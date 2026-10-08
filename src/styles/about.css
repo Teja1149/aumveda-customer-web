@@ -1,0 +1,2283 @@
+/* ============================================================
+   AUMVEDA PREMIUM ABOUT PAGE
+   Palette:
+   Brown  #381f12
+   Cream  #ede4d4
+   Green  #576654
+   Neutral #eeeae2
+============================================================ */
+
+
+.aumveda-about-page {
+
+    --brown: #381f12;
+    --cream: #ede4d4;
+    --green: #576654;
+    --neutral: #eeeae2;
+    --paper: #f7f3eb;
+    --muted: #756d64;
+    --white: #ffffff;
+
+    background: var(--paper);
+    color: var(--brown);
+
+    overflow: hidden;
+
+}
+
+
+.aumveda-about-container {
+
+    width: min(
+        1240px,
+        calc(100% - 48px)
+    );
+
+    margin: 0 auto;
+
+}
+
+
+/* ============================================================
+   COMMON
+============================================================ */
+
+.aumveda-about-eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--green);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.7px;
+
+    text-transform: uppercase;
+
+}
+
+
+.aumveda-about-eyebrow::before {
+
+    content: "";
+
+    width: 25px;
+
+    height: 1px;
+
+    background: currentColor;
+
+}
+
+
+.aumveda-about-eyebrow.light {
+
+    color: #d8dfd3;
+
+}
+
+
+.aumveda-about-section-heading {
+
+    max-width: 720px;
+
+}
+
+
+.aumveda-about-section-heading.centered {
+
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+
+}
+
+
+.aumveda-about-section-heading.centered
+.aumveda-about-eyebrow {
+
+    justify-content: center;
+
+}
+
+
+.aumveda-about-section-heading h2 {
+
+    margin: 16px 0 17px;
+
+    font-size: clamp(
+        38px,
+        5vw,
+        67px
+    );
+
+    line-height: 0.98;
+
+    font-weight: 500;
+
+    letter-spacing: -2.8px;
+
+}
+
+
+.aumveda-about-section-heading h2 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-style: italic;
+
+}
+
+
+.aumveda-about-section-heading p {
+
+    max-width: 600px;
+
+    color: var(--muted);
+
+    font-size: 15px;
+
+    line-height: 1.85;
+
+}
+
+
+.aumveda-about-section-heading.centered p {
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+.aumveda-about-hero {
+
+    position: relative;
+
+    min-height: 760px;
+
+    padding: 85px 0 0;
+
+    background:
+
+        radial-gradient(
+            circle at 78% 26%,
+            rgba(87,102,84,.15),
+            transparent 25%
+        ),
+
+        linear-gradient(
+            135deg,
+            #f8f4eb 0%,
+            #eeeae2 52%,
+            #e4e1d5 100%
+        );
+
+}
+
+
+.aumveda-about-hero__background-orb {
+
+    position: absolute;
+
+    width: 520px;
+    height: 520px;
+
+    right: -170px;
+    top: 100px;
+
+    border-radius: 50%;
+
+    background:
+
+        radial-gradient(
+            circle at 30% 25%,
+            rgba(255,255,255,.85),
+            rgba(87,102,84,.13) 42%,
+            rgba(56,31,18,.04) 70%,
+            transparent 71%
+        );
+
+    filter: blur(.2px);
+
+}
+
+
+.aumveda-about-hero__grain {
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .12;
+
+    background-image:
+        radial-gradient(
+            rgba(56,31,18,.35) .5px,
+            transparent .5px
+        );
+
+    background-size: 7px 7px;
+
+    mix-blend-mode: multiply;
+
+}
+
+
+.aumveda-about-hero__content {
+
+    position: relative;
+    z-index: 2;
+
+    width: min(
+        1240px,
+        calc(100% - 48px)
+    );
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        .9fr
+        1.1fr;
+
+    align-items: center;
+
+    gap: 50px;
+
+}
+
+
+.aumveda-about-hero__copy {
+
+    padding-bottom: 45px;
+
+}
+
+
+.aumveda-about-hero__copy h1 {
+
+    max-width: 650px;
+
+    margin: 20px 0 25px;
+
+    font-size: clamp(
+        52px,
+        6vw,
+        91px
+    );
+
+    line-height: .91;
+
+    letter-spacing: -5px;
+
+    font-weight: 500;
+
+}
+
+
+.aumveda-about-hero__copy h1 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+    font-weight: 400;
+
+}
+
+
+.aumveda-about-hero__copy p {
+
+    max-width: 580px;
+
+    color: #6e665e;
+
+    font-size: 16px;
+
+    line-height: 1.85;
+
+}
+
+
+.aumveda-about-hero__actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-top: 31px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.aumveda-about-primary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 48px;
+
+    padding: 0 21px;
+
+    border-radius: 999px;
+
+    background: var(--brown);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: .7px;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.aumveda-about-primary-button:hover {
+
+    transform: translateY(-3px);
+
+    background: var(--green);
+
+    box-shadow:
+        0 14px 30px
+        rgba(56,31,18,.17);
+
+}
+
+
+.aumveda-about-secondary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 48px;
+
+    padding: 0 20px;
+
+    border: 1px solid
+        rgba(56,31,18,.17);
+
+    border-radius: 999px;
+
+    color: var(--brown);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    transition: .25s ease;
+
+}
+
+
+.aumveda-about-secondary-button:hover {
+
+    border-color: var(--green);
+
+    color: var(--green);
+
+    background: rgba(255,255,255,.45);
+
+}
+
+
+/* ============================================================
+   HERO VISUAL
+============================================================ */
+
+.aumveda-about-hero__visual {
+
+    position: relative;
+
+    height: 570px;
+
+}
+
+
+.aumveda-about-image-frame {
+
+    position: absolute;
+
+    width: 410px;
+    height: 500px;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(2deg);
+
+    overflow: hidden;
+
+    border-radius:
+        190px
+        190px
+        35px
+        35px;
+
+    box-shadow:
+        0 35px 80px
+        rgba(56,31,18,.18),
+
+        0 10px 30px
+        rgba(56,31,18,.08);
+
+    border: 9px solid
+        rgba(255,255,255,.55);
+
+    transition:
+        transform .6s ease;
+
+}
+
+
+.aumveda-about-image-frame:hover {
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-1deg)
+        scale(1.015);
+
+}
+
+
+.aumveda-about-image-frame img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+.aumveda-about-image-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            transparent 35%,
+            rgba(56,31,18,.5) 100%
+        );
+
+}
+
+
+.aumveda-about-image-label {
+
+    position: absolute;
+
+    left: 29px;
+    bottom: 27px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    color: white;
+
+}
+
+
+.aumveda-about-image-label span {
+
+    font-family: Georgia, serif;
+
+    font-size: 27px;
+
+    letter-spacing: 4px;
+
+}
+
+
+.aumveda-about-image-label small {
+
+    margin-top: 5px;
+
+    opacity: .8;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.aumveda-about-floating-card {
+
+    position: absolute;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    min-width: 185px;
+
+    padding: 13px 16px;
+
+    border: 1px solid
+        rgba(255,255,255,.7);
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,.62);
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 20px 45px
+        rgba(56,31,18,.13);
+
+    animation:
+        aboutFloat 5s ease-in-out infinite;
+
+}
+
+
+.aumveda-about-floating-card svg {
+
+    color: var(--green);
+
+}
+
+
+.aumveda-about-floating-card div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+.aumveda-about-floating-card strong {
+
+    font-size: 11px;
+
+    letter-spacing: .4px;
+
+}
+
+
+.aumveda-about-floating-card span {
+
+    color: #756d64;
+
+    font-size: 9px;
+
+}
+
+
+.card-top {
+
+    left: 4px;
+    top: 95px;
+
+}
+
+
+.card-bottom {
+
+    right: 0;
+    bottom: 92px;
+
+    animation-delay: -2s;
+
+}
+
+
+.aumveda-about-orbit {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    border: 1px solid
+        rgba(87,102,84,.22);
+
+    border-radius: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-17deg);
+
+}
+
+
+.orbit-one {
+
+    width: 560px;
+    height: 185px;
+
+}
+
+
+.orbit-two {
+
+    width: 470px;
+    height: 165px;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(43deg);
+
+}
+
+
+.aumveda-about-orbit-dot {
+
+    position: absolute;
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 0 7px
+        rgba(87,102,84,.1);
+
+}
+
+
+.dot-one {
+
+    top: 118px;
+    right: 73px;
+
+}
+
+
+.dot-two {
+
+    bottom: 128px;
+    left: 90px;
+
+}
+
+
+@keyframes aboutFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0)
+            rotate(0deg);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-10px)
+            rotate(1deg);
+
+    }
+
+}
+
+
+/* ============================================================
+   HERO BOTTOM
+============================================================ */
+
+.aumveda-about-hero__bottom {
+
+    position: relative;
+    z-index: 5;
+
+    width: min(
+        1240px,
+        calc(100% - 48px)
+    );
+
+    margin: 10px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    border-top:
+        1px solid
+        rgba(56,31,18,.13);
+
+}
+
+
+.aumveda-about-hero__bottom div {
+
+    padding: 18px 20px;
+
+    border-right:
+        1px solid
+        rgba(56,31,18,.1);
+
+}
+
+
+.aumveda-about-hero__bottom div:last-child {
+
+    border-right: 0;
+
+}
+
+
+.aumveda-about-hero__bottom span {
+
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.aumveda-about-hero__bottom small {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #80776f;
+
+    font-size: 10px;
+
+}
+
+
+/* ============================================================
+   STORY
+============================================================ */
+
+.aumveda-about-story {
+
+    padding: 125px 0;
+
+    background: var(--paper);
+
+}
+
+
+.aumveda-about-story-grid {
+
+    margin-top: 65px;
+
+    display: grid;
+
+    grid-template-columns:
+        .95fr
+        1.05fr;
+
+    gap: 80px;
+
+    align-items: center;
+
+}
+
+
+.aumveda-about-story-image {
+
+    position: relative;
+
+}
+
+
+.aumveda-about-story-image img {
+
+    width: 100%;
+
+    height: 520px;
+
+    object-fit: cover;
+
+    border-radius:
+        28px
+        100px
+        28px
+        28px;
+
+    box-shadow:
+        0 30px 70px
+        rgba(56,31,18,.13);
+
+}
+
+
+.aumveda-about-story-badge {
+
+    position: absolute;
+
+    right: -20px;
+    bottom: 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 13px 17px;
+
+    border-radius: 999px;
+
+    background: var(--green);
+
+    color: white;
+
+    box-shadow:
+        0 15px 30px
+        rgba(87,102,84,.25);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+}
+
+
+.aumveda-about-small-label {
+
+    color: var(--green);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.5px;
+
+}
+
+
+.aumveda-about-story-content h3 {
+
+    max-width: 570px;
+
+    margin: 14px 0 22px;
+
+    font-size: clamp(
+        34px,
+        4vw,
+        53px
+    );
+
+    line-height: 1.04;
+
+    font-weight: 500;
+
+    letter-spacing: -2px;
+
+}
+
+
+.aumveda-about-story-content p {
+
+    max-width: 590px;
+
+    color: #766d65;
+
+    font-size: 14px;
+
+    line-height: 1.85;
+
+}
+
+
+.aumveda-about-story-points {
+
+    display: grid;
+
+    gap: 17px;
+
+    margin-top: 29px;
+
+}
+
+
+.aumveda-about-story-points > div {
+
+    display: grid;
+
+    grid-template-columns: 31px 1fr;
+
+    gap: 11px;
+
+}
+
+
+.story-point-icon {
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(87,102,84,.1);
+
+    color: var(--green);
+
+}
+
+
+.aumveda-about-story-points strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 11px;
+
+}
+
+
+.aumveda-about-story-points span {
+
+    display: block;
+
+    color: #81776f;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+/* ============================================================
+   VALUES
+============================================================ */
+
+.aumveda-about-values {
+
+    padding: 120px 0 130px;
+
+    background: var(--neutral);
+
+}
+
+
+.aumveda-about-values-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-top: 55px;
+
+}
+
+
+.aumveda-about-value-card {
+
+    position: relative;
+
+    min-height: 350px;
+
+    padding: 35px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(56,31,18,.1);
+
+    border-radius: 27px;
+
+    background:
+        rgba(255,255,255,.45);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+
+.aumveda-about-value-card:hover {
+
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 25px 55px
+        rgba(56,31,18,.1);
+
+}
+
+
+.aumveda-about-value-card.featured {
+
+    background: var(--green);
+
+    color: white;
+
+    transform: translateY(-18px);
+
+    box-shadow:
+        0 25px 60px
+        rgba(87,102,84,.25);
+
+}
+
+
+.aumveda-about-value-card.featured:hover {
+
+    transform: translateY(-25px);
+
+}
+
+
+.value-number {
+
+    position: absolute;
+
+    top: 25px;
+    right: 29px;
+
+    font-family: Georgia, serif;
+
+    font-size: 42px;
+
+    opacity: .11;
+
+}
+
+
+.value-icon {
+
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background:
+        rgba(87,102,84,.1);
+
+    color: var(--green);
+
+}
+
+
+.featured .value-icon {
+
+    background:
+        rgba(255,255,255,.12);
+
+    color: white;
+
+}
+
+
+.aumveda-about-value-card h3 {
+
+    margin: 34px 0 13px;
+
+    font-size: 23px;
+
+    font-weight: 550;
+
+    letter-spacing: -.6px;
+
+}
+
+
+.aumveda-about-value-card p {
+
+    max-width: 300px;
+
+    color: #7b726a;
+
+    font-size: 12px;
+
+    line-height: 1.75;
+
+}
+
+
+.featured p {
+
+    color: rgba(255,255,255,.7);
+
+}
+
+
+.value-line {
+
+    position: absolute;
+
+    left: 35px;
+    bottom: 31px;
+
+    width: 42px;
+    height: 2px;
+
+    background: var(--green);
+
+}
+
+
+.featured .value-line {
+
+    background: #d8dfd3;
+
+}
+
+
+/* ============================================================
+   PURPOSE
+============================================================ */
+
+.aumveda-about-purpose {
+
+    padding: 130px 0;
+
+    background: #f8f5ee;
+
+}
+
+
+.aumveda-about-purpose-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        .9fr
+        1.1fr;
+
+    gap: 85px;
+
+    align-items: center;
+
+}
+
+
+.aumveda-about-purpose-visual {
+
+    position: relative;
+
+}
+
+
+.aumveda-about-purpose-visual img {
+
+    width: 100%;
+
+    height: 610px;
+
+    object-fit: cover;
+
+    border-radius:
+        130px
+        30px
+        30px
+        30px;
+
+    box-shadow:
+        0 35px 75px
+        rgba(56,31,18,.14);
+
+}
+
+
+.purpose-floating-card {
+
+    position: absolute;
+
+    right: -30px;
+    bottom: 35px;
+
+    max-width: 225px;
+
+    padding: 18px;
+
+    display: flex;
+
+    gap: 11px;
+
+    align-items: flex-start;
+
+    border-radius: 20px;
+
+    background:
+        rgba(56,31,18,.93);
+
+    color: white;
+
+    box-shadow:
+        0 20px 40px
+        rgba(56,31,18,.2);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+}
+
+
+.purpose-floating-card svg {
+
+    color: #cbd6c4;
+
+    flex-shrink: 0;
+
+}
+
+
+.aumveda-about-purpose-content h2 {
+
+    max-width: 600px;
+
+    margin: 17px 0 42px;
+
+    font-size: clamp(
+        40px,
+        5vw,
+        66px
+    );
+
+    line-height: 1;
+
+    font-weight: 500;
+
+    letter-spacing: -3px;
+
+}
+
+
+.aumveda-about-purpose-content h2 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.purpose-block {
+
+    display: grid;
+
+    grid-template-columns: 48px 1fr;
+
+    gap: 19px;
+
+    padding: 23px 0;
+
+    border-top:
+        1px solid
+        rgba(56,31,18,.11);
+
+}
+
+
+.purpose-icon {
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(87,102,84,.11);
+
+    color: var(--green);
+
+}
+
+
+.purpose-block span {
+
+    color: var(--green);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.purpose-block h3 {
+
+    margin: 7px 0 8px;
+
+    font-size: 19px;
+
+    font-weight: 550;
+
+}
+
+
+.purpose-block p {
+
+    max-width: 530px;
+
+    margin: 0;
+
+    color: #7a7169;
+
+    font-size: 11px;
+
+    line-height: 1.8;
+
+}
+
+
+/* ============================================================
+   IMPACT
+============================================================ */
+
+.aumveda-about-impact {
+
+    position: relative;
+
+    padding: 110px 0 115px;
+
+    overflow: hidden;
+
+    background: var(--brown);
+
+    color: white;
+
+}
+
+
+.aumveda-about-impact-glow {
+
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    right: -260px;
+    top: -320px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(87,102,84,.7),
+            transparent 68%
+        );
+
+    filter: blur(8px);
+
+}
+
+
+.aumveda-about-impact-header {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        .7fr;
+
+    gap: 70px;
+
+    align-items: end;
+
+}
+
+
+.aumveda-about-impact-header h2 {
+
+    margin: 17px 0 0;
+
+    font-size: clamp(
+        42px,
+        5vw,
+        68px
+    );
+
+    line-height: .96;
+
+    font-weight: 500;
+
+    letter-spacing: -3px;
+
+}
+
+
+.aumveda-about-impact-header h2 span {
+
+    display: block;
+
+    color: #bcc9b5;
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.aumveda-about-impact-header p {
+
+    max-width: 450px;
+
+    margin: 0;
+
+    color: rgba(255,255,255,.65);
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+}
+
+
+.aumveda-about-impact-grid {
+
+    position: relative;
+
+    margin-top: 65px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.13);
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.13);
+
+}
+
+
+.impact-item {
+
+    min-height: 245px;
+
+    padding: 35px 25px;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.1);
+
+}
+
+
+.impact-item:last-child {
+
+    border-right: 0;
+
+}
+
+
+.impact-icon {
+
+    width: 47px;
+    height: 47px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color: #cad5c4;
+
+}
+
+
+.impact-item strong {
+
+    display: block;
+
+    margin-top: 31px;
+
+    font-size: 15px;
+
+    font-weight: 550;
+
+}
+
+
+.impact-item span {
+
+    display: block;
+
+    max-width: 180px;
+
+    margin-top: 9px;
+
+    color: rgba(255,255,255,.53);
+
+    font-size: 10px;
+
+    line-height: 1.7;
+
+}
+
+
+/* ============================================================
+   FUTURE
+============================================================ */
+
+.aumveda-about-future {
+
+    padding: 125px 0;
+
+    background: var(--paper);
+
+}
+
+
+.aumveda-about-future-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 0;
+
+    margin-top: 60px;
+
+    border-top:
+        1px solid
+        rgba(56,31,18,.13);
+
+}
+
+
+.aumveda-about-future-grid article {
+
+    min-height: 280px;
+
+    padding: 28px 23px;
+
+    border-right:
+        1px solid
+        rgba(56,31,18,.1);
+
+    transition:
+        background .25s ease;
+
+}
+
+
+.aumveda-about-future-grid article:last-child {
+
+    border-right: 0;
+
+}
+
+
+.aumveda-about-future-grid article:hover {
+
+    background:
+        rgba(87,102,84,.06);
+
+}
+
+
+.aumveda-about-future-grid article > span {
+
+    color: var(--green);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.aumveda-about-future-grid h3 {
+
+    margin: 46px 0 12px;
+
+    font-size: 20px;
+
+    font-weight: 550;
+
+}
+
+
+.aumveda-about-future-grid p {
+
+    color: #7b726a;
+
+    font-size: 11px;
+
+    line-height: 1.8;
+
+}
+
+
+/* ============================================================
+   CTA
+============================================================ */
+
+.aumveda-about-cta {
+
+    position: relative;
+
+    min-height: 490px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(87,102,84,.25),
+            transparent 35%
+        ),
+
+        #ede4d4;
+
+}
+
+
+.aumveda-about-cta::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 450px;
+    height: 450px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(87,102,84,.2);
+
+    transform: rotate(20deg);
+
+}
+
+
+.aumveda-about-cta__content {
+
+    position: relative;
+    z-index: 2;
+
+    max-width: 700px;
+
+}
+
+
+.aumveda-about-cta__content
+.aumveda-about-eyebrow {
+
+    justify-content: center;
+
+}
+
+
+.aumveda-about-cta__content h2 {
+
+    margin: 17px 0;
+
+    font-size: clamp(
+        44px,
+        6vw,
+        76px
+    );
+
+    line-height: .95;
+
+    font-weight: 500;
+
+    letter-spacing: -3.5px;
+
+}
+
+
+.aumveda-about-cta__content h2 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.aumveda-about-cta__content p {
+
+    max-width: 500px;
+
+    margin: 0 auto 25px;
+
+    color: #766d65;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+}
+
+
+.aumveda-about-cta__content
+.aumveda-about-primary-button {
+
+    margin-top: 5px;
+
+}
+
+
+.aumveda-about-cta__leaf {
+
+    position: absolute;
+
+    color: var(--green);
+
+    opacity: .15;
+
+}
+
+
+.leaf-a {
+
+    left: 12%;
+
+    top: 26%;
+
+    transform: rotate(-25deg);
+
+}
+
+
+.leaf-b {
+
+    right: 13%;
+
+    bottom: 20%;
+
+    transform: rotate(30deg);
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 1050px) {
+
+    .aumveda-about-hero {
+
+        min-height: auto;
+
+    }
+
+
+    .aumveda-about-hero__content {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .aumveda-about-hero__copy {
+
+        padding-bottom: 0;
+
+        text-align: center;
+
+    }
+
+
+    .aumveda-about-hero__copy p {
+
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
+
+    .aumveda-about-hero__actions {
+
+        justify-content: center;
+
+    }
+
+
+    .aumveda-about-hero__visual {
+
+        height: 590px;
+
+    }
+
+
+    .aumveda-about-values-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .aumveda-about-value-card.featured {
+
+        transform: none;
+
+    }
+
+
+    .aumveda-about-value-card.featured:hover {
+
+        transform: translateY(-8px);
+
+    }
+
+
+    .aumveda-about-purpose-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .aumveda-about-purpose-visual {
+
+        max-width: 650px;
+
+        margin: auto;
+
+    }
+
+
+    .aumveda-about-impact-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .impact-item:nth-child(2) {
+
+        border-right: 0;
+
+    }
+
+
+    .impact-item:nth-child(3),
+    .impact-item:nth-child(4) {
+
+        border-top:
+            1px solid
+            rgba(255,255,255,.1);
+
+    }
+
+
+    .aumveda-about-future-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .aumveda-about-future-grid article:nth-child(2) {
+
+        border-right: 0;
+
+    }
+
+
+    .aumveda-about-future-grid article:nth-child(3),
+    .aumveda-about-future-grid article:nth-child(4) {
+
+        border-top:
+            1px solid
+            rgba(56,31,18,.1);
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .aumveda-about-container,
+    .aumveda-about-hero__content,
+    .aumveda-about-hero__bottom {
+
+        width: min(
+            100% - 30px,
+            1240px
+        );
+
+    }
+
+
+    .aumveda-about-hero {
+
+        padding-top: 55px;
+
+    }
+
+
+    .aumveda-about-hero__copy h1 {
+
+        font-size: 52px;
+
+        letter-spacing: -3px;
+
+    }
+
+
+    .aumveda-about-hero__visual {
+
+        height: 470px;
+
+    }
+
+
+    .aumveda-about-image-frame {
+
+        width: 290px;
+        height: 370px;
+
+        border-radius:
+            140px
+            140px
+            25px
+            25px;
+
+    }
+
+
+    .orbit-one {
+
+        width: 370px;
+        height: 130px;
+
+    }
+
+
+    .orbit-two {
+
+        width: 330px;
+        height: 115px;
+
+    }
+
+
+    .card-top {
+
+        left: -3px;
+        top: 65px;
+
+    }
+
+
+    .card-bottom {
+
+        right: -3px;
+        bottom: 65px;
+
+    }
+
+
+    .aumveda-about-floating-card {
+
+        min-width: auto;
+
+        padding: 10px 12px;
+
+    }
+
+
+    .aumveda-about-floating-card span {
+
+        font-size: 8px;
+
+    }
+
+
+    .aumveda-about-hero__bottom {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .aumveda-about-hero__bottom div {
+
+        border-right: 0;
+
+        border-bottom:
+            1px solid
+            rgba(56,31,18,.1);
+
+    }
+
+
+    .aumveda-about-story,
+    .aumveda-about-values,
+    .aumveda-about-purpose,
+    .aumveda-about-future {
+
+        padding: 85px 0;
+
+    }
+
+
+    .aumveda-about-story-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+
+    }
+
+
+    .aumveda-about-story-image img {
+
+        height: 390px;
+
+    }
+
+
+    .aumveda-about-story-badge {
+
+        right: 10px;
+
+    }
+
+
+    .aumveda-about-section-heading h2 {
+
+        font-size: 43px;
+
+    }
+
+
+    .aumveda-about-purpose-content h2 {
+
+        font-size: 43px;
+
+    }
+
+
+    .aumveda-about-purpose-visual img {
+
+        height: 430px;
+
+    }
+
+
+    .purpose-floating-card {
+
+        right: 10px;
+
+    }
+
+
+    .aumveda-about-impact {
+
+        padding: 85px 0;
+
+    }
+
+
+    .aumveda-about-impact-header {
+
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+
+    }
+
+
+    .aumveda-about-impact-header h2 {
+
+        font-size: 44px;
+
+    }
+
+
+    .aumveda-about-impact-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .impact-item {
+
+        min-height: auto;
+
+        border-right: 0;
+
+        border-bottom:
+            1px solid
+            rgba(255,255,255,.1);
+
+    }
+
+
+    .impact-item:nth-child(3) {
+
+        border-top: 0;
+
+    }
+
+
+    .aumveda-about-future-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .aumveda-about-future-grid article {
+
+        min-height: 220px;
+
+        border-right: 0;
+
+        border-bottom:
+            1px solid
+            rgba(56,31,18,.1);
+
+    }
+
+
+    .aumveda-about-future-grid article:nth-child(3),
+    .aumveda-about-future-grid article:nth-child(4) {
+
+        border-top: 0;
+
+    }
+
+
+    .aumveda-about-cta {
+
+        min-height: 430px;
+
+        padding: 50px 20px;
+
+    }
+
+
+    .aumveda-about-cta__content h2 {
+
+        font-size: 48px;
+
+    }
+
+}

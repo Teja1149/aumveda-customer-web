@@ -1,0 +1,2133 @@
+/* ============================================================
+   AUMVEDA PREMIUM HERO
+============================================================ */
+
+.hero {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    min-height:
+        clamp(
+            650px,
+            78vh,
+            820px
+        );
+
+    overflow:
+        hidden;
+
+    isolation:
+        isolate;
+
+    background:
+        #d9d2c5;
+
+
+    /*
+        These values come from HeroSection.jsx.
+
+        --hero-video-opacity:
+            controls video visibility
+
+        --hero-left-overlay:
+            controls cream overlay on left
+    */
+
+    --hero-video-opacity:
+        0.92;
+
+    --hero-left-overlay:
+        0.68;
+
+}
+
+
+/* ============================================================
+   BACKGROUND MEDIA
+============================================================ */
+
+.hero__media {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        0;
+
+    background-size:
+        cover;
+
+    background-position:
+        center;
+
+    transform-origin:
+        center;
+
+}
+
+
+/* ============================================================
+   VIDEO
+============================================================ */
+
+.hero-video {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+    opacity:
+        0;
+
+    /*
+        Gives the background slightly richer visual depth.
+    */
+
+    filter:
+        saturate(1.08)
+        contrast(1.05)
+        brightness(0.98);
+
+    transition:
+        opacity
+        900ms ease;
+
+}
+
+
+/*
+    Video intensity is controlled by:
+
+    const VIDEO_INTENSITY = 0.92;
+
+    inside HeroSection.jsx.
+*/
+
+.hero-video--visible {
+
+    opacity:
+        var(
+            --hero-video-opacity
+        );
+
+}
+
+
+/* ============================================================
+   BALANCED VIDEO OVERLAY
+============================================================ */
+
+.hero__veil {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        1;
+
+    pointer-events:
+        none;
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            rgba(
+                247,
+                243,
+                235,
+                var(
+                    --hero-left-overlay
+                )
+            )
+            0%,
+
+            rgba(
+                247,
+                243,
+                235,
+                0.60
+            )
+            20%,
+
+            rgba(
+                247,
+                243,
+                235,
+                0.40
+            )
+            38%,
+
+            rgba(
+                247,
+                243,
+                235,
+                0.19
+            )
+            57%,
+
+            rgba(
+                247,
+                243,
+                235,
+                0.06
+            )
+            74%,
+
+            rgba(
+                56,
+                31,
+                18,
+                0.07
+            )
+            100%
+
+        ),
+
+        linear-gradient(
+
+            180deg,
+
+            rgba(
+                255,
+                255,
+                255,
+                0.03
+            )
+            0%,
+
+            rgba(
+                255,
+                255,
+                255,
+                0
+            )
+            55%,
+
+            rgba(
+                56,
+                31,
+                18,
+                0.12
+            )
+            100%
+
+        );
+
+}
+
+
+/* ============================================================
+   VERY SUBTLE TEXTURE
+============================================================ */
+
+.hero__grain {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        2;
+
+    pointer-events:
+        none;
+
+    opacity:
+        0.055;
+
+    background-image:
+
+        radial-gradient(
+
+            rgba(
+                56,
+                31,
+                18,
+                0.18
+            )
+            0.5px,
+
+            transparent
+            0.5px
+
+        );
+
+    background-size:
+        7px 7px;
+
+}
+
+
+/* ============================================================
+   AMBIENT DECORATION
+============================================================ */
+
+.hero__ambient {
+
+    position:
+        absolute;
+
+    z-index:
+        2;
+
+    pointer-events:
+        none;
+
+    border-radius:
+        50%;
+
+    filter:
+        blur(
+            9px
+        );
+
+}
+
+
+.hero__ambient--one {
+
+    width:
+        390px;
+
+    height:
+        390px;
+
+    top:
+        7%;
+
+    left:
+        -170px;
+
+    background:
+
+        radial-gradient(
+
+            circle,
+
+            rgba(
+                185,
+                147,
+                74,
+                0.11
+            ),
+
+            transparent
+            70%
+
+        );
+
+}
+
+
+.hero__ambient--two {
+
+    width:
+        380px;
+
+    height:
+        380px;
+
+    right:
+        8%;
+
+    bottom:
+        -190px;
+
+    background:
+
+        radial-gradient(
+
+            circle,
+
+            rgba(
+                87,
+                102,
+                84,
+                0.13
+            ),
+
+            transparent
+            70%
+
+        );
+
+}
+
+
+/* ============================================================
+   MAIN INNER CONTAINER
+============================================================ */
+
+.hero__inner {
+
+    position:
+        relative;
+
+    z-index:
+        4;
+
+    width:
+        min(
+            calc(
+                100% - 100px
+            ),
+            1480px
+        );
+
+    min-height:
+        clamp(
+            650px,
+            78vh,
+            820px
+        );
+
+    margin:
+        0 auto;
+
+    display:
+        grid;
+
+    grid-template-columns:
+
+        minmax(
+            0,
+            1.05fr
+        )
+
+        minmax(
+            300px,
+            0.72fr
+        );
+
+    align-items:
+        center;
+
+    gap:
+        70px;
+
+    padding:
+        80px 0
+        128px;
+
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.hero__content {
+
+    max-width:
+        720px;
+
+}
+
+
+/* ============================================================
+   EYEBROW
+============================================================ */
+
+.hero__eyebrow {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        13px;
+
+    margin-bottom:
+        20px;
+
+    color:
+        #576654;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2.7px;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.hero__eyebrow-line {
+
+    width:
+        38px;
+
+    height:
+        1px;
+
+    flex-shrink:
+        0;
+
+    background:
+        #b9934a;
+
+}
+
+
+/* ============================================================
+   MAIN HERO HEADING
+
+   IMPORTANT:
+   THIS USES THE ORIGINAL AUMVEDA HERO FONT
+============================================================ */
+
+.hero h1 {
+
+    max-width:
+        760px;
+
+    margin:
+        0;
+
+
+    /*
+        Original font restored exactly.
+    */
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+
+    font-size:
+        clamp(
+            56px,
+            5.7vw,
+            82px
+        );
+
+    font-weight:
+        400;
+
+    line-height:
+        1.01;
+
+    letter-spacing:
+        -0.035em;
+
+    color:
+        #381f12;
+
+
+    /*
+        Helps readability while still allowing
+        the video to remain visible.
+    */
+
+    text-shadow:
+        0 1px 10px
+        rgba(
+            255,
+            255,
+            255,
+            0.28
+        );
+
+}
+
+
+/* ============================================================
+   SECOND HEADING LINE
+============================================================ */
+
+.hero h1 span {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #576654;
+
+
+    /*
+        Keep original typography.
+        No italic transformation.
+    */
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-style:
+        normal;
+
+    font-weight:
+        400;
+
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.hero__description {
+
+    max-width:
+        610px;
+
+    margin:
+        27px 0 0;
+
+    color:
+        #55483f;
+
+    font-size:
+        clamp(
+            15px,
+            1.25vw,
+            17px
+        );
+
+    line-height:
+        1.75;
+
+    text-shadow:
+        0 1px 8px
+        rgba(
+            255,
+            255,
+            255,
+            0.30
+        );
+
+}
+
+
+/* ============================================================
+   BUTTON AREA
+============================================================ */
+
+.hero__buttons {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        14px;
+
+    margin-top:
+        34px;
+
+}
+
+
+/* ============================================================
+   PRIMARY BUTTON
+============================================================ */
+
+.hero__primary {
+
+    position:
+        relative;
+
+    min-height:
+        50px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        10px;
+
+    padding:
+        0 24px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        #576654;
+
+    border-radius:
+        999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #61725e,
+            #4f604d
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        .01em;
+
+    box-shadow:
+        0 14px 32px
+        rgba(
+            87,
+            102,
+            84,
+            0.24
+        );
+
+    transition:
+        transform
+        240ms ease,
+        background
+        240ms ease,
+        border-color
+        240ms ease,
+        box-shadow
+        240ms ease;
+
+}
+
+
+/* ============================================================
+   PRIMARY BUTTON SHINE
+============================================================ */
+
+.hero__primary::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        -50%;
+
+    left:
+        -40%;
+
+    width:
+        30%;
+
+    height:
+        200%;
+
+    transform:
+        rotate(
+            20deg
+        );
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(
+                255,
+                255,
+                255,
+                0.20
+            ),
+            transparent
+        );
+
+    transition:
+        left
+        500ms
+        cubic-bezier(
+            .22,
+            1,
+            .36,
+            1
+        );
+
+}
+
+
+.hero__primary:hover::before {
+
+    left:
+        120%;
+
+}
+
+
+.hero__primary:hover {
+
+    transform:
+        translateY(
+            -3px
+        );
+
+    border-color:
+        #381f12;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4d3020,
+            #381f12
+        );
+
+    box-shadow:
+        0 18px 40px
+        rgba(
+            56,
+            31,
+            18,
+            0.20
+        );
+
+}
+
+
+.hero__primary:active {
+
+    transform:
+        translateY(
+            0
+        )
+        scale(
+            0.96
+        );
+
+}
+
+
+.hero__primary svg {
+
+    transition:
+        transform
+        220ms ease;
+
+}
+
+
+.hero__primary:hover svg {
+
+    transform:
+        translateX(
+            3px
+        );
+
+}
+
+
+/* ============================================================
+   SECONDARY BUTTON
+============================================================ */
+
+.hero__secondary {
+
+    min-height:
+        50px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        0 22px;
+
+    border:
+        1px solid
+        rgba(
+            56,
+            31,
+            18,
+            0.18
+        );
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.52
+        );
+
+    color:
+        #381f12;
+
+    font-size:
+        12px;
+
+    font-weight:
+        650;
+
+    backdrop-filter:
+        blur(
+            12px
+        );
+
+    -webkit-backdrop-filter:
+        blur(
+            12px
+        );
+
+    transition:
+        transform
+        240ms ease,
+        background
+        240ms ease,
+        border-color
+        240ms ease,
+        box-shadow
+        240ms ease;
+
+}
+
+
+.hero__secondary:hover {
+
+    transform:
+        translateY(
+            -3px
+        );
+
+    border-color:
+        rgba(
+            87,
+            102,
+            84,
+            0.38
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.88
+        );
+
+    color:
+        #576654;
+
+    box-shadow:
+        0 13px 28px
+        rgba(
+            56,
+            31,
+            18,
+            0.08
+        );
+
+}
+
+
+.hero__secondary:active {
+
+    transform:
+        scale(
+            0.96
+        );
+
+}
+
+
+.hero__secondary-arrow {
+
+    transition:
+        transform
+        220ms ease;
+
+}
+
+
+.hero__secondary:hover
+.hero__secondary-arrow {
+
+    transform:
+        translate(
+            2px,
+            -2px
+        );
+
+}
+
+
+/* ============================================================
+   ASSURANCE
+============================================================ */
+
+.hero__assurance {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        18px;
+
+    margin-top:
+        24px;
+
+    color:
+        #71645a;
+
+}
+
+
+.hero__assurance span {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+.hero__assurance svg {
+
+    color:
+        #a77f32;
+
+}
+
+
+/* ============================================================
+   PHILOSOPHY CARD
+============================================================ */
+
+.hero__signature {
+
+    justify-self:
+        end;
+
+    align-self:
+        end;
+
+    width:
+        min(
+            360px,
+            100%
+        );
+
+    margin-bottom:
+        95px;
+
+    padding:
+        24px 25px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.58
+        );
+
+    border-radius:
+        22px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.48
+        );
+
+    backdrop-filter:
+        blur(
+            18px
+        );
+
+    -webkit-backdrop-filter:
+        blur(
+            18px
+        );
+
+    box-shadow:
+        0 20px 55px
+        rgba(
+            56,
+            31,
+            18,
+            0.10
+        );
+
+    transition:
+        transform
+        300ms ease,
+        background
+        300ms ease,
+        box-shadow
+        300ms ease;
+
+}
+
+
+.hero__signature:hover {
+
+    transform:
+        translateY(
+            -4px
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.62
+        );
+
+    box-shadow:
+        0 26px 65px
+        rgba(
+            56,
+            31,
+            18,
+            0.13
+        );
+
+}
+
+
+/* ============================================================
+   SIGNATURE LABEL
+============================================================ */
+
+.hero__signature-label {
+
+    display:
+        block;
+
+    color:
+        #576654;
+
+    font-size:
+        9px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        2px;
+
+}
+
+
+/* ============================================================
+   SIGNATURE TEXT
+============================================================ */
+
+.hero__signature p {
+
+    margin:
+        10px 0 16px;
+
+    color:
+        #45352b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        23px;
+
+    line-height:
+        1.25;
+
+}
+
+
+/* ============================================================
+   SIGNATURE MARK
+============================================================ */
+
+.hero__signature-mark {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    color:
+        #716359;
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+}
+
+
+.hero__signature-mark svg {
+
+    color:
+        #a77f32;
+
+}
+
+
+/* ============================================================
+   TRUST STRIP
+============================================================ */
+
+.hero__trust {
+
+    position:
+        absolute;
+
+    z-index:
+        5;
+
+    left:
+        50%;
+
+    bottom:
+        26px;
+
+    width:
+        min(
+            calc(
+                100% - 100px
+            ),
+            1480px
+        );
+
+    transform:
+        translateX(
+            -50%
+        );
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.58
+        );
+
+    border-radius:
+        20px;
+
+    background:
+        rgba(
+            251,
+            248,
+            242,
+            0.74
+        );
+
+    backdrop-filter:
+        blur(
+            19px
+        );
+
+    -webkit-backdrop-filter:
+        blur(
+            19px
+        );
+
+    box-shadow:
+        0 18px 54px
+        rgba(
+            56,
+            31,
+            18,
+            0.10
+        );
+
+}
+
+
+/* ============================================================
+   TRUST CARD
+============================================================ */
+
+.hero-trust-card {
+
+    position:
+        relative;
+
+    min-height:
+        72px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        12px;
+
+    padding:
+        13px 26px;
+
+    transition:
+        background
+        240ms ease;
+
+}
+
+
+.hero-trust-card:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.40
+        );
+
+}
+
+
+/* ============================================================
+   TRUST DIVIDER
+============================================================ */
+
+.hero-trust-card +
+.hero-trust-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    top:
+        18px;
+
+    bottom:
+        18px;
+
+    width:
+        1px;
+
+    background:
+        rgba(
+            56,
+            31,
+            18,
+            0.10
+        );
+
+}
+
+
+/* ============================================================
+   TRUST ICON
+============================================================ */
+
+.hero-trust-card__icon {
+
+    width:
+        36px;
+
+    height:
+        36px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(
+            87,
+            102,
+            84,
+            0.10
+        );
+
+    color:
+        #576654;
+
+    transition:
+        transform
+        240ms ease,
+        background
+        240ms ease;
+
+}
+
+
+.hero-trust-card:hover
+.hero-trust-card__icon {
+
+    transform:
+        scale(
+            1.08
+        );
+
+    background:
+        rgba(
+            87,
+            102,
+            84,
+            0.15
+        );
+
+}
+
+
+/* ============================================================
+   TRUST TEXT
+============================================================ */
+
+.hero-trust-card div {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
+}
+
+
+.hero-trust-card strong {
+
+    color:
+        #381f12;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+}
+
+
+.hero-trust-card small {
+
+    color:
+        #807267;
+
+    font-size:
+        9px;
+
+}
+
+
+/* ============================================================
+   AUDIO CONTROL
+============================================================ */
+
+.hero-audio-toggle {
+
+    position:
+        absolute;
+
+    right:
+        34px;
+
+    bottom:
+        116px;
+
+    z-index:
+        7;
+
+    width:
+        42px;
+
+    height:
+        42px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.58
+        );
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.70
+        );
+
+    color:
+        #381f12;
+
+    backdrop-filter:
+        blur(
+            14px
+        );
+
+    -webkit-backdrop-filter:
+        blur(
+            14px
+        );
+
+    box-shadow:
+        0 10px 28px
+        rgba(
+            56,
+            31,
+            18,
+            0.12
+        );
+
+    transition:
+        transform
+        230ms ease,
+        background
+        230ms ease,
+        color
+        230ms ease;
+
+}
+
+
+.hero-audio-toggle:hover {
+
+    transform:
+        translateY(
+            -3px
+        );
+
+    background:
+        #576654;
+
+    color:
+        #ffffff;
+
+}
+
+
+.hero-audio-toggle:active {
+
+    transform:
+        scale(
+            0.92
+        );
+
+}
+
+
+/* ============================================================
+   LAPTOP
+============================================================ */
+
+@media(
+    max-width:1100px
+) {
+
+    .hero__inner {
+
+        width:
+            min(
+                calc(
+                    100% - 56px
+                ),
+                1480px
+            );
+
+        grid-template-columns:
+            minmax(
+                0,
+                1fr
+            )
+            280px;
+
+        gap:
+            28px;
+
+    }
+
+
+    .hero__trust {
+
+        width:
+            min(
+                calc(
+                    100% - 56px
+                ),
+                1480px
+            );
+
+    }
+
+
+    .hero__signature {
+
+        margin-bottom:
+            100px;
+
+    }
+
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media(
+    max-width:900px
+) {
+
+    .hero {
+
+        min-height:
+            710px;
+
+    }
+
+
+    /*
+        Tablet overlay remains slightly stronger
+        because background video can interfere with text.
+    */
+
+    .hero__veil {
+
+        background:
+
+            linear-gradient(
+
+                90deg,
+
+                rgba(
+                    247,
+                    243,
+                    235,
+                    0.84
+                )
+                0%,
+
+                rgba(
+                    247,
+                    243,
+                    235,
+                    0.68
+                )
+                48%,
+
+                rgba(
+                    247,
+                    243,
+                    235,
+                    0.28
+                )
+                100%
+
+            ),
+
+            linear-gradient(
+
+                180deg,
+
+                transparent
+                52%,
+
+                rgba(
+                    56,
+                    31,
+                    18,
+                    0.12
+                )
+                100%
+
+            );
+
+    }
+
+
+    .hero__inner {
+
+        width:
+            min(
+                calc(
+                    100% - 40px
+                ),
+                1480px
+            );
+
+        min-height:
+            710px;
+
+        grid-template-columns:
+            1fr;
+
+        align-items:
+            center;
+
+        padding:
+            74px 0
+            170px;
+
+    }
+
+
+    .hero__content {
+
+        max-width:
+            650px;
+
+    }
+
+
+    .hero__signature {
+
+        display:
+            none;
+
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(
+                50px,
+                8vw,
+                67px
+            );
+
+    }
+
+
+    .hero__trust {
+
+        width:
+            calc(
+                100% - 40px
+            );
+
+        bottom:
+            22px;
+
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media(
+    max-width:640px
+) {
+
+    .hero {
+
+        min-height:
+            760px;
+
+    }
+
+
+    .hero__media {
+
+        background-position:
+            62% center;
+
+    }
+
+
+    /*
+        Mobile needs slightly more overlay
+        because text occupies most of the image.
+    */
+
+    .hero__veil {
+
+        background:
+
+            linear-gradient(
+
+                180deg,
+
+                rgba(
+                    247,
+                    243,
+                    235,
+                    0.86
+                )
+                0%,
+
+                rgba(
+                    247,
+                    243,
+                    235,
+                    0.74
+                )
+                47%,
+
+                rgba(
+                    247,
+                    243,
+                    235,
+                    0.38
+                )
+                75%,
+
+                rgba(
+                    56,
+                    31,
+                    18,
+                    0.13
+                )
+                100%
+
+            );
+
+    }
+
+
+    .hero-video {
+
+        filter:
+            saturate(
+                1.07
+            )
+            contrast(
+                1.04
+            )
+            brightness(
+                0.97
+            );
+
+    }
+
+
+    .hero__inner {
+
+        width:
+            calc(
+                100% - 30px
+            );
+
+        min-height:
+            760px;
+
+        align-items:
+            start;
+
+        padding:
+            74px 0
+            232px;
+
+    }
+
+
+    .hero__content {
+
+        padding-top:
+            24px;
+
+    }
+
+
+    .hero__eyebrow {
+
+        margin-bottom:
+            17px;
+
+        font-size:
+            9px;
+
+        letter-spacing:
+            1.8px;
+
+    }
+
+
+    .hero__eyebrow-line {
+
+        width:
+            25px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(
+                43px,
+                12vw,
+                58px
+            );
+
+        line-height:
+            1;
+
+        letter-spacing:
+            -0.025em;
+
+    }
+
+
+    .hero__description {
+
+        max-width:
+            95%;
+
+        margin-top:
+            22px;
+
+        font-size:
+            14px;
+
+        line-height:
+            1.7;
+
+    }
+
+
+    .hero__buttons {
+
+        gap:
+            10px;
+
+        margin-top:
+            27px;
+
+    }
+
+
+    .hero__primary,
+    .hero__secondary {
+
+        min-height:
+            47px;
+
+        padding:
+            0 19px;
+
+        font-size:
+            11px;
+
+    }
+
+
+    .hero__assurance {
+
+        gap:
+            10px 15px;
+
+        margin-top:
+            20px;
+
+    }
+
+
+    .hero__trust {
+
+        grid-template-columns:
+            1fr;
+
+        width:
+            calc(
+                100% - 28px
+            );
+
+        bottom:
+            14px;
+
+        border-radius:
+            17px;
+
+    }
+
+
+    .hero-trust-card {
+
+        min-height:
+            58px;
+
+        justify-content:
+            flex-start;
+
+        padding:
+            9px 16px;
+
+    }
+
+
+    .hero-trust-card +
+    .hero-trust-card::before {
+
+        top:
+            0;
+
+        bottom:
+            auto;
+
+        left:
+            16px;
+
+        right:
+            16px;
+
+        width:
+            auto;
+
+        height:
+            1px;
+
+    }
+
+
+    .hero-trust-card__icon {
+
+        width:
+            31px;
+
+        height:
+            31px;
+
+    }
+
+
+    .hero-audio-toggle {
+
+        right:
+            18px;
+
+        bottom:
+            206px;
+
+    }
+
+}

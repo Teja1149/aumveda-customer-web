@@ -1,0 +1,2337 @@
+/* ============================================================
+   AUMVEDA PREMIUM CONTACT PAGE
+
+   Contact intentionally uses a darker editorial aesthetic
+   so it does NOT look like the About page.
+============================================================ */
+
+
+.aumveda-contact-page {
+
+    --brown: #381f12;
+    --cream: #ede4d4;
+    --green: #576654;
+    --neutral: #eeeae2;
+    --paper: #f7f3eb;
+    --dark: #263127;
+    --muted: #756d64;
+
+    background: var(--paper);
+
+    color: var(--brown);
+
+    overflow: hidden;
+
+}
+
+
+.aumveda-contact-container {
+
+    width: min(
+        1240px,
+        calc(100% - 48px)
+    );
+
+    margin: 0 auto;
+
+}
+
+
+/* ============================================================
+   COMMON
+============================================================ */
+
+.aumveda-contact-eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #cbd6c4;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.7px;
+
+}
+
+
+.aumveda-contact-eyebrow::before {
+
+    content: "";
+
+    width: 25px;
+
+    height: 1px;
+
+    background: currentColor;
+
+}
+
+
+.aumveda-contact-eyebrow.dark {
+
+    color: var(--green);
+
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+.aumveda-contact-hero {
+
+    position: relative;
+
+    min-height: 750px;
+
+    display: flex;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 78% 35%,
+            rgba(125,145,116,.3),
+            transparent 29%
+        ),
+
+        linear-gradient(
+            125deg,
+            #263127 0%,
+            #354337 48%,
+            #576654 100%
+        );
+
+    color: white;
+
+}
+
+
+.contact-hero-glow {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(1px);
+
+    pointer-events: none;
+
+}
+
+
+.glow-one {
+
+    width: 430px;
+    height: 430px;
+
+    right: -150px;
+    top: -160px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.glow-two {
+
+    width: 280px;
+    height: 280px;
+
+    left: -150px;
+    bottom: -150px;
+
+    background:
+        rgba(87,102,84,.3);
+
+}
+
+
+.aumveda-contact-hero-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    align-items: center;
+
+    gap: 80px;
+
+}
+
+
+.aumveda-contact-hero-copy h1 {
+
+    max-width: 670px;
+
+    margin: 19px 0 24px;
+
+    font-size: clamp(
+        52px,
+        6vw,
+        86px
+    );
+
+    line-height: .93;
+
+    font-weight: 450;
+
+    letter-spacing: -4.5px;
+
+}
+
+
+.aumveda-contact-hero-copy h1 span {
+
+    display: block;
+
+    color: #d6dfd1;
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+    font-weight: 400;
+
+}
+
+
+.aumveda-contact-hero-copy p {
+
+    max-width: 540px;
+
+    color: rgba(255,255,255,.66);
+
+    font-size: 14px;
+
+    line-height: 1.9;
+
+}
+
+
+.contact-hero-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 23px;
+
+    flex-wrap: wrap;
+
+    margin-top: 32px;
+
+}
+
+
+.contact-primary-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 49px;
+
+    padding: 0 22px;
+
+    border-radius: 999px;
+
+    background: #f2eee5;
+
+    color: var(--brown);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: .6px;
+
+    transition: .25s ease;
+
+}
+
+
+.contact-primary-button:hover {
+
+    transform: translateY(-3px);
+
+    background: white;
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,0,0,.2);
+
+}
+
+
+.contact-text-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: rgba(255,255,255,.75);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+
+}
+
+
+.contact-text-link:hover {
+
+    color: white;
+
+}
+
+
+/* ============================================================
+   3D CONTACT VISUAL
+============================================================ */
+
+.aumveda-contact-hero-visual {
+
+    position: relative;
+
+    height: 560px;
+
+    perspective: 1000px;
+
+}
+
+
+.contact-letter-card {
+
+    position: absolute;
+
+    z-index: 4;
+
+    left: 50%;
+    top: 50%;
+
+    width: 390px;
+    min-height: 360px;
+
+    padding: 27px;
+
+    transform:
+        translate(-50%, -50%)
+        rotateX(7deg)
+        rotateY(-10deg)
+        rotateZ(3deg);
+
+    border:
+        1px solid
+        rgba(255,255,255,.28);
+
+    border-radius: 27px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.18),
+            rgba(255,255,255,.055)
+        );
+
+    backdrop-filter: blur(25px);
+
+    box-shadow:
+
+        30px 45px 80px
+        rgba(0,0,0,.27),
+
+        inset 0 1px 0
+        rgba(255,255,255,.2);
+
+    transition:
+        transform .6s ease;
+
+}
+
+
+.contact-letter-card:hover {
+
+    transform:
+        translate(-50%, -50%)
+        rotateX(2deg)
+        rotateY(-3deg)
+        rotateZ(0deg)
+        translateY(-8px);
+
+}
+
+
+.letter-card-top {
+
+    display: grid;
+
+    grid-template-columns:
+        42px
+        1fr
+        auto;
+
+    gap: 12px;
+
+    align-items: center;
+
+}
+
+
+.letter-logo-mark {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    font-family: Georgia, serif;
+
+    font-size: 20px;
+
+}
+
+
+.letter-card-top span {
+
+    display: flex;
+
+    flex-direction: column;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.letter-card-top span small {
+
+    margin-top: 2px;
+
+    color: rgba(255,255,255,.5);
+
+    font-size: 7px;
+
+    letter-spacing: 3px;
+
+}
+
+
+.letter-card-top > svg {
+
+    color: #d7e0d2;
+
+}
+
+
+.letter-card-lines {
+
+    margin-top: 50px;
+
+    display: grid;
+
+    gap: 9px;
+
+}
+
+
+.letter-card-lines span {
+
+    display: block;
+
+    width: 100%;
+
+    height: 5px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.12);
+
+}
+
+
+.letter-card-lines span:nth-child(2) {
+
+    width: 78%;
+
+}
+
+
+.letter-card-lines span.short {
+
+    width: 55%;
+
+}
+
+
+.letter-card-message {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin-top: 45px;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius: 18px;
+
+    background:
+        rgba(0,0,0,.09);
+
+}
+
+
+.letter-card-message svg {
+
+    flex-shrink: 0;
+
+    color: #d5dfd0;
+
+}
+
+
+.letter-card-message div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+.letter-card-message strong {
+
+    font-size: 12px;
+
+}
+
+
+.letter-card-message span {
+
+    color: rgba(255,255,255,.55);
+
+    font-size: 9px;
+
+    line-height: 1.6;
+
+}
+
+
+.letter-card-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 30px;
+
+    color: rgba(255,255,255,.35);
+
+    font-size: 7px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.contact-floating-chip {
+
+    position: absolute;
+
+    z-index: 8;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 11px 14px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.1);
+
+    backdrop-filter: blur(16px);
+
+    color: rgba(255,255,255,.8);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: .6px;
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,0,0,.12);
+
+    animation:
+        contactFloat 5s ease-in-out infinite;
+
+}
+
+
+.chip-top {
+
+    left: 20px;
+    top: 92px;
+
+}
+
+
+.chip-bottom {
+
+    right: 10px;
+    bottom: 90px;
+
+    animation-delay: -2.2s;
+
+}
+
+
+.contact-orbit {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    border-radius: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+}
+
+
+.contact-orbit-one {
+
+    width: 510px;
+    height: 180px;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(31deg);
+
+}
+
+
+.contact-orbit-two {
+
+    width: 430px;
+    height: 160px;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-39deg);
+
+}
+
+
+@keyframes contactFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-9px);
+
+    }
+
+}
+
+
+/* ============================================================
+   CHANNELS
+============================================================ */
+
+.aumveda-contact-channels {
+
+    padding: 115px 0;
+
+    background: var(--paper);
+
+}
+
+
+.contact-channel-header {
+
+    max-width: 650px;
+
+}
+
+
+.contact-channel-header h2 {
+
+    margin: 16px 0 0;
+
+    font-size: clamp(
+        40px,
+        5vw,
+        64px
+    );
+
+    line-height: .98;
+
+    font-weight: 500;
+
+    letter-spacing: -3px;
+
+}
+
+
+.contact-channel-header h2 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.contact-channel-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 17px;
+
+    margin-top: 55px;
+
+}
+
+
+.contact-channel-card {
+
+    position: relative;
+
+    min-height: 270px;
+
+    padding: 28px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(56,31,18,.1);
+
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,.55);
+
+    color: var(--brown);
+
+    text-decoration: none;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+
+}
+
+
+.contact-channel-card:hover {
+
+    transform: translateY(-7px);
+
+    border-color:
+        rgba(87,102,84,.35);
+
+    box-shadow:
+        0 25px 55px
+        rgba(56,31,18,.1);
+
+}
+
+
+.channel-icon {
+
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background:
+        rgba(87,102,84,.1);
+
+    color: var(--green);
+
+}
+
+
+.channel-label {
+
+    display: block;
+
+    margin-top: 35px;
+
+    color: var(--green);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.contact-channel-card h3 {
+
+    margin: 8px 0 10px;
+
+    font-size: 18px;
+
+    font-weight: 550;
+
+    overflow-wrap: anywhere;
+
+}
+
+
+.contact-channel-card p {
+
+    max-width: 240px;
+
+    color: #817870;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+
+}
+
+
+.channel-arrow {
+
+    position: absolute;
+
+    right: 26px;
+    bottom: 27px;
+
+    color: var(--green);
+
+}
+
+
+/* ============================================================
+   FORM SECTION
+============================================================ */
+
+.aumveda-contact-form-section {
+
+    padding: 120px 0;
+
+    background: var(--neutral);
+
+}
+
+
+.contact-form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        .85fr
+        1.15fr;
+
+    gap: 75px;
+
+    align-items: center;
+
+}
+
+
+.contact-form-visual {
+
+    position: relative;
+
+    min-height: 670px;
+
+}
+
+
+.contact-form-visual img {
+
+    width: 100%;
+    height: 670px;
+
+    object-fit: cover;
+
+    border-radius:
+        35px
+        125px
+        35px
+        35px;
+
+    box-shadow:
+        0 35px 75px
+        rgba(56,31,18,.16);
+
+}
+
+
+.contact-form-visual-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    border-radius:
+        35px
+        125px
+        35px
+        35px;
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent 35%,
+            rgba(38,49,39,.85) 100%
+        );
+
+}
+
+
+.contact-form-quote {
+
+    position: absolute;
+
+    left: 35px;
+    right: 35px;
+    bottom: 40px;
+
+    color: white;
+
+}
+
+
+.contact-form-quote > span {
+
+    font-family: Georgia, serif;
+
+    font-size: 70px;
+
+    line-height: .5;
+
+    opacity: .7;
+
+}
+
+
+.contact-form-quote p {
+
+    max-width: 390px;
+
+    margin: 12px 0;
+
+    font-family: Georgia, serif;
+
+    font-size: 25px;
+
+    line-height: 1.15;
+
+    font-style: italic;
+
+}
+
+
+.contact-form-quote small {
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    opacity: .7;
+
+}
+
+
+.contact-form-mini-card {
+
+    position: absolute;
+
+    right: -28px;
+    top: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px 16px;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255,255,255,.82);
+
+    backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 20px 45px
+        rgba(56,31,18,.14);
+
+}
+
+
+.contact-form-mini-card svg {
+
+    color: var(--green);
+
+}
+
+
+.contact-form-mini-card div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+.contact-form-mini-card strong {
+
+    font-size: 10px;
+
+}
+
+
+.contact-form-mini-card span {
+
+    color: #827970;
+
+    font-size: 8px;
+
+}
+
+
+.contact-form-wrapper h2 {
+
+    margin: 17px 0 13px;
+
+    font-size: clamp(
+        42px,
+        5vw,
+        64px
+    );
+
+    line-height: .95;
+
+    font-weight: 500;
+
+    letter-spacing: -3px;
+
+}
+
+
+.contact-form-wrapper h2 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.contact-form-intro {
+
+    max-width: 530px;
+
+    color: #7c736b;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+
+}
+
+
+.aumveda-contact-form {
+
+    margin-top: 35px;
+
+}
+
+
+.contact-input-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 15px;
+
+}
+
+
+.aumveda-contact-form label {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 17px;
+
+    color: var(--brown);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .8px;
+
+}
+
+
+.aumveda-contact-form input,
+.aumveda-contact-form textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(56,31,18,.14);
+
+    border-radius: 13px;
+
+    outline: none;
+
+    background:
+        rgba(255,255,255,.7);
+
+    color: var(--brown);
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.aumveda-contact-form input {
+
+    height: 46px;
+
+    padding: 0 14px;
+
+}
+
+
+.aumveda-contact-form textarea {
+
+    resize: vertical;
+
+    min-height: 140px;
+
+    padding: 13px 14px;
+
+}
+
+
+.aumveda-contact-form input:focus,
+.aumveda-contact-form textarea:focus {
+
+    border-color: var(--green);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(87,102,84,.08);
+
+}
+
+
+.aumveda-contact-form input::placeholder,
+.aumveda-contact-form textarea::placeholder {
+
+    color: #a49b93;
+
+}
+
+
+.contact-form-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.contact-submit-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    height: 48px;
+
+    padding: 0 21px;
+
+    border: 0;
+
+    border-radius: 999px;
+
+    background: var(--green);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: .7px;
+
+    transition: .25s ease;
+
+}
+
+
+.contact-submit-button:hover {
+
+    background: var(--brown);
+
+    transform: translateY(-2px);
+
+}
+
+
+.contact-form-success {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--green);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+}
+
+
+/* ============================================================
+   TEAM
+============================================================ */
+
+.aumveda-contact-team {
+
+    padding: 110px 0;
+
+    background: var(--paper);
+
+}
+
+
+.contact-team-header {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        .65fr;
+
+    gap: 70px;
+
+    align-items: end;
+
+}
+
+
+.contact-team-header h2 {
+
+    margin: 16px 0 0;
+
+    font-size: clamp(
+        40px,
+        5vw,
+        64px
+    );
+
+    line-height: .97;
+
+    font-weight: 500;
+
+    letter-spacing: -3px;
+
+}
+
+
+.contact-team-header h2 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.contact-team-header > p {
+
+    margin: 0;
+
+    color: #7b726a;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+
+}
+
+
+.contact-team-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 14px;
+
+    margin-top: 50px;
+
+}
+
+
+.contact-person-card {
+
+    display: grid;
+
+    grid-template-columns:
+        48px
+        1fr
+        20px;
+
+    gap: 13px;
+
+    align-items: center;
+
+    padding: 21px;
+
+    border:
+        1px solid
+        rgba(56,31,18,.1);
+
+    border-radius: 19px;
+
+    background:
+        rgba(255,255,255,.6);
+
+    color: var(--brown);
+
+    text-decoration: none;
+
+    transition: .25s ease;
+
+}
+
+
+.contact-person-card:hover {
+
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(87,102,84,.3);
+
+    box-shadow:
+        0 20px 40px
+        rgba(56,31,18,.08);
+
+}
+
+
+.person-avatar {
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    color: white;
+
+    font-family: Georgia, serif;
+
+    font-size: 20px;
+
+}
+
+
+.contact-person-card span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.contact-person-card h3 {
+
+    margin: 4px 0 2px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+
+.contact-person-card p {
+
+    margin: 0;
+
+    color: #827970;
+
+    font-size: 9px;
+
+}
+
+
+.contact-person-card > svg {
+
+    color: var(--green);
+
+}
+
+
+/* ============================================================
+   LOCATION
+============================================================ */
+
+.aumveda-contact-location {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    min-height: 620px;
+
+}
+
+
+.location-map-art {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(87,102,84,.25),
+            transparent 45%
+        ),
+
+        #263127;
+
+}
+
+
+.map-grid {
+
+    position: absolute;
+
+    inset: -50px;
+
+    opacity: .18;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255,255,255,.2) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.2) 1px,
+            transparent 1px
+        );
+
+    background-size: 42px 42px;
+
+    transform: rotate(8deg);
+
+}
+
+
+.map-ring {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    border:
+        1px solid
+        rgba(207,219,201,.2);
+
+    border-radius: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+}
+
+
+.ring-a {
+
+    width: 350px;
+    height: 350px;
+
+}
+
+
+.ring-b {
+
+    width: 520px;
+    height: 520px;
+
+}
+
+
+.map-pin {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 68px;
+    height: 68px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: #d8e0d4;
+
+    color: var(--green);
+
+    box-shadow:
+        0 0 0 15px
+        rgba(216,224,212,.08),
+
+        0 20px 50px
+        rgba(0,0,0,.35);
+
+    animation:
+        locationPulse 2.7s ease-in-out infinite;
+
+}
+
+
+@keyframes locationPulse {
+
+    0%,
+    100% {
+
+        box-shadow:
+            0 0 0 15px
+            rgba(216,224,212,.08),
+
+            0 20px 50px
+            rgba(0,0,0,.35);
+
+    }
+
+    50% {
+
+        box-shadow:
+            0 0 0 27px
+            rgba(216,224,212,.04),
+
+            0 20px 50px
+            rgba(0,0,0,.35);
+
+    }
+
+}
+
+
+.map-label {
+
+    position: absolute;
+
+    display: flex;
+
+    flex-direction: column;
+
+    color: white;
+
+}
+
+
+.label-main {
+
+    left: calc(50% + 55px);
+    top: calc(50% - 25px);
+
+}
+
+
+.label-main strong {
+
+    font-family: Georgia, serif;
+
+    font-size: 23px;
+
+    letter-spacing: 3px;
+
+}
+
+
+.label-main span {
+
+    margin-top: 4px;
+
+    color: #cbd6c4;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.label-small {
+
+    right: 55px;
+    bottom: 50px;
+
+    color: rgba(255,255,255,.4);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.location-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding:
+        80px
+        clamp(
+            40px,
+            7vw,
+            110px
+        );
+
+    background: #f4f0e7;
+
+}
+
+
+.location-content h2 {
+
+    margin: 17px 0;
+
+    font-size: clamp(
+        42px,
+        5vw,
+        67px
+    );
+
+    line-height: .95;
+
+    font-weight: 500;
+
+    letter-spacing: -3px;
+
+}
+
+
+.location-content h2 span {
+
+    display: block;
+
+    color: var(--green);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.location-content > p {
+
+    max-width: 500px;
+
+    color: #7b726a;
+
+    font-size: 12px;
+
+    line-height: 1.85;
+
+}
+
+
+.location-address,
+.location-hours {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+    color: var(--brown);
+
+    font-size: 11px;
+
+    line-height: 1.7;
+
+}
+
+
+.location-address svg,
+.location-hours svg {
+
+    flex-shrink: 0;
+
+    color: var(--green);
+
+}
+
+
+.location-hours {
+
+    margin-top: 14px;
+
+    color: #817870;
+
+    font-size: 9px;
+
+}
+
+
+.contact-location-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    align-self: flex-start;
+
+    gap: 8px;
+
+    margin-top: 31px;
+
+    min-height: 45px;
+
+    padding: 0 18px;
+
+    border-radius: 999px;
+
+    background: var(--brown);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    transition: .25s ease;
+
+}
+
+
+.contact-location-button:hover {
+
+    background: var(--green);
+
+    transform: translateY(-2px);
+
+}
+
+
+/* ============================================================
+   FINAL
+============================================================ */
+
+.aumveda-contact-final {
+
+    position: relative;
+
+    min-height: 470px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    background: var(--brown);
+
+    color: white;
+
+}
+
+
+.contact-final-orb {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+.orb-left {
+
+    width: 380px;
+    height: 380px;
+
+    left: -180px;
+    top: -130px;
+
+}
+
+
+.orb-right {
+
+    width: 500px;
+    height: 500px;
+
+    right: -250px;
+    bottom: -250px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(87,102,84,.25),
+            transparent 65%
+        );
+
+}
+
+
+.contact-final-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 720px;
+
+}
+
+
+.contact-final-content
+.aumveda-contact-eyebrow {
+
+    justify-content: center;
+
+}
+
+
+.contact-final-content h2 {
+
+    margin: 17px 0;
+
+    font-size: clamp(
+        43px,
+        6vw,
+        75px
+    );
+
+    line-height: .95;
+
+    font-weight: 500;
+
+    letter-spacing: -3.5px;
+
+}
+
+
+.contact-final-content h2 span {
+
+    display: block;
+
+    color: #cbd6c4;
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+}
+
+
+.contact-final-content p {
+
+    max-width: 520px;
+
+    margin: 0 auto 28px;
+
+    color: rgba(255,255,255,.58);
+
+    font-size: 12px;
+
+    line-height: 1.8;
+
+}
+
+
+.contact-final-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.contact-final-link {
+
+    color: rgba(255,255,255,.7);
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.contact-final-link:hover {
+
+    color: white;
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 1050px) {
+
+    .aumveda-contact-hero {
+
+        min-height: auto;
+
+        padding: 90px 0;
+
+    }
+
+
+    .aumveda-contact-hero-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+
+    }
+
+
+    .aumveda-contact-hero-copy {
+
+        text-align: center;
+
+    }
+
+
+    .aumveda-contact-hero-copy p {
+
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+
+
+    .aumveda-contact-eyebrow {
+
+        justify-content: center;
+
+    }
+
+
+    .contact-hero-actions {
+
+        justify-content: center;
+
+    }
+
+
+    .aumveda-contact-hero-visual {
+
+        height: 550px;
+
+    }
+
+
+    .contact-channel-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .contact-form-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .contact-form-visual {
+
+        max-width: 650px;
+
+        width: 100%;
+
+        margin: auto;
+
+    }
+
+
+    .contact-team-header {
+
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+
+    }
+
+
+    .contact-team-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .aumveda-contact-container {
+
+        width: min(
+            100% - 30px,
+            1240px
+        );
+
+    }
+
+
+    .aumveda-contact-hero-copy h1 {
+
+        font-size: 50px;
+
+        letter-spacing: -3px;
+
+    }
+
+
+    .aumveda-contact-hero-visual {
+
+        height: 460px;
+
+    }
+
+
+    .contact-letter-card {
+
+        width: 300px;
+
+        min-height: 315px;
+
+        padding: 21px;
+
+    }
+
+
+    .contact-orbit-one {
+
+        width: 390px;
+        height: 135px;
+
+    }
+
+
+    .contact-orbit-two {
+
+        width: 350px;
+        height: 120px;
+
+    }
+
+
+    .chip-top {
+
+        left: 0;
+
+        top: 50px;
+
+    }
+
+
+    .chip-bottom {
+
+        right: 0;
+
+        bottom: 50px;
+
+    }
+
+
+    .aumveda-contact-channels,
+    .aumveda-contact-form-section,
+    .aumveda-contact-team {
+
+        padding: 85px 0;
+
+    }
+
+
+    .contact-channel-header h2,
+    .contact-team-header h2 {
+
+        font-size: 43px;
+
+    }
+
+
+    .contact-input-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 0;
+
+    }
+
+
+    .contact-form-visual {
+
+        min-height: 500px;
+
+    }
+
+
+    .contact-form-visual img {
+
+        height: 500px;
+
+    }
+
+
+    .contact-form-mini-card {
+
+        right: 8px;
+
+    }
+
+
+    .aumveda-contact-location {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .location-map-art {
+
+        min-height: 450px;
+
+    }
+
+
+    .location-content {
+
+        padding:
+            75px
+            25px;
+
+    }
+
+
+    .location-content h2 {
+
+        font-size: 45px;
+
+    }
+
+
+    .aumveda-contact-final {
+
+        min-height: 430px;
+
+        padding:
+            60px 20px;
+
+    }
+
+
+    .contact-final-content h2 {
+
+        font-size: 48px;
+
+    }
+
+}

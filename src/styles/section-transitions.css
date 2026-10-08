@@ -1,0 +1,105 @@
+/* ============================================================
+   AUMVEDA NATURAL SECTION TRANSITIONS
+============================================================ */
+
+
+.section-blend {
+
+
+    position:relative;
+
+
+    overflow:hidden;
+
+
+}
+
+
+
+
+
+.section-blend::before {
+
+
+    content:"";
+
+
+    position:absolute;
+
+
+    top:-80px;
+
+
+    left:0;
+
+
+    width:100%;
+
+
+    height:120px;
+
+
+    background:linear-gradient(
+
+        to bottom,
+
+        transparent,
+
+        inherit
+
+    );
+
+
+    z-index:1;
+
+
+    pointer-events:none;
+
+
+}
+
+
+
+
+
+.section-blend::after {
+
+
+    content:"";
+
+
+    position:absolute;
+
+
+    bottom:-1px;
+
+
+    left:0;
+
+
+    width:100%;
+
+
+    height:90px;
+
+
+    background:
+
+    linear-gradient(
+
+        to bottom,
+
+        transparent,
+
+        rgba(238,234,226,.9)
+
+    );
+
+
+    z-index:1;
+
+
+    pointer-events:none;
+
+
+}

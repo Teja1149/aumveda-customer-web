@@ -1,0 +1,1009 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
+
+
+:root {
+
+    --aum-brown-950: #25130b;
+
+    --aum-brown-900: #381f12;
+
+    --aum-brown-800: #4b2c1c;
+
+    --aum-brown-700: #654331;
+
+
+    --aum-green-900: #3f4a3d;
+
+    --aum-green-800: #4b5949;
+
+    --aum-green-700: #576654;
+
+    --aum-green-600: #6d7c69;
+
+
+    --aum-gold-700: #a77f32;
+
+    --aum-gold-600: #b9934a;
+
+    --aum-gold-500: #caa65d;
+
+
+    --aum-cream: #ede4d4;
+
+    --aum-sand: #e7dece;
+
+    --aum-ivory: #f7f3eb;
+
+    --aum-ivory-soft: #fbf8f2;
+
+    --aum-white: #ffffff;
+
+
+    --aum-text-primary: #381f12;
+
+    --aum-text-secondary: #675d55;
+
+    --aum-text-muted: #85786e;
+
+    --aum-text-light: #a09489;
+
+
+    --aum-border:
+        rgba(
+            56,
+            31,
+            18,
+            0.10
+        );
+
+
+    --aum-border-medium:
+        rgba(
+            56,
+            31,
+            18,
+            0.15
+        );
+
+
+    --aum-border-green:
+        rgba(
+            87,
+            102,
+            84,
+            0.18
+        );
+
+
+    --aum-border-gold:
+        rgba(
+            185,
+            147,
+            74,
+            0.28
+        );
+
+
+    --aum-font-display:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+
+    --aum-font-body:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+
+    --aum-radius-xs: 8px;
+
+    --aum-radius-sm: 12px;
+
+    --aum-radius-md: 18px;
+
+    --aum-radius-lg: 24px;
+
+    --aum-radius-xl: 32px;
+
+    --aum-radius-pill: 999px;
+
+
+    --aum-shadow-xs:
+        0 4px 14px
+        rgba(
+            56,
+            31,
+            18,
+            0.04
+        );
+
+
+    --aum-shadow-sm:
+        0 10px 28px
+        rgba(
+            56,
+            31,
+            18,
+            0.06
+        );
+
+
+    --aum-shadow-md:
+        0 16px 42px
+        rgba(
+            56,
+            31,
+            18,
+            0.08
+        );
+
+
+    --aum-shadow-lg:
+        0 26px 70px
+        rgba(
+            56,
+            31,
+            18,
+            0.11
+        );
+
+
+    --aum-shadow-premium:
+        0 30px 90px
+        rgba(
+            56,
+            31,
+            18,
+            0.13
+        );
+
+
+    --aum-transition-fast:
+        180ms ease;
+
+
+    --aum-transition:
+        280ms ease;
+
+
+    --aum-transition-slow:
+        450ms
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+
+
+    --aum-container:
+        1440px;
+
+
+    --aum-section-space:
+        92px;
+
+}
+
+
+/* ============================================================
+   GLOBAL RESET
+============================================================ */
+
+* {
+
+    box-sizing:
+        border-box;
+
+}
+
+
+html {
+
+    scroll-behavior:
+        smooth;
+
+}
+
+
+html,
+body,
+#root {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+}
+
+
+body {
+
+    margin:
+        0;
+
+    min-width:
+        320px;
+
+    overflow-x:
+        hidden;
+
+    background:
+        var(
+            --aum-ivory
+        );
+
+    color:
+        var(
+            --aum-text-primary
+        );
+
+    font-family:
+        var(
+            --aum-font-body
+        );
+
+    font-size:
+        15px;
+
+    line-height:
+        1.6;
+
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        optimizeLegibility;
+
+}
+
+
+button,
+input,
+textarea,
+select {
+
+    font:
+        inherit;
+
+}
+
+
+button {
+
+    cursor:
+        pointer;
+
+}
+
+
+a {
+
+    color:
+        inherit;
+
+    text-decoration:
+        none;
+
+}
+
+
+img {
+
+    display:
+        block;
+
+    max-width:
+        100%;
+
+}
+
+
+/* ============================================================
+   SELECTION
+============================================================ */
+
+::selection {
+
+    background:
+        var(
+            --aum-green-700
+        );
+
+    color:
+        #ffffff;
+
+}
+
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+
+::-webkit-scrollbar {
+
+    width:
+        8px;
+
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        #f2ede4;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(
+            87,
+            102,
+            84,
+            0.42
+        );
+
+    border-radius:
+        999px;
+
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        var(
+            --aum-green-700
+        );
+
+}
+
+
+/* ============================================================
+   TYPOGRAPHY
+============================================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+
+    color:
+        var(
+            --aum-brown-900
+        );
+
+    font-family:
+        var(
+            --aum-font-display
+        );
+
+    letter-spacing:
+        -0.02em;
+
+}
+
+
+/* ============================================================
+   GLOBAL CONTAINER
+============================================================ */
+
+.aumveda-container {
+
+    width:
+        min(
+            calc(
+                100% - 72px
+            ),
+            var(
+                --aum-container
+            )
+        );
+
+    margin:
+        0 auto;
+
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media(
+    max-width:900px
+) {
+
+    :root {
+
+        --aum-section-space:
+            70px;
+
+    }
+
+
+    .aumveda-container {
+
+        width:
+            min(
+                calc(
+                    100% - 36px
+                ),
+                var(
+                    --aum-container
+                )
+            );
+
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media(
+    max-width:560px
+) {
+
+    :root {
+
+        --aum-section-space:
+            54px;
+
+    }
+
+
+    .aumveda-container {
+
+        width:
+            calc(
+                100% - 28px
+            );
+
+    }
+
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media(
+    prefers-reduced-motion:
+    reduce
+) {
+
+    * {
+
+        scroll-behavior:
+            auto !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+
+    }
+
+}@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
+
+
+:root {
+
+    --aum-brown-950: #25130b;
+
+    --aum-brown-900: #381f12;
+
+    --aum-brown-800: #4b2c1c;
+
+    --aum-brown-700: #654331;
+
+
+    --aum-green-900: #3f4a3d;
+
+    --aum-green-800: #4b5949;
+
+    --aum-green-700: #576654;
+
+    --aum-green-600: #6d7c69;
+
+
+    --aum-gold-700: #a77f32;
+
+    --aum-gold-600: #b9934a;
+
+    --aum-gold-500: #caa65d;
+
+
+    --aum-cream: #ede4d4;
+
+    --aum-sand: #e7dece;
+
+    --aum-ivory: #f7f3eb;
+
+    --aum-ivory-soft: #fbf8f2;
+
+    --aum-white: #ffffff;
+
+
+    --aum-text-primary: #381f12;
+
+    --aum-text-secondary: #675d55;
+
+    --aum-text-muted: #85786e;
+
+    --aum-text-light: #a09489;
+
+
+    --aum-border:
+        rgba(
+            56,
+            31,
+            18,
+            0.10
+        );
+
+
+    --aum-border-medium:
+        rgba(
+            56,
+            31,
+            18,
+            0.15
+        );
+
+
+    --aum-border-green:
+        rgba(
+            87,
+            102,
+            84,
+            0.18
+        );
+
+
+    --aum-border-gold:
+        rgba(
+            185,
+            147,
+            74,
+            0.28
+        );
+
+
+    --aum-font-display:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+
+    --aum-font-body:
+        "Inter",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+
+    --aum-radius-xs: 8px;
+
+    --aum-radius-sm: 12px;
+
+    --aum-radius-md: 18px;
+
+    --aum-radius-lg: 24px;
+
+    --aum-radius-xl: 32px;
+
+    --aum-radius-pill: 999px;
+
+
+    --aum-shadow-xs:
+        0 4px 14px
+        rgba(
+            56,
+            31,
+            18,
+            0.04
+        );
+
+
+    --aum-shadow-sm:
+        0 10px 28px
+        rgba(
+            56,
+            31,
+            18,
+            0.06
+        );
+
+
+    --aum-shadow-md:
+        0 16px 42px
+        rgba(
+            56,
+            31,
+            18,
+            0.08
+        );
+
+
+    --aum-shadow-lg:
+        0 26px 70px
+        rgba(
+            56,
+            31,
+            18,
+            0.11
+        );
+
+
+    --aum-shadow-premium:
+        0 30px 90px
+        rgba(
+            56,
+            31,
+            18,
+            0.13
+        );
+
+
+    --aum-transition-fast:
+        180ms ease;
+
+
+    --aum-transition:
+        280ms ease;
+
+
+    --aum-transition-slow:
+        450ms
+        cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+
+
+    --aum-container:
+        1440px;
+
+
+    --aum-section-space:
+        92px;
+
+}
+
+
+/* ============================================================
+   GLOBAL RESET
+============================================================ */
+
+* {
+
+    box-sizing:
+        border-box;
+
+}
+
+
+html {
+
+    scroll-behavior:
+        smooth;
+
+}
+
+
+html,
+body,
+#root {
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+}
+
+
+body {
+
+    margin:
+        0;
+
+    min-width:
+        320px;
+
+    overflow-x:
+        hidden;
+
+    background:
+        var(
+            --aum-ivory
+        );
+
+    color:
+        var(
+            --aum-text-primary
+        );
+
+    font-family:
+        var(
+            --aum-font-body
+        );
+
+    font-size:
+        15px;
+
+    line-height:
+        1.6;
+
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        optimizeLegibility;
+
+}
+
+
+button,
+input,
+textarea,
+select {
+
+    font:
+        inherit;
+
+}
+
+
+button {
+
+    cursor:
+        pointer;
+
+}
+
+
+a {
+
+    color:
+        inherit;
+
+    text-decoration:
+        none;
+
+}
+
+
+img {
+
+    display:
+        block;
+
+    max-width:
+        100%;
+
+}
+
+
+/* ============================================================
+   SELECTION
+============================================================ */
+
+::selection {
+
+    background:
+        var(
+            --aum-green-700
+        );
+
+    color:
+        #ffffff;
+
+}
+
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+
+::-webkit-scrollbar {
+
+    width:
+        8px;
+
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        #f2ede4;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(
+            87,
+            102,
+            84,
+            0.42
+        );
+
+    border-radius:
+        999px;
+
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        var(
+            --aum-green-700
+        );
+
+}
+
+
+/* ============================================================
+   TYPOGRAPHY
+============================================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+
+    color:
+        var(
+            --aum-brown-900
+        );
+
+    font-family:
+        var(
+            --aum-font-display
+        );
+
+    letter-spacing:
+        -0.02em;
+
+}
+
+
+/* ============================================================
+   GLOBAL CONTAINER
+============================================================ */
+
+.aumveda-container {
+
+    width:
+        min(
+            calc(
+                100% - 72px
+            ),
+            var(
+                --aum-container
+            )
+        );
+
+    margin:
+        0 auto;
+
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media(
+    max-width:900px
+) {
+
+    :root {
+
+        --aum-section-space:
+            70px;
+
+    }
+
+
+    .aumveda-container {
+
+        width:
+            min(
+                calc(
+                    100% - 36px
+                ),
+                var(
+                    --aum-container
+                )
+            );
+
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media(
+    max-width:560px
+) {
+
+    :root {
+
+        --aum-section-space:
+            54px;
+
+    }
+
+
+    .aumveda-container {
+
+        width:
+            calc(
+                100% - 28px
+            );
+
+    }
+
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media(
+    prefers-reduced-motion:
+    reduce
+) {
+
+    * {
+
+        scroll-behavior:
+            auto !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+
+    }
+
+}

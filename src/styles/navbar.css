@@ -1,0 +1,2147 @@
+/* ============================================================
+   AUMVEDA ULTRA-PREMIUM NAVBAR
+   SINGLE-LINE DESKTOP LAYOUT
+============================================================ */
+
+.aumveda-navbar {
+
+    position:
+        sticky;
+
+    top:
+        0;
+
+    z-index:
+        1000;
+
+    width:
+        100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(248, 244, 236, 0.995) 0%,
+            rgba(239, 234, 225, 0.985) 100%
+        );
+
+    border-bottom:
+        1px solid
+        rgba(56, 31, 18, 0.075);
+
+    box-shadow:
+        0 8px 26px
+        rgba(56, 31, 18, 0.055);
+
+    backdrop-filter:
+        blur(20px)
+        saturate(118%);
+
+    -webkit-backdrop-filter:
+        blur(20px)
+        saturate(118%);
+
+}
+
+
+/* ============================================================
+   GOLD BASE ACCENT
+============================================================ */
+
+.aumveda-navbar::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        6%;
+
+    right:
+        6%;
+
+    bottom:
+        0;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(185,147,74,.20),
+            rgba(87,102,84,.16),
+            rgba(185,147,74,.20),
+            transparent
+        );
+
+    pointer-events:
+        none;
+
+}
+
+
+/* ============================================================
+   INNER
+============================================================ */
+
+.aumveda-navbar__inner {
+
+    width:
+        100%;
+
+    max-width:
+        1600px;
+
+    height:
+        92px;
+
+    margin:
+        0 auto;
+
+    padding:
+        8px 24px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        170px
+        minmax(320px, 1fr)
+        auto
+        auto;
+
+    align-items:
+        center;
+
+    gap:
+        18px;
+
+}
+
+
+/* ============================================================
+   BRAND
+============================================================ */
+
+.aumveda-brand {
+
+    position:
+        relative;
+
+    width:
+        170px;
+
+    min-width:
+        170px;
+
+    height:
+        72px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    isolation:
+        isolate;
+
+}
+
+
+.aumveda-brand::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    z-index:
+        -1;
+
+    left:
+        2px;
+
+    top:
+        50%;
+
+    width:
+        145px;
+
+    height:
+        52px;
+
+    transform:
+        translateY(-50%);
+
+    border-radius:
+        26px;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255,255,255,.64),
+            rgba(255,255,255,.18) 65%,
+            transparent 75%
+        );
+
+    opacity:
+        .75;
+
+    transition:
+        opacity 260ms ease,
+        transform 260ms ease;
+
+}
+
+
+.aumveda-brand:hover::before {
+
+    opacity:
+        1;
+
+    transform:
+        translateY(-50%)
+        scale(1.04);
+
+}
+
+
+.aumveda-brand-wrapper {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        center;
+
+}
+
+
+/* ============================================================
+   LOGO
+============================================================ */
+
+.aumveda-brand__logo {
+
+    width:
+        250px;
+
+    height:
+        75px;
+
+    object-fit:
+        contain;
+
+    object-position:
+             center;
+
+    filter:
+        drop-shadow(
+            0 5px 10px
+            rgba(56,31,18,.075)
+        );
+
+    transition:
+        transform 320ms
+        cubic-bezier(.22,1,.36,1),
+        filter 320ms ease;
+
+}
+
+
+.aumveda-brand:hover
+.aumveda-brand__logo {
+
+    transform:
+        scale(1.05)
+        translateY(-1px);
+
+    filter:
+        drop-shadow(
+            0 10px 20px
+            rgba(56,31,18,.13)
+        );
+
+}
+
+
+/* ============================================================
+   TAGLINE
+============================================================ */
+
+.aumveda-brand__tagline {
+
+    margin-top:
+        3px;
+
+    padding-left:
+        2px;
+
+    color:
+        #5d493b;
+
+    font-size:
+        6.9px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        .8px;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.aumveda-search {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    height:
+        50px;
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        rgba(87,102,84,.20);
+
+    border-radius:
+        999px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.96),
+            rgba(255,255,255,.72)
+        );
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.95),
+        inset 0 -1px 0
+        rgba(56,31,18,.025),
+        0 8px 22px
+        rgba(56,31,18,.045);
+
+    transition:
+        transform 260ms
+        cubic-bezier(.22,1,.36,1),
+        border-color 220ms ease,
+        box-shadow 220ms ease,
+        background 220ms ease;
+
+}
+
+
+.aumveda-search::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        9%;
+
+    top:
+        0;
+
+    width:
+        52%;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.98),
+            transparent
+        );
+
+    pointer-events:
+        none;
+
+}
+
+
+.aumveda-search::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        1px;
+
+    border-radius:
+        inherit;
+
+    pointer-events:
+        none;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255,255,255,.35);
+
+}
+
+
+.aumveda-search:hover {
+
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(87,102,84,.38);
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.98),
+        0 12px 30px
+        rgba(56,31,18,.07);
+
+}
+
+
+.aumveda-search:focus-within {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(87,102,84,.66);
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(87,102,84,.07),
+        0 16px 36px
+        rgba(56,31,18,.095);
+
+}
+
+
+/* ============================================================
+   SEARCH ICON
+============================================================ */
+
+.aumveda-search__icon {
+
+    margin-left:
+        18px;
+
+    flex-shrink:
+        0;
+
+    color:
+        #76695f;
+
+    transition:
+        transform 240ms ease,
+        color 240ms ease;
+
+}
+
+
+.aumveda-search:hover
+.aumveda-search__icon,
+.aumveda-search:focus-within
+.aumveda-search__icon {
+
+    color:
+        #576654;
+
+    transform:
+        scale(1.08);
+
+}
+
+
+/* ============================================================
+   SEARCH INPUT
+============================================================ */
+
+.aumveda-search input {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    height:
+        100%;
+
+    padding:
+        0 15px;
+
+    border:
+        none;
+
+    outline:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        #381f12;
+
+    font-size:
+        12px;
+
+    font-weight:
+        450;
+
+}
+
+
+.aumveda-search input::placeholder {
+
+    color:
+        #9b8d82;
+
+}
+
+
+/* ============================================================
+   SEARCH BUTTON
+============================================================ */
+
+.aumveda-search__button {
+
+    position:
+        relative;
+
+    height:
+        calc(100% - 6px);
+
+    flex-shrink:
+        0;
+
+    margin-right:
+        3px;
+
+    padding:
+        0 25px;
+
+    overflow:
+        hidden;
+
+    border:
+        none;
+
+    border-radius:
+        999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #657562 0%,
+            #536451 58%,
+            #475646 100%
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        .025em;
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.15),
+        0 7px 17px
+        rgba(87,102,84,.23);
+
+    transition:
+        transform 180ms ease,
+        box-shadow 220ms ease,
+        background 220ms ease;
+
+}
+
+
+.aumveda-search__button::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        -60%;
+
+    left:
+        -45%;
+
+    width:
+        34%;
+
+    height:
+        220%;
+
+    transform:
+        rotate(20deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.30),
+            transparent
+        );
+
+    transition:
+        left 500ms
+        cubic-bezier(.22,1,.36,1);
+
+}
+
+
+.aumveda-search__button:hover::before {
+
+    left:
+        120%;
+
+}
+
+
+.aumveda-search__button:hover {
+
+    transform:
+        translateY(-1px)
+        scale(1.025);
+
+    background:
+        linear-gradient(
+            135deg,
+            #4b3325,
+            #381f12
+        );
+
+    box-shadow:
+        0 11px 24px
+        rgba(56,31,18,.22);
+
+}
+
+
+.aumveda-search__button:active {
+
+    transform:
+        scale(.95);
+
+}
+
+
+/* ============================================================
+   NAV LINKS
+============================================================ */
+
+.aumveda-nav-links {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-wrap:
+        nowrap;
+
+    flex-shrink:
+        0;
+
+    gap:
+        19px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.aumveda-nav-link {
+
+    position:
+        relative;
+
+    min-height:
+        40px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        0 2px;
+
+    color:
+        #5e534a;
+
+    font-size:
+        11px;
+
+    font-weight:
+        620;
+
+    letter-spacing:
+        .01em;
+
+    white-space:
+        nowrap;
+
+    transition:
+        color 220ms ease,
+        transform 220ms ease,
+        letter-spacing 220ms ease;
+
+}
+
+
+.aumveda-nav-link:hover {
+
+    color:
+        #576654;
+
+    transform:
+        translateY(-2px);
+
+    letter-spacing:
+        .025em;
+
+}
+
+
+.aumveda-nav-link::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    bottom:
+        1px;
+
+    width:
+        0;
+
+    height:
+        2px;
+
+    border-radius:
+        999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #576654,
+            #b9934a
+        );
+
+    transform:
+        translateX(-50%);
+
+    box-shadow:
+        0 2px 6px
+        rgba(185,147,74,.15);
+
+    transition:
+        width 280ms
+        cubic-bezier(.22,1,.36,1);
+
+}
+
+
+.aumveda-nav-link:hover::before,
+.aumveda-nav-link--active::before {
+
+    width:
+        100%;
+
+}
+
+
+.aumveda-nav-link--active {
+
+    color:
+        #381f12;
+
+}
+
+
+/* ============================================================
+   ACTIONS
+============================================================ */
+
+.aumveda-navbar__actions {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-end;
+
+    flex-wrap:
+        nowrap;
+
+    flex-shrink:
+        0;
+
+    gap:
+        8px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* ============================================================
+   ACTION BUTTON
+============================================================ */
+
+.aumveda-action {
+
+    position:
+        relative;
+
+    width:
+        51px;
+
+    min-width:
+        51px;
+
+    height:
+        60px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        4px;
+
+    padding:
+        2px;
+
+    border:
+        none;
+
+    border-radius:
+        16px;
+
+    background:
+        transparent;
+
+    color:
+        #4d392d;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 240ms
+        cubic-bezier(.22,1,.36,1),
+        background 220ms ease,
+        color 220ms ease,
+        box-shadow 220ms ease;
+
+}
+
+
+.aumveda-action::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        3px;
+
+    border-radius:
+        14px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.42),
+            rgba(255,255,255,.04)
+        );
+
+    opacity:
+        0;
+
+    transition:
+        opacity 220ms ease;
+
+    pointer-events:
+        none;
+
+}
+
+
+.aumveda-action:hover {
+
+    transform:
+        translateY(-4px);
+
+    color:
+        #576654;
+
+    background:
+        rgba(255,255,255,.50);
+
+    box-shadow:
+        0 13px 30px
+        rgba(56,31,18,.085);
+
+}
+
+
+.aumveda-action:hover::before {
+
+    opacity:
+        1;
+
+}
+
+
+.aumveda-action:active {
+
+    transform:
+        translateY(-1px)
+        scale(.92);
+
+}
+
+
+/* ============================================================
+   ICON SHELL
+============================================================ */
+
+.aumveda-action__icon-shell {
+
+    position:
+        relative;
+
+    width:
+        37px;
+
+    height:
+        37px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        rgba(56,31,18,.09);
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.94),
+            rgba(255,255,255,.58)
+        );
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.95),
+        0 6px 15px
+        rgba(56,31,18,.055);
+
+    transition:
+        transform 270ms
+        cubic-bezier(.22,1,.36,1),
+        border-color 220ms ease,
+        background 220ms ease,
+        box-shadow 220ms ease;
+
+}
+
+
+.aumveda-action__icon-shell::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        2px;
+
+    border-radius:
+        50%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.48);
+
+    pointer-events:
+        none;
+
+}
+
+
+.aumveda-action:hover
+.aumveda-action__icon-shell {
+
+    transform:
+        scale(1.14)
+        rotate(-3deg);
+
+    border-color:
+        rgba(87,102,84,.31);
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #f7f4ef
+        );
+
+    box-shadow:
+        0 10px 24px
+        rgba(56,31,18,.11);
+
+}
+
+
+.aumveda-action:active
+.aumveda-action__icon-shell {
+
+    transform:
+        scale(.88);
+
+}
+
+
+/* ============================================================
+   ACTIVE STATE
+============================================================ */
+
+.aumveda-action--active {
+
+    color:
+        #576654;
+
+}
+
+
+.aumveda-action--active
+.aumveda-action__icon-shell {
+
+    border-color:
+        rgba(87,102,84,.38);
+
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            rgba(255,255,255,.88),
+            rgba(87,102,84,.14)
+        );
+
+    box-shadow:
+        0 10px 22px
+        rgba(87,102,84,.13);
+
+}
+
+
+/* ============================================================
+   ACTION LABEL
+============================================================ */
+
+.aumveda-action__label {
+
+    color:
+        #685a50;
+
+    font-size:
+        7px;
+
+    font-weight:
+        680;
+
+    letter-spacing:
+        .01em;
+
+    line-height:
+        1;
+
+    white-space:
+        nowrap;
+
+    transition:
+        color 220ms ease,
+        transform 220ms ease;
+
+}
+
+
+.aumveda-action:hover
+.aumveda-action__label {
+
+    color:
+        #576654;
+
+    transform:
+        translateY(1px);
+
+}
+
+
+/* ============================================================
+   BADGE
+============================================================ */
+
+.aumveda-action__badge {
+
+    position:
+        absolute;
+
+    top:
+        -6px;
+
+    right:
+        -7px;
+
+    min-width:
+        18px;
+
+    height:
+        18px;
+
+    padding:
+        0 4px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        2px solid
+        #eeeae2;
+
+    border-radius:
+        999px;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #7e9079,
+            #526250 65%
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+
+    box-shadow:
+        0 4px 10px
+        rgba(56,31,18,.20);
+
+}
+
+
+/* ============================================================
+   PROFILE WRAPPER
+============================================================ */
+
+.aumveda-profile-wrapper {
+
+    position:
+        relative;
+
+}
+
+
+/* ============================================================
+   PROFILE MENU
+============================================================ */
+
+.aumveda-profile-menu {
+
+    position:
+        absolute;
+
+    top:
+        calc(100% + 14px);
+
+    right:
+        0;
+
+    width:
+        280px;
+
+    padding:
+        16px;
+
+    border:
+        1px solid
+        rgba(56,31,18,.09);
+
+    border-radius:
+        22px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,253,248,.99),
+            rgba(248,243,235,.98)
+        );
+
+    backdrop-filter:
+        blur(24px);
+
+    -webkit-backdrop-filter:
+        blur(24px);
+
+    box-shadow:
+        0 30px 78px
+        rgba(56,31,18,.16);
+
+    animation:
+        profileMenuEnter
+        200ms
+        cubic-bezier(.22,1,.36,1);
+
+}
+
+
+@keyframes profileMenuEnter {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(-9px)
+            scale(.97);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+.aumveda-profile-menu__header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    padding:
+        5px 4px 13px;
+
+}
+
+
+.aumveda-profile-menu__avatar {
+
+    width:
+        43px;
+
+    height:
+        43px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border:
+        1px solid
+        rgba(87,102,84,.12);
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(87,102,84,.15),
+            rgba(87,102,84,.07)
+        );
+
+    color:
+        #576654;
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255,255,255,.60);
+
+}
+
+
+.aumveda-profile-menu__user {
+
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
+}
+
+
+.aumveda-profile-menu__user strong {
+
+    overflow:
+        hidden;
+
+    color:
+        #381f12;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.aumveda-profile-menu__user span {
+
+    overflow:
+        hidden;
+
+    color:
+        #81746a;
+
+    font-size:
+        10px;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.aumveda-profile-menu__divider {
+
+    height:
+        1px;
+
+    margin:
+        3px 0 9px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(56,31,18,.10),
+            transparent
+        );
+
+}
+
+
+.aumveda-profile-menu__logout {
+
+    width:
+        100%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    padding:
+        11px;
+
+    border:
+        none;
+
+    border-radius:
+        12px;
+
+    background:
+        transparent;
+
+    color:
+        #5c4c41;
+
+    font-size:
+        11px;
+
+    font-weight:
+        650;
+
+    transition:
+        transform 200ms ease,
+        background 200ms ease,
+        color 200ms ease;
+
+}
+
+
+.aumveda-profile-menu__logout:hover {
+
+    transform:
+        translateX(2px);
+
+    background:
+        rgba(87,102,84,.09);
+
+    color:
+        #576654;
+
+}
+
+
+/* ============================================================
+   MOBILE TOGGLE
+============================================================ */
+
+.aumveda-mobile-toggle {
+
+    display:
+        none;
+
+    width:
+        39px;
+
+    height:
+        39px;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    border:
+        1px solid
+        rgba(56,31,18,.08);
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.86),
+            rgba(255,255,255,.55)
+        );
+
+    color:
+        #381f12;
+
+    box-shadow:
+        0 5px 14px
+        rgba(56,31,18,.05);
+
+}
+
+
+/* ============================================================
+   MOBILE NAV
+============================================================ */
+
+.aumveda-mobile-nav {
+
+    display:
+        none;
+
+}
+
+
+/* ============================================================
+   LAPTOP
+============================================================ */
+
+@media(max-width:1400px) {
+
+    .aumveda-navbar__inner {
+
+        grid-template-columns:
+            148px
+            minmax(250px,1fr)
+            auto
+            auto;
+
+        gap:
+            13px;
+
+        padding:
+            7px 14px;
+
+    }
+
+
+    .aumveda-brand {
+
+        width:
+            148px;
+
+        min-width:
+            148px;
+
+    }
+
+
+    .aumveda-brand__logo {
+
+        width:
+            142px;
+
+    }
+
+
+    .aumveda-brand__tagline {
+
+        font-size:
+            5.8px;
+
+        letter-spacing:
+            .55px;
+
+    }
+
+
+    .aumveda-nav-links {
+
+        gap:
+            13px;
+
+    }
+
+
+    .aumveda-nav-link {
+
+        font-size:
+            10px;
+
+    }
+
+
+    .aumveda-search__button {
+
+        padding:
+            0 18px;
+
+    }
+
+
+    .aumveda-action {
+
+        width:
+            45px;
+
+        min-width:
+            45px;
+
+    }
+
+}
+
+
+/* ============================================================
+   SMALL LAPTOP
+============================================================ */
+
+@media(max-width:1180px) {
+
+    .aumveda-navbar__inner {
+
+        grid-template-columns:
+            130px
+            minmax(220px,1fr)
+            auto
+            auto;
+
+        gap:
+            9px;
+
+        padding:
+            7px 10px;
+
+    }
+
+
+    .aumveda-brand {
+
+        width:
+            130px;
+
+        min-width:
+            130px;
+
+    }
+
+
+    .aumveda-brand__logo {
+
+        width:
+            124px;
+
+    }
+
+
+    .aumveda-brand__tagline {
+
+        display:
+            none;
+
+    }
+
+
+    .aumveda-nav-links {
+
+        gap:
+            10px;
+
+    }
+
+
+    .aumveda-nav-link {
+
+        font-size:
+            9.5px;
+
+    }
+
+
+    .aumveda-search {
+
+        height:
+            45px;
+
+    }
+
+
+    .aumveda-search input {
+
+        padding:
+            0 9px;
+
+        font-size:
+            10.5px;
+
+    }
+
+
+    .aumveda-search__icon {
+
+        margin-left:
+            13px;
+
+    }
+
+
+    .aumveda-search__button {
+
+        padding:
+            0 14px;
+
+        font-size:
+            10px;
+
+    }
+
+
+    .aumveda-action {
+
+        width:
+            42px;
+
+        min-width:
+            42px;
+
+        height:
+            53px;
+
+    }
+
+
+    .aumveda-action__icon-shell {
+
+        width:
+            32px;
+
+        height:
+            32px;
+
+    }
+
+
+    .aumveda-action__label {
+
+        font-size:
+            6.4px;
+
+    }
+
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media(max-width:980px) {
+
+    .aumveda-navbar__inner {
+
+        display:
+            flex;
+
+        height:
+            76px;
+
+        padding:
+            7px 14px;
+
+        flex-wrap:
+            nowrap;
+
+    }
+
+
+    .aumveda-brand {
+
+        width:
+            140px;
+
+        min-width:
+            140px;
+
+    }
+
+
+    .aumveda-brand__logo {
+
+        width:
+            135px;
+
+    }
+
+
+    .aumveda-nav-links {
+
+        display:
+            none;
+
+    }
+
+
+    .aumveda-search {
+
+        flex:
+            1;
+
+        min-width:
+            0;
+
+    }
+
+
+    .aumveda-navbar__actions {
+
+        margin-left:
+            auto;
+
+    }
+
+
+    .aumveda-mobile-toggle {
+
+        display:
+            flex;
+
+    }
+
+
+    .aumveda-action__label {
+
+        display:
+            none;
+
+    }
+
+
+    .aumveda-action {
+
+        width:
+            38px;
+
+        min-width:
+            38px;
+
+        height:
+            42px;
+
+    }
+
+
+    .aumveda-action__icon-shell {
+
+        width:
+            35px;
+
+        height:
+            35px;
+
+    }
+
+
+    .aumveda-mobile-nav {
+
+        display:
+            flex;
+
+        flex-direction:
+            column;
+
+        padding:
+            10px 14px 14px;
+
+        border-top:
+            1px solid
+            rgba(56,31,18,.07);
+
+        background:
+            rgba(238,234,226,.99);
+
+    }
+
+
+    .aumveda-mobile-nav a,
+    .aumveda-mobile-nav button {
+
+        width:
+            100%;
+
+        min-height:
+            43px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            space-between;
+
+        padding:
+            0 13px;
+
+        border:
+            none;
+
+        border-radius:
+            10px;
+
+        background:
+            transparent;
+
+        color:
+            #4d4037;
+
+        font-size:
+            11px;
+
+        font-weight:
+            600;
+
+        text-decoration:
+            none;
+
+    }
+
+
+    .aumveda-mobile-nav a:hover,
+    .aumveda-mobile-nav button:hover {
+
+        background:
+            rgba(87,102,84,.08);
+
+        color:
+            #576654;
+
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media(max-width:680px) {
+
+    .aumveda-navbar__inner {
+
+        height:
+            auto;
+
+        min-height:
+            70px;
+
+        display:
+            grid;
+
+        grid-template-columns:
+            125px
+            1fr
+            auto;
+
+        gap:
+            7px;
+
+        padding:
+            7px 10px;
+
+    }
+
+
+    .aumveda-brand {
+
+        width:
+            125px;
+
+        min-width:
+            125px;
+
+    }
+
+
+    .aumveda-brand__logo {
+
+        width:
+            120px;
+
+        height:
+            47px;
+
+    }
+
+
+    .aumveda-search {
+
+        height:
+            42px;
+
+    }
+
+
+    .aumveda-search__icon {
+
+        margin-left:
+            12px;
+
+    }
+
+
+    .aumveda-search input {
+
+        padding:
+            0 7px;
+
+        font-size:
+            10px;
+
+    }
+
+
+    .aumveda-search__button {
+
+        width:
+            38px;
+
+        padding:
+            0;
+
+        font-size:
+            0;
+
+    }
+
+
+    .aumveda-search__button::after {
+
+        content:
+            "→";
+
+        font-size:
+            15px;
+
+    }
+
+
+    .aumveda-navbar__actions
+    .aumveda-action {
+
+        display:
+            none;
+
+    }
+
+
+    .aumveda-mobile-toggle {
+
+        display:
+            flex;
+
+    }
+
+}
