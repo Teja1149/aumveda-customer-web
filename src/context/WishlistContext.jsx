@@ -1,5 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import {
     createContext,
+    useCallback,
     useContext,
     useMemo,
     useState
@@ -49,6 +52,31 @@ function readWishlist() {
 
 
 /* ============================================================
+   WRITE WISHLIST
+============================================================ */
+
+function writeWishlist(
+    nextWishlist
+) {
+
+    localStorage.setItem(
+        WISHLIST_KEY,
+        JSON.stringify(
+            nextWishlist
+        )
+    );
+
+
+    window.dispatchEvent(
+        new CustomEvent(
+            "aumveda-wishlist-updated"
+        )
+    );
+
+}
+
+
+/* ============================================================
    PROVIDER
 ============================================================ */
 
@@ -69,139 +97,211 @@ export function WishlistProvider({
        SAVE
     ======================================================== */
 
-    function saveWishlist(
-        nextWishlist
-    ) {
+    const saveWishlist =
+        useCallback(
+            nextWishlist => {
 
-        setWishlistIds(
-            nextWishlist
+                setWishlistIds(
+                    nextWishlist
+                );
+
+
+                writeWishlist(
+                    nextWishlist
+                );
+
+            },
+            []
         );
-
-
-        localStorage.setItem(
-            WISHLIST_KEY,
-            JSON.stringify(
-                nextWishlist
-            )
-        );
-
-
-        window.dispatchEvent(
-            new CustomEvent(
-                "aumveda-wishlist-updated"
-            )
-        );
-
-    }
 
 
     /* ========================================================
        CHECK WISHLIST
     ======================================================== */
 
-    function isWishlisted(
-        productId
-    ) {
+    const isWishlisted =
+        useCallback(
+            productId => {
 
-        return wishlistIds.includes(
-            productId
+                return wishlistIds.includes(
+                    productId
+                );
+
+            },
+            [
+                wishlistIds
+            ]
         );
-
-    }
 
 
     /* ========================================================
        ADD
     ======================================================== */
 
-    function addToWishlist(
-        productId
-    ) {
+    const addToWishlist =
+        useCallback(
+            productId => {
 
-        if (
-            !productId ||
-            wishlistIds.includes(
-                productId
-            )
-        ) {
+                if (!productId) {
 
-            return;
+                    return;
 
-        }
+                }
 
 
-        saveWishlist([
-            ...wishlistIds,
-            productId
-        ]);
+                setWishlistIds(
+                    previousWishlist => {
 
-    }
+                        if (
+                            previousWishlist.includes(
+                                productId
+                            )
+                        ) {
+
+                            return previousWishlist;
+
+                        }
+
+
+                        const nextWishlist = [
+                            ...previousWishlist,
+                            productId
+                        ];
+
+
+                        writeWishlist(
+                            nextWishlist
+                        );
+
+
+                        return nextWishlist;
+
+                    }
+                );
+
+            },
+            []
+        );
 
 
     /* ========================================================
        REMOVE
     ======================================================== */
 
-    function removeFromWishlist(
-        productId
-    ) {
+    const removeFromWishlist =
+        useCallback(
+            productId => {
 
-        saveWishlist(
-            wishlistIds.filter(
-                id =>
-                    id !== productId
-            )
+                if (!productId) {
+
+                    return;
+
+                }
+
+
+                setWishlistIds(
+                    previousWishlist => {
+
+                        const nextWishlist =
+                            previousWishlist.filter(
+                                id =>
+                                    id !== productId
+                            );
+
+
+                        if (
+                            nextWishlist.length ===
+                            previousWishlist.length
+                        ) {
+
+                            return previousWishlist;
+
+                        }
+
+
+                        writeWishlist(
+                            nextWishlist
+                        );
+
+
+                        return nextWishlist;
+
+                    }
+                );
+
+            },
+            []
         );
-
-    }
 
 
     /* ========================================================
        TOGGLE
     ======================================================== */
 
-    function toggleWishlist(
-        productId
-    ) {
+    const toggleWishlist =
+        useCallback(
+            productId => {
 
-        if (!productId) {
+                if (!productId) {
 
-            return;
+                    return;
 
-        }
+                }
 
 
-        if (
-            wishlistIds.includes(
-                productId
-            )
-        ) {
+                setWishlistIds(
+                    previousWishlist => {
 
-            removeFromWishlist(
-                productId
-            );
+                        const exists =
+                            previousWishlist.includes(
+                                productId
+                            );
 
-        }
-        else {
 
-            addToWishlist(
-                productId
-            );
+                        const nextWishlist =
+                            exists
+                                ? previousWishlist.filter(
+                                    id =>
+                                        id !== productId
+                                )
+                                : [
+                                    ...previousWishlist,
+                                    productId
+                                ];
 
-        }
 
-    }
+                        writeWishlist(
+                            nextWishlist
+                        );
+
+
+                        return nextWishlist;
+
+                    }
+                );
+
+            },
+            []
+        );
 
 
     /* ========================================================
        CLEAR
     ======================================================== */
 
-    function clearWishlist() {
+    const clearWishlist =
+        useCallback(
+            () => {
 
-        saveWishlist([]);
+                saveWishlist(
+                    []
+                );
 
-    }
+            },
+            [
+                saveWishlist
+            ]
+        );
 
 
     /* ========================================================
@@ -237,7 +337,12 @@ export function WishlistProvider({
             }),
             [
                 wishlistIds,
-                wishlistCount
+                wishlistCount,
+                isWishlisted,
+                addToWishlist,
+                removeFromWishlist,
+                toggleWishlist,
+                clearWishlist
             ]
         );
 

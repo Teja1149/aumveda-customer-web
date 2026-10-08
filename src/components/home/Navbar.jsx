@@ -1,8 +1,9 @@
+
 import {
     useEffect,
+    useRef,
     useState
 } from "react";
-
 
 import {
     Heart,
@@ -11,9 +12,9 @@ import {
     ShoppingCart,
     UserRound,
     X,
-    LogOut
+    LogOut,
+    ChevronDown
 } from "lucide-react";
-
 
 import {
     Link,
@@ -21,38 +22,29 @@ import {
     useNavigate
 } from "react-router-dom";
 
-
 import {
     useAuth
 } from "../../context/AuthContext";
-
 
 import {
     useCart
 } from "../../context/CartContext";
 
-
 import {
     useWishlist
 } from "../../context/WishlistContext";
-
 
 import "../../styles/navbar.css";
 
 
 function Navbar() {
 
-    const location =
-        useLocation();
+    const location = useLocation();
+    const navigate = useNavigate();
 
-
-    const navigate =
-        useNavigate();
-
-
-    /* ========================================================
-       AUTH
-    ======================================================== */
+    // ========================================================
+    // AUTHENTICATION
+    // ========================================================
 
     const {
         user,
@@ -63,125 +55,106 @@ function Navbar() {
     } = useAuth();
 
 
-    /* ========================================================
-       CART
-    ======================================================== */
+    // ========================================================
+    // CART
+    // ========================================================
 
-    const cartContext =
-        useCart();
+    const cartContext = useCart();
 
-
-    const totalQuantity =
-        Number(
-            cartContext?.totalQuantity ??
-            cartContext?.items?.reduce(
-                (
-                    total,
-                    item
-                ) =>
-                    total +
-                    Number(
-                        item?.quantity || 0
-                    ),
-                0
-            ) ??
+    const totalQuantity = Number(
+        cartContext?.totalQuantity ??
+        cartContext?.items?.reduce(
+            (total, item) =>
+                total + Number(item?.quantity || 0),
             0
-        );
+        ) ??
+        0
+    );
 
 
-    /* ========================================================
-       WISHLIST
-    ======================================================== */
+    // ========================================================
+    // WISHLIST
+    // ========================================================
 
     const {
         wishlistCount
     } = useWishlist();
 
+    const safeWishlistCount = Number(
+        wishlistCount || 0
+    );
 
-    /* ========================================================
-       SEARCH
-    ======================================================== */
+
+    // ========================================================
+    // STATE
+    // ========================================================
 
     const [
         searchText,
         setSearchText
     ] = useState("");
 
-
-    /* ========================================================
-       MOBILE MENU
-    ======================================================== */
-
     const [
         mobileMenuOpen,
         setMobileMenuOpen
     ] = useState(false);
-
-
-    /* ========================================================
-       PROFILE MENU
-    ======================================================== */
 
     const [
         profileMenuOpen,
         setProfileMenuOpen
     ] = useState(false);
 
+    const profileWrapperRef = useRef(null);
 
-    /* ========================================================
-       LOGO
-    ======================================================== */
+
+    // ========================================================
+    // BRAND LOGO
+    // ========================================================
 
     const LOGO_URL =
         "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/branding/logo%20without%20bg.webp";
 
 
-    /* ========================================================
-       ACTIVE ROUTES
-    ======================================================== */
+    // ========================================================
+    // ACTIVE ROUTES
+    // ========================================================
+
+    const activePath = location.pathname;
 
     const isHomeActive =
-        location.pathname === "/";
-
+        activePath === "/";
 
     const isProductsActive =
-        location.pathname === "/products" ||
-        location.pathname.startsWith(
-            "/products/"
-        );
-
+        activePath === "/products" ||
+        activePath.startsWith("/products/");
 
     const isWishlistActive =
-        location.pathname === "/wishlist";
-
+        activePath === "/wishlist";
 
     const isCartActive =
-        location.pathname === "/cart";
+        activePath === "/cart";
 
+    const isProfileActive =
+        activePath === "/profile";
 
     const isAboutActive =
-        location.pathname === "/about";
-
+        activePath === "/about";
 
     const isContactActive =
-        location.pathname === "/contact";
+        activePath === "/contact";
 
 
-    /* ========================================================
-       NAV CLASS
-    ======================================================== */
+    // ========================================================
+    // NAVIGATION CSS
+    // ========================================================
 
-    function navClass(
-        isActive
-    ) {
+    function navClass(isActive) {
 
         return [
             "aumveda-nav-link",
-
             isActive
                 ? "aumveda-nav-link--active"
                 : ""
-
         ]
             .filter(Boolean)
             .join(" ");
@@ -189,172 +162,150 @@ function Navbar() {
     }
 
 
-    /* ========================================================
-       CLOSE MOBILE MENU
-    ======================================================== */
+    // ========================================================
+    // CLOSE MENUS
+    // ========================================================
 
     function closeMobileMenu() {
-
-        setMobileMenuOpen(
-            false
-        );
-
+        setMobileMenuOpen(false);
     }
-
-
-    /* ========================================================
-       CLOSE PROFILE MENU
-    ======================================================== */
 
     function closeProfileMenu() {
-
-        setProfileMenuOpen(
-            false
-        );
-
+        setProfileMenuOpen(false);
     }
 
 
-    /* ========================================================
-       SEARCH
-    ======================================================== */
+    // ========================================================
+    // SEARCH
+    // ========================================================
 
-    function handleSearch(
-        event
-    ) {
+    function handleSearch(event) {
 
         event.preventDefault();
 
-
-        const query =
-            searchText.trim();
-
+        const query = searchText.trim();
 
         if (!query) {
-
             return;
-
         }
 
+        closeMobileMenu();
+        closeProfileMenu();
 
         navigate(
-            `/products?search=${encodeURIComponent(
-                query
-            )}`
+            `/products?search=${encodeURIComponent(query)}`
         );
-
-
-        closeMobileMenu();
-
-        closeProfileMenu();
 
     }
 
 
-    /* ========================================================
-       WISHLIST
-    ======================================================== */
+    // ========================================================
+    // WISHLIST NAVIGATION
+    // ========================================================
 
     function handleWishlistClick() {
 
         closeMobileMenu();
-
         closeProfileMenu();
 
-
-        navigate(
-            "/wishlist"
-        );
+        navigate("/wishlist");
 
     }
 
 
-    /* ========================================================
-       CART
-    ======================================================== */
+    // ========================================================
+    // CART NAVIGATION
+    // ========================================================
 
     function handleCartClick() {
 
-        if (
-            authLoading
-        ) {
-
+        if (authLoading) {
             return;
-
         }
-
 
         closeMobileMenu();
-
         closeProfileMenu();
 
-
-        if (
-            !isAuthenticated
-        ) {
-
-            navigate(
-                "/login"
-            );
-
-
+        if (!isAuthenticated) {
+            navigate("/login");
             return;
-
         }
 
-
-        navigate(
-            "/cart"
-        );
+        navigate("/cart");
 
     }
 
 
-    /* ========================================================
-       PROFILE
-    ======================================================== */
+    // ========================================================
+    // PROFILE ICON NAVIGATION
+    // ========================================================
 
     function handleProfileClick() {
 
-        if (
-            authLoading
-        ) {
-
+        if (authLoading) {
             return;
-
         }
 
+        closeMobileMenu();
+        closeProfileMenu();
 
-        if (
-            !isAuthenticated
-        ) {
+        // Guest -> Login
+        if (!isAuthenticated) {
+            navigate("/login");
+            return;
+        }
+
+        // Logged-in customer -> Profile
+        navigate("/profile");
+
+    }
+
+
+    // ========================================================
+    // ACCOUNT DROPDOWN TOGGLE
+    // ========================================================
+
+    function handleAccountMenuToggle() {
+
+        if (authLoading) {
+            return;
+        }
+
+        if (!isAuthenticated) {
 
             closeProfileMenu();
 
-            closeMobileMenu();
-
-
-            navigate(
-                "/login"
-            );
-
+            navigate("/login");
 
             return;
-
         }
 
+        closeMobileMenu();
 
         setProfileMenuOpen(
-            previous =>
-                !previous
+            previous => !previous
         );
 
     }
 
 
-    /* ========================================================
-       LOGOUT
-    ======================================================== */
+    // ========================================================
+    // USERNAME CLICK
+    // ========================================================
+
+    function handleUsernameClick() {
+
+        closeProfileMenu();
+        closeMobileMenu();
+
+        // Navigation is handled by Link to="/profile"
+
+    }
+
+
+    // ========================================================
+    // LOGOUT
+    // ========================================================
 
     async function handleLogout() {
 
@@ -362,13 +313,12 @@ function Navbar() {
 
             await logout();
 
-
             closeProfileMenu();
-
             closeMobileMenu();
 
-
-            navigate("/");
+            navigate("/", {
+                replace: true
+            });
 
         }
         catch (error) {
@@ -383,20 +333,14 @@ function Navbar() {
     }
 
 
-    /* ========================================================
-       CLOSE MENUS ON ROUTE CHANGE
-    ======================================================== */
+    // ========================================================
+    // CLOSE MENUS ON ROUTE CHANGE
+    // ========================================================
 
     useEffect(() => {
 
-        setMobileMenuOpen(
-            false
-        );
-
-
-        setProfileMenuOpen(
-            false
-        );
+        setMobileMenuOpen(false);
+        setProfileMenuOpen(false);
 
     }, [
         location.pathname,
@@ -404,51 +348,46 @@ function Navbar() {
     ]);
 
 
-    /* ========================================================
-       OUTSIDE PROFILE CLICK
-    ======================================================== */
+    // ========================================================
+    // CLOSE DROPDOWN WHEN CLICKING OUTSIDE
+    // ========================================================
 
     useEffect(() => {
 
-        function handleOutsideClick(
-            event
-        ) {
-
-            const target =
-                event.target;
-
+        function handleOutsideClick(event) {
 
             if (
-                !target ||
-                typeof target.closest !==
-                "function"
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                !target.closest(
-                    ".aumveda-profile-wrapper"
+                profileWrapperRef.current &&
+                !profileWrapperRef.current.contains(
+                    event.target
                 )
             ) {
 
-                setProfileMenuOpen(
-                    false
-                );
+                setProfileMenuOpen(false);
 
             }
 
         }
 
+        function handleEscape(event) {
+
+            if (event.key === "Escape") {
+
+                setProfileMenuOpen(false);
+
+            }
+
+        }
 
         document.addEventListener(
             "mousedown",
             handleOutsideClick
         );
 
+        document.addEventListener(
+            "keydown",
+            handleEscape
+        );
 
         return () => {
 
@@ -457,84 +396,65 @@ function Navbar() {
                 handleOutsideClick
             );
 
+            document.removeEventListener(
+                "keydown",
+                handleEscape
+            );
+
         };
 
     }, []);
 
 
-    /* ========================================================
-       RENDER
-    ======================================================== */
+    // ========================================================
+    // CLOSE ACCOUNT MENU AFTER LOGOUT
+    // ========================================================
+
+    useEffect(() => {
+
+        if (!isAuthenticated) {
+
+            setProfileMenuOpen(false);
+
+        }
+
+    }, [isAuthenticated]);
+
+
+    // ========================================================
+    // RENDER
+    // ========================================================
 
     return (
 
-        <header
-            className="aumveda-navbar"
-        >
+        <header className="aumveda-navbar">
 
-            <div
-                className="
-                    aumveda-navbar__inner
-                "
-            >
+            <div className="aumveda-navbar__inner">
 
-                {/* ==================================================
+                {/* =============================================
                     BRAND
-                ================================================== */}
+                ============================================= */}
 
                 <Link
-
                     to="/"
-
-                    className="
-                        aumveda-brand
-                    "
-
-                    aria-label="
-                        AUMVEDA Home
-                    "
-
+                    className="aumveda-brand"
+                    aria-label="AUMVEDA Home"
                     onClick={() => {
-
                         closeMobileMenu();
-
                         closeProfileMenu();
-
                     }}
-
                 >
 
-                    <div
-                        className="
-                            aumveda-brand-wrapper
-                        "
-                    >
+                    <div className="aumveda-brand-wrapper">
 
                         <img
-
-                            src={
-                                LOGO_URL
-                            }
-
-                            alt="
-                                AUMVEDA Wellness
-                            "
-
-                            className="
-                                aumveda-brand__logo
-                            "
-
+                            src={LOGO_URL}
+                            alt="AUMVEDA Wellness"
+                            className="aumveda-brand__logo"
                         />
 
-
-                        <span
-                            className="
-                                aumveda-brand__tagline
-                            "
-                        >
-
+                        <span className="aumveda-brand__tagline">
                             Ancient Wisdom • Modern Wellness
-
                         </span>
 
                     </div>
@@ -542,241 +462,129 @@ function Navbar() {
                 </Link>
 
 
-                {/* ==================================================
+                {/* =============================================
                     SEARCH
-                ================================================== */}
+                ============================================= */}
 
                 <form
-
-                    className="
-                        aumveda-search
-                    "
-
-                    onSubmit={
-                        handleSearch
-                    }
-
+                    className="aumveda-search"
+                    onSubmit={handleSearch}
                 >
 
                     <Search
-
                         size={20}
-
                         strokeWidth={1.75}
-
-                        className="
-                            aumveda-search__icon
-                        "
-
+                        className="aumveda-search__icon"
                     />
-
 
                     <input
-
                         type="search"
-
-                        value={
-                            searchText
-                        }
-
+                        value={searchText}
                         onChange={
                             event =>
-                                setSearchText(
-                                    event.target.value
-                                )
+                                setSearchText(event.target.value)
                         }
-
-                        placeholder="
-                            Search Ayurvedic products, herbs & wellness...
-                        "
-
-                        aria-label="
-                            Search AUMVEDA
-                        "
-
+                        placeholder="Search Ayurvedic products, herbs & wellness..."
+                        aria-label="Search AUMVEDA"
                     />
 
-
                     <button
-
                         type="submit"
-
-                        className="
-                            aumveda-search__button
-                        "
-
+                        className="aumveda-search__button"
                     >
-
                         Search
-
                     </button>
 
                 </form>
 
 
-                {/* ==================================================
+                {/* =============================================
                     DESKTOP NAVIGATION
-                ================================================== */}
+                ============================================= */}
 
                 <nav
-
-                    className="
-                        aumveda-nav-links
-                    "
-
-                    aria-label="
-                        Main navigation
-                    "
-
+                    className="aumveda-nav-links"
+                    aria-label="Main navigation"
                 >
 
                     <Link
-
                         to="/"
-
-                        className={
-                            navClass(
-                                isHomeActive
-                            )
-                        }
-
+                        className={navClass(isHomeActive)}
                     >
-
                         Home
-
                     </Link>
 
-
                     <Link
-
                         to="/products"
-
-                        className={
-                            navClass(
-                                isProductsActive
-                            )
-                        }
-
+                        className={navClass(isProductsActive)}
                     >
-
                         Products
-
                     </Link>
 
-
                     <Link
-
                         to="/about"
-
-                        className={
-                            navClass(
-                                isAboutActive
-                            )
-                        }
-
+                        className={navClass(isAboutActive)}
                     >
-
                         About
-
                     </Link>
 
-
                     <Link
-
                         to="/contact"
-
-                        className={
-                            navClass(
-                                isContactActive
-                            )
-                        }
-
+                        className={navClass(isContactActive)}
                     >
-
                         Contact
-
                     </Link>
 
                 </nav>
 
 
-                {/* ==================================================
+                {/* =============================================
                     ACTIONS
-                ================================================== */}
+                ============================================= */}
 
-                <div
-                    className="
-                        aumveda-navbar__actions
-                    "
-                >
+                <div className="aumveda-navbar__actions">
 
-                    {/* =================================================
+                    {/* =========================================
                         WISHLIST
-                    ================================================= */}
+                    ========================================= */}
 
                     <button
-
                         type="button"
-
-                        className={`
-                            aumveda-action
-                            ${
-                                isWishlistActive
-                                    ? "aumveda-action--active"
-                                    : ""
-                            }
-                        `}
-
-                        onClick={
-                            handleWishlistClick
-                        }
-
+                        className={`aumveda-action ${
+                            isWishlistActive
+                                ? "aumveda-action--active"
+                                : ""
+                        }`}
+                        onClick={handleWishlistClick}
                         aria-label={
-                            wishlistCount > 0
-                                ? `Wishlist with ${wishlistCount} items`
+                            safeWishlistCount > 0
+                                ? `Wishlist with ${safeWishlistCount} items`
                                 : "Wishlist"
                         }
-
-                        title="
-                            Wishlist
-                        "
-
+                        title="Wishlist"
                     >
 
-                        <span
-                            className="
-                                aumveda-action__icon-shell
-                            "
-                        >
+                        <span className="aumveda-action__icon-shell">
 
                             <Heart
-
                                 size={20}
-
                                 strokeWidth={1.7}
-
                                 fill={
                                     isWishlistActive
                                         ? "currentColor"
                                         : "none"
                                 }
-
                             />
 
-
                             {
-                                wishlistCount > 0 && (
+                                safeWishlistCount > 0 && (
 
-                                    <span
-                                        className="
-                                            aumveda-action__badge
-                                        "
-                                    >
+                                    <span className="aumveda-action__badge">
 
                                         {
-                                            wishlistCount > 99
+                                            safeWishlistCount > 99
                                                 ? "99+"
-                                                : wishlistCount
+                                                : safeWishlistCount
                                         }
 
                                     </span>
@@ -786,76 +594,45 @@ function Navbar() {
 
                         </span>
 
-
-                        <span
-                            className="
-                                aumveda-action__label
-                            "
-                        >
-
+                        <span className="aumveda-action__label">
                             Wishlist
-
                         </span>
 
                     </button>
 
 
-                    {/* =================================================
+                    {/* =========================================
                         CART
-                    ================================================= */}
+                    ========================================= */}
 
                     <button
-
                         type="button"
-
-                        className={`
-                            aumveda-action
-                            ${
-                                isCartActive
-                                    ? "aumveda-action--active"
-                                    : ""
-                            }
-                        `}
-
-                        onClick={
-                            handleCartClick
-                        }
-
+                        className={`aumveda-action ${
+                            isCartActive
+                                ? "aumveda-action--active"
+                                : ""
+                        }`}
+                        onClick={handleCartClick}
                         aria-label={
                             totalQuantity > 0
                                 ? `Cart with ${totalQuantity} items`
                                 : "Cart"
                         }
-
-                        title="
-                            Cart
-                        "
-
+                        title="Cart"
+                        disabled={authLoading}
                     >
 
-                        <span
-                            className="
-                                aumveda-action__icon-shell
-                            "
-                        >
+                        <span className="aumveda-action__icon-shell">
 
                             <ShoppingCart
-
                                 size={20}
-
                                 strokeWidth={1.7}
-
                             />
-
 
                             {
                                 totalQuantity > 0 && (
 
-                                    <span
-                                        className="
-                                            aumveda-action__badge
-                                        "
-                                    >
+                                    <span className="aumveda-action__badge">
 
                                         {
                                             totalQuantity > 99
@@ -870,140 +647,148 @@ function Navbar() {
 
                         </span>
 
-
-                        <span
-                            className="
-                                aumveda-action__label
-                            "
-                        >
-
+                        <span className="aumveda-action__label">
                             Cart
-
                         </span>
 
                     </button>
 
 
-                    {/* =================================================
-                        ACCOUNT
-                    ================================================= */}
+                    {/* =========================================
+                        PROFILE + ACCOUNT DROPDOWN
+                    ========================================= */}
 
                     <div
-                        className="
-                            aumveda-profile-wrapper
-                        "
+                        className="aumveda-profile-wrapper"
+                        ref={profileWrapperRef}
                     >
 
-                        <button
+                        <div className="aumveda-profile-actions">
 
-                            type="button"
+                            {/* PROFILE ICON */}
 
-                            className="
-                                aumveda-action
-                            "
+                            <button
+                                type="button"
+                                className={`aumveda-action ${
+                                    isProfileActive
+                                        ? "aumveda-action--active"
+                                        : ""
+                                }`}
+                                onClick={handleProfileClick}
+                                aria-label={
+                                    isAuthenticated
+                                        ? "Open my profile"
+                                        : "Log in to my account"
+                                }
+                                title={
+                                    isAuthenticated
+                                        ? "My Profile"
+                                        : "Login"
+                                }
+                                disabled={authLoading}
+                            >
 
-                            onClick={
-                                handleProfileClick
+                                <span className="aumveda-action__icon-shell">
+
+                                    <UserRound
+                                        size={20}
+                                        strokeWidth={1.7}
+                                    />
+
+                                </span>
+
+                                <span className="aumveda-action__label">
+
+                                    {
+                                        isAuthenticated
+                                            ? "Account"
+                                            : "Profile"
+                                    }
+
+                                </span>
+
+                            </button>
+
+
+                            {/* SEPARATE DROPDOWN ARROW */}
+
+                            {
+                                isAuthenticated && (
+
+                                    <button
+                                        type="button"
+                                        className="aumveda-profile-dropdown-toggle"
+                                        onClick={handleAccountMenuToggle}
+                                        aria-label="Toggle account dropdown"
+                                        aria-haspopup="menu"
+                                        aria-expanded={profileMenuOpen}
+                                        aria-controls="aumveda-account-menu"
+                                        disabled={authLoading}
+                                        title="Account menu"
+                                    >
+
+                                        <ChevronDown
+                                            size={16}
+                                            strokeWidth={1.9}
+                                            className={
+                                                profileMenuOpen
+                                                    ? "aumveda-profile-chevron--open"
+                                                    : ""
+                                            }
+                                        />
+
+                                    </button>
+
+                                )
                             }
 
-                            aria-label="
-                                Account
-                            "
-
-                            title="
-                                Account
-                            "
-
-                        >
-
-                            <span
-                                className="
-                                    aumveda-action__icon-shell
-                                "
-                            >
-
-                                <UserRound
-
-                                    size={20}
-
-                                    strokeWidth={1.7}
-
-                                />
-
-                            </span>
+                        </div>
 
 
-                            <span
-                                className="
-                                    aumveda-action__label
-                                "
-                            >
-
-                                {
-                                    isAuthenticated
-                                        ? "Account"
-                                        : "Profile"
-                                }
-
-                            </span>
-
-                        </button>
-
-
-                        {/* =================================================
-                            PROFILE MENU
-                        ================================================= */}
+                        {/* =====================================
+                            PROFILE DROPDOWN
+                        ===================================== */}
 
                         {
                             isAuthenticated &&
                             profileMenuOpen && (
 
                                 <div
-                                    className="
-                                        aumveda-profile-menu
-                                    "
+                                    id="aumveda-account-menu"
+                                    className="aumveda-profile-menu"
+                                    role="menu"
+                                    aria-label="Account menu"
                                 >
 
-                                    <div
-                                        className="
-                                            aumveda-profile-menu__header
-                                        "
-                                    >
+                                    <div className="aumveda-profile-menu__header">
 
-                                        <div
-                                            className="
-                                                aumveda-profile-menu__avatar
-                                            "
-                                        >
+                                        <div className="aumveda-profile-menu__avatar">
 
-                                            <UserRound
-                                                size={18}
-                                            />
+                                            <UserRound size={18} />
 
                                         </div>
 
 
-                                        <div
-                                            className="
-                                                aumveda-profile-menu__user
-                                            "
-                                        >
+                                        <div className="aumveda-profile-menu__user">
 
-                                            <strong>
+                                            <Link
+                                                to="/profile"
+                                                onClick={handleUsernameClick}
+                                                className="aumveda-profile-menu__name"
+                                                role="menuitem"
+                                                title="Open my profile"
+                                            >
 
                                                 {
-                                                    displayName
+                                                    displayName ||
+                                                    user?.email?.split("@")[0] ||
+                                                    "My Profile"
                                                 }
 
-                                            </strong>
-
+                                            </Link>
 
                                             <span>
-
-                                                {
-                                                    user?.email
-                                                }
-
+                                                {user?.email}
                                             </span>
 
                                         </div>
@@ -1011,36 +796,40 @@ function Navbar() {
                                     </div>
 
 
-                                    <div
-                                        className="
-                                            aumveda-profile-menu__divider
-                                        "
-                                    />
+                                    {/* PROFILE MENU ITEM */}
 
-
-                                    <button
-
-                                        type="button"
-
-                                        className="
-                                            aumveda-profile-menu__logout
-                                        "
-
-                                        onClick={
-                                            handleLogout
-                                        }
-
+                                    <Link
+                                        to="/profile"
+                                        onClick={handleUsernameClick}
+                                        className="aumveda-profile-menu__profile-link"
+                                        role="menuitem"
                                     >
 
-                                        <LogOut
-                                            size={16}
-                                        />
-
+                                        <UserRound size={16} />
 
                                         <span>
+                                            My Profile
+                                        </span>
 
+                                    </Link>
+
+
+                                    <div className="aumveda-profile-menu__divider" />
+
+
+                                    {/* LOGOUT */}
+
+                                    <button
+                                        type="button"
+                                        className="aumveda-profile-menu__logout"
+                                        onClick={handleLogout}
+                                        role="menuitem"
+                                    >
+
+                                        <LogOut size={16} />
+
+                                        <span>
                                             Logout
-
                                         </span>
 
                                     </button>
@@ -1053,47 +842,26 @@ function Navbar() {
                     </div>
 
 
-                    {/* =================================================
+                    {/* =========================================
                         MOBILE MENU BUTTON
-                    ================================================= */}
+                    ========================================= */}
 
                     <button
-
                         type="button"
-
-                        className="
-                            aumveda-mobile-toggle
-                        "
-
-                        aria-label="
-                            Toggle Menu
-                        "
-
-                        aria-expanded={
-                            mobileMenuOpen
-                        }
-
+                        className="aumveda-mobile-toggle"
+                        aria-label="Toggle Menu"
+                        aria-expanded={mobileMenuOpen}
                         onClick={() =>
                             setMobileMenuOpen(
-                                previous =>
-                                    !previous
+                                previous => !previous
                             )
                         }
-
                     >
 
                         {
                             mobileMenuOpen
-                                ? (
-                                    <X
-                                        size={23}
-                                    />
-                                )
-                                : (
-                                    <Menu
-                                        size={23}
-                                    />
-                                )
+                                ? <X size={23} />
+                                : <Menu size={23} />
                         }
 
                     </button>
@@ -1103,75 +871,46 @@ function Navbar() {
             </div>
 
 
-            {/* ==================================================
+            {/* ================================================
                 MOBILE NAVIGATION
-            ================================================== */}
+            ================================================ */}
 
             {
                 mobileMenuOpen && (
 
                     <nav
-                        className="
-                            aumveda-mobile-nav
-                        "
-
-                        aria-label="
-                            Mobile navigation
-                        "
+                        className="aumveda-mobile-nav"
+                        aria-label="Mobile navigation"
                     >
 
                         <Link
-
                             to="/"
-
-                            onClick={
-                                closeMobileMenu
-                            }
-
+                            onClick={closeMobileMenu}
                         >
-
                             Home
-
                         </Link>
 
 
                         <Link
-
                             to="/products"
-
-                            onClick={
-                                closeMobileMenu
-                            }
-
+                            onClick={closeMobileMenu}
                         >
-
                             Products
-
                         </Link>
 
 
                         <button
-
                             type="button"
-
-                            onClick={
-                                handleWishlistClick
-                            }
-
+                            onClick={handleWishlistClick}
                         >
 
                             Wishlist
 
-
                             {
-                                wishlistCount > 0 && (
+                                safeWishlistCount > 0 && (
 
                                     <span>
-
-                                        {
-                                            wishlistCount
-                                        }
-
+                                        {safeWishlistCount}
                                     </span>
 
                                 )
@@ -1181,27 +920,17 @@ function Navbar() {
 
 
                         <button
-
                             type="button"
-
-                            onClick={
-                                handleCartClick
-                            }
-
+                            onClick={handleCartClick}
                         >
 
                             Cart
-
 
                             {
                                 totalQuantity > 0 && (
 
                                     <span>
-
-                                        {
-                                            totalQuantity
-                                        }
-
+                                        {totalQuantity}
                                     </span>
 
                                 )
@@ -1210,34 +939,51 @@ function Navbar() {
                         </button>
 
 
-                        <Link
+                        {/* PROFILE IN MOBILE */}
 
+                        <button
+                            type="button"
+                            onClick={handleProfileClick}
+                            disabled={authLoading}
+                        >
+
+                            {
+                                isAuthenticated
+                                    ? "My Profile"
+                                    : "Login / Profile"
+                            }
+
+                        </button>
+
+
+                        <Link
                             to="/about"
-
-                            onClick={
-                                closeMobileMenu
-                            }
-
+                            onClick={closeMobileMenu}
                         >
-
                             About
-
                         </Link>
 
 
                         <Link
-
                             to="/contact"
-
-                            onClick={
-                                closeMobileMenu
-                            }
-
+                            onClick={closeMobileMenu}
                         >
-
                             Contact
-
                         </Link>
+
+
+                        {
+                            isAuthenticated && (
+
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </button>
+
+                            )
+                        }
 
                     </nav>
 
@@ -1249,6 +995,5 @@ function Navbar() {
     );
 
 }
-
 
 export default Navbar;

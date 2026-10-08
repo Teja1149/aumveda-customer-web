@@ -1,7 +1,7 @@
 import {
     BrowserRouter,
     Routes,
-    Route,
+    Route
 } from "react-router-dom";
 
 
@@ -11,6 +11,14 @@ import MainLayout
 
 import HomePage
     from "../pages/HomePage";
+
+
+import LoginPage
+    from "../pages/LoginPage";
+
+
+import SignupPage
+    from "../pages/SignupPage";
 
 
 import Products
@@ -27,6 +35,14 @@ import Wishlist
 
 import Cart
     from "../pages/Cart";
+
+
+import Checkout
+    from "../pages/Checkout";
+
+
+import Profile
+    from "../pages/Profile";
 
 
 import About
@@ -61,6 +77,29 @@ function AppRouter() {
                     />
 
 
+                    {/* =================================================
+                        LOGIN
+                    ================================================= */}
+
+                    <Route
+                        path="/login"
+                        element={
+                            <LoginPage />
+                        }
+                    />
+
+
+                    {/* =================================================
+                        SIGNUP
+                    ================================================= */}
+
+                    <Route
+                        path="/signup"
+                        element={
+                            <SignupPage />
+                        }
+                    />
+
 
                     {/* =================================================
                         PRODUCTS
@@ -72,7 +111,6 @@ function AppRouter() {
                             <Products />
                         }
                     />
-
 
 
                     {/* =================================================
@@ -87,7 +125,6 @@ function AppRouter() {
                     />
 
 
-
                     {/* =================================================
                         WISHLIST
                     ================================================= */}
@@ -98,7 +135,6 @@ function AppRouter() {
                             <Wishlist />
                         }
                     />
-
 
 
                     {/* =================================================
@@ -113,6 +149,29 @@ function AppRouter() {
                     />
 
 
+                    {/* =================================================
+                        CHECKOUT
+                    ================================================= */}
+
+                    <Route
+                        path="/checkout"
+                        element={
+                            <Checkout />
+                        }
+                    />
+
+
+                    {/* =================================================
+                        PROFILE
+                    ================================================= */}
+
+                    <Route
+                        path="/profile"
+                        element={
+                            <Profile />
+                        }
+                    />
+
 
                     {/* =================================================
                         ABOUT
@@ -126,7 +185,6 @@ function AppRouter() {
                     />
 
 
-
                     {/* =================================================
                         CONTACT
                     ================================================= */}
@@ -135,6 +193,18 @@ function AppRouter() {
                         path="/contact"
                         element={
                             <Contact />
+                        }
+                    />
+
+
+                    {/* =================================================
+                        FALLBACK
+                    ================================================= */}
+
+                    <Route
+                        path="*"
+                        element={
+                            <HomePage />
                         }
                     />
 

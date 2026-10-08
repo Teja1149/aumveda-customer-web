@@ -6,52 +6,56 @@ import {
     Trash2,
     ArrowLeft,
     Leaf,
-    ShieldCheck,
+    ShieldCheck
 } from "lucide-react";
 
 import {
     Link,
-    useNavigate,
+    useNavigate
 } from "react-router-dom";
 
 import {
-    useEffect,
+    useEffect
 } from "react";
 
 import {
-    useAuth,
+    useAuth
 } from "../context/AuthContext";
 
 import {
-    useCart,
+    useCart
 } from "../context/CartContext";
 
 import "../styles/cart.css";
 
 
-// ============================================================
-// PRICE FORMAT
-// ============================================================
+/* ============================================================
+   PRICE FORMAT
+============================================================ */
 
 function formatPrice(value) {
 
     const amount =
-        Number(value || 0);
+        Number(
+            value || 0
+        );
 
 
     return new Intl.NumberFormat(
         "en-IN",
         {
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 0
         }
-    ).format(amount);
+    ).format(
+        amount
+    );
 
 }
 
 
-// ============================================================
-// CART PAGE
-// ============================================================
+/* ============================================================
+   CART PAGE
+============================================================ */
 
 function Cart() {
 
@@ -59,19 +63,20 @@ function Cart() {
         useNavigate();
 
 
-    // ========================================================
-    // AUTH
-    // ========================================================
+    /* ========================================================
+       AUTH
+    ======================================================== */
 
     const {
         isAuthenticated,
-        loading: authLoading,
-    } = useAuth();
+        loading: authLoading
+    } =
+        useAuth();
 
 
-    // ========================================================
-    // CART
-    // ========================================================
+    /* ========================================================
+       CART
+    ======================================================== */
 
     const {
         items,
@@ -81,13 +86,14 @@ function Cart() {
         subtotal,
         updateCartItem,
         removeFromCart,
-        clearCart,
-    } = useCart();
+        clearCart
+    } =
+        useCart();
 
 
-    // ========================================================
-    // PROTECT CART
-    // ========================================================
+    /* ========================================================
+       PROTECT CART
+    ======================================================== */
 
     useEffect(() => {
 
@@ -99,7 +105,7 @@ function Cart() {
             navigate(
                 "/login",
                 {
-                    replace: true,
+                    replace: true
                 }
             );
 
@@ -108,13 +114,13 @@ function Cart() {
     }, [
         authLoading,
         isAuthenticated,
-        navigate,
+        navigate
     ]);
 
 
-    // ========================================================
-    // QUANTITY UPDATE
-    // ========================================================
+    /* ========================================================
+       QUANTITY UPDATE
+    ======================================================== */
 
     async function changeQuantity(
         item,
@@ -122,11 +128,15 @@ function Cart() {
     ) {
 
         const quantity =
-            Number(nextQuantity);
+            Number(
+                nextQuantity
+            );
 
 
         if (
-            !Number.isInteger(quantity) ||
+            !Number.isInteger(
+                quantity
+            ) ||
             quantity < 1
         ) {
 
@@ -138,7 +148,8 @@ function Cart() {
         const stock =
             Number(
                 item?.variant
-                    ?.stock_quantity || 0
+                    ?.stock_quantity ||
+                0
             );
 
 
@@ -172,9 +183,9 @@ function Cart() {
     }
 
 
-    // ========================================================
-    // REMOVE ITEM
-    // ========================================================
+    /* ========================================================
+       REMOVE ITEM
+    ======================================================== */
 
     async function handleRemove(
         itemId
@@ -199,9 +210,9 @@ function Cart() {
     }
 
 
-    // ========================================================
-    // CLEAR CART
-    // ========================================================
+    /* ========================================================
+       CLEAR CART
+    ======================================================== */
 
     async function handleClearCart() {
 
@@ -242,9 +253,36 @@ function Cart() {
     }
 
 
-    // ========================================================
-    // AUTH LOADING
-    // ========================================================
+    /* ========================================================
+       CHECKOUT
+    ======================================================== */
+
+    function handleCheckout() {
+
+        /*
+         * We already have the cart items.
+         *
+         * Do not block navigation merely because CartContext
+         * is performing another background operation.
+         */
+
+        if (!items.length) {
+
+            return;
+
+        }
+
+
+        navigate(
+            "/checkout"
+        );
+
+    }
+
+
+    /* ========================================================
+       AUTH LOADING
+    ======================================================== */
 
     if (authLoading) {
 
@@ -262,6 +300,7 @@ function Cart() {
                         className="aumveda-cart-loading__spinner"
                     />
 
+
                     <p>
                         Preparing your cart...
                     </p>
@@ -275,9 +314,9 @@ function Cart() {
     }
 
 
-    // ========================================================
-    // NOT AUTHENTICATED
-    // ========================================================
+    /* ========================================================
+       NOT AUTHENTICATED
+    ======================================================== */
 
     if (!isAuthenticated) {
 
@@ -286,9 +325,9 @@ function Cart() {
     }
 
 
-    // ========================================================
-    // CART LOADING
-    // ========================================================
+    /* ========================================================
+       CART LOADING
+    ======================================================== */
 
     if (
         loading &&
@@ -309,6 +348,7 @@ function Cart() {
                         className="aumveda-cart-loading__spinner"
                     />
 
+
                     <p>
                         Loading your cart...
                     </p>
@@ -322,9 +362,9 @@ function Cart() {
     }
 
 
-    // ========================================================
-    // EMPTY CART
-    // ========================================================
+    /* ========================================================
+       EMPTY CART
+    ======================================================== */
 
     if (!items.length) {
 
@@ -353,9 +393,7 @@ function Cart() {
                     <span
                         className="aumveda-cart-empty__eyebrow"
                     >
-
                         YOUR WELLNESS JOURNEY
-
                     </span>
 
 
@@ -365,11 +403,9 @@ function Cart() {
 
 
                     <p>
-
                         Discover authentic Ayurvedic
                         products crafted for your
                         everyday wellness.
-
                     </p>
 
 
@@ -395,9 +431,9 @@ function Cart() {
     }
 
 
-    // ========================================================
-    // CART PAGE
-    // ========================================================
+    /* ========================================================
+       CART
+    ======================================================== */
 
     return (
 
@@ -405,9 +441,9 @@ function Cart() {
             className="aumveda-cart-page"
         >
 
-            {/* ==================================================
+            {/* =================================================
                 HEADER
-            ================================================== */}
+            ================================================= */}
 
             <div
                 className="aumveda-cart-header"
@@ -418,9 +454,7 @@ function Cart() {
                     <span
                         className="aumveda-cart-eyebrow"
                     >
-
                         YOUR WELLNESS CART
-
                     </span>
 
 
@@ -430,11 +464,8 @@ function Cart() {
 
 
                     <p>
-
-                        Review your selected
-                        Ayurvedic essentials before
-                        continuing.
-
+                        Review your selected Ayurvedic
+                        essentials before continuing.
                     </p>
 
                 </div>
@@ -448,11 +479,11 @@ function Cart() {
                         size={19}
                     />
 
+
                     <span>
-
                         {totalQuantity}
-
                     </span>
+
 
                     {
                         totalQuantity === 1
@@ -465,9 +496,9 @@ function Cart() {
             </div>
 
 
-            {/* ==================================================
+            {/* =================================================
                 ERROR
-            ================================================== */}
+            ================================================= */}
 
             {
                 error && (
@@ -475,25 +506,23 @@ function Cart() {
                     <div
                         className="aumveda-cart-error"
                     >
-
                         {error}
-
                     </div>
 
                 )
             }
 
 
-            {/* ==================================================
-                MAIN GRID
-            ================================================== */}
+            {/* =================================================
+                MAIN
+            ================================================= */}
 
             <div
                 className="aumveda-cart-layout"
             >
 
                 {/* =================================================
-                    ITEMS
+                    CART ITEMS
                 ================================================= */}
 
                 <div
@@ -510,13 +539,17 @@ function Cart() {
                                 Cart Items
                             </strong>
 
+
                             <span>
+
                                 {items.length}
+
                                 {
                                     items.length === 1
                                         ? " product"
                                         : " products"
                                 }
+
                             </span>
 
                         </div>
@@ -527,6 +560,9 @@ function Cart() {
                             className="aumveda-cart-clear"
                             onClick={
                                 handleClearCart
+                            }
+                            disabled={
+                                loading
                             }
                         >
 
@@ -541,10 +577,6 @@ function Cart() {
                     </div>
 
 
-                    {/* =================================================
-                        CART ITEM
-                    ================================================= */}
-
                     <div
                         className="aumveda-cart-item-list"
                     >
@@ -557,9 +589,11 @@ function Cart() {
                                         item.product ||
                                         {};
 
+
                                     const variant =
                                         item.variant ||
                                         {};
+
 
                                     const quantity =
                                         Number(
@@ -567,11 +601,14 @@ function Cart() {
                                             1
                                         );
 
+
                                     const price =
                                         Number(
                                             variant.price ||
+                                            item.price ||
                                             0
                                         );
+
 
                                     const comparePrice =
                                         Number(
@@ -579,16 +616,20 @@ function Cart() {
                                             0
                                         );
 
+
                                     const stock =
                                         Number(
                                             variant.stock_quantity ||
                                             0
                                         );
 
+
                                     const lineTotal =
                                         Number(
                                             item.line_total ??
-                                            price * quantity
+                                            item.subtotal ??
+                                            price *
+                                            quantity
                                         );
 
 
@@ -674,11 +715,7 @@ function Cart() {
                                                         <span
                                                             className="aumveda-cart-item__variant"
                                                         >
-
-                                                            {
-                                                                variant.name
-                                                            }
-
+                                                            {variant.name}
                                                         </span>
 
                                                     )
@@ -689,11 +726,9 @@ function Cart() {
                                                     product.short_description && (
 
                                                         <p>
-
                                                             {
                                                                 product.short_description
                                                             }
-
                                                         </p>
 
                                                     )
@@ -758,15 +793,13 @@ function Cart() {
                                                         type="button"
                                                         aria-label="Decrease quantity"
                                                         disabled={
-                                                            quantity <=
-                                                            1 ||
+                                                            quantity <= 1 ||
                                                             loading
                                                         }
                                                         onClick={() =>
                                                             changeQuantity(
                                                                 item,
-                                                                quantity -
-                                                                1
+                                                                quantity - 1
                                                             )
                                                         }
                                                     >
@@ -779,9 +812,7 @@ function Cart() {
 
 
                                                     <strong>
-                                                        {
-                                                            quantity
-                                                        }
+                                                        {quantity}
                                                     </strong>
 
 
@@ -791,8 +822,7 @@ function Cart() {
                                                         disabled={
                                                             loading ||
                                                             (
-                                                                stock >
-                                                                0 &&
+                                                                stock > 0 &&
                                                                 quantity >=
                                                                 stock
                                                             )
@@ -800,8 +830,7 @@ function Cart() {
                                                         onClick={() =>
                                                             changeQuantity(
                                                                 item,
-                                                                quantity +
-                                                                1
+                                                                quantity + 1
                                                             )
                                                         }
                                                     >
@@ -820,10 +849,7 @@ function Cart() {
 
                                                         <small>
 
-                                                            {
-                                                                stock
-                                                            }
-                                                            {" "}
+                                                            {stock}{" "}
                                                             available
 
                                                         </small>
@@ -895,8 +921,6 @@ function Cart() {
                     </div>
 
 
-                    {/* CONTINUE SHOPPING */}
-
                     <Link
                         to="/products"
                         className="aumveda-cart-continue"
@@ -929,6 +953,7 @@ function Cart() {
                             ORDER SUMMARY
                         </span>
 
+
                         <h2>
                             Your Selection
                         </h2>
@@ -946,6 +971,7 @@ function Cart() {
                                 Items
                             </span>
 
+
                             <strong>
                                 {totalQuantity}
                             </strong>
@@ -958,6 +984,7 @@ function Cart() {
                             <span>
                                 Subtotal
                             </span>
+
 
                             <strong>
 
@@ -979,12 +1006,11 @@ function Cart() {
                                 Delivery
                             </span>
 
+
                             <strong
                                 className="aumveda-free"
                             >
-
                                 FREE
-
                             </strong>
 
                         </div>
@@ -1005,6 +1031,7 @@ function Cart() {
                             Total
                         </span>
 
+
                         <strong>
 
                             ₹
@@ -1022,15 +1049,12 @@ function Cart() {
                     <button
                         type="button"
                         className="aumveda-checkout-button"
-                        onClick={() => {
-                            /*
-                                Checkout will be connected in the
-                                next implementation stage.
-                            */
-                            alert(
-                                "Checkout will be available soon."
-                            );
-                        }}
+                        onClick={
+                            handleCheckout
+                        }
+                        disabled={
+                            !items.length
+                        }
                     >
 
                         Proceed to Checkout
@@ -1041,8 +1065,6 @@ function Cart() {
 
                     </button>
 
-
-                    {/* TRUST */}
 
                     <div
                         className="aumveda-cart-trust"
@@ -1079,11 +1101,9 @@ function Cart() {
                     <p
                         className="aumveda-cart-summary__note"
                     >
-
-                        Final delivery charges,
-                        discounts and payment details
-                        will be calculated during checkout.
-
+                        Delivery address and payment
+                        details will be reviewed during
+                        checkout.
                     </p>
 
                 </aside>
