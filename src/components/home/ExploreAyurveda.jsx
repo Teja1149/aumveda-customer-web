@@ -265,7 +265,7 @@ function ExploreAyurveda() {
 
                 <h2>
 
-                    Explore Ayurveda
+                    Explore Aumveda
 
                 </h2>
 
