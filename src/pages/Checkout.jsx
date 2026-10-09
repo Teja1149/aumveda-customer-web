@@ -14,7 +14,6 @@ import {
 
 import {
     useEffect,
-    useMemo,
     useState
 } from "react";
 
@@ -39,8 +38,12 @@ import {
 import "../styles/checkout.css";
 
 
+const BUY_NOW_STORAGE_KEY =
+    "aumveda_buy_now";
+
+
 /* ============================================================
-   PRICE FORMAT
+   FORMAT PRICE
 ============================================================ */
 
 function formatPrice(value) {
@@ -59,6 +62,61 @@ function formatPrice(value) {
     ).format(
         amount
     );
+
+}
+
+
+/* ============================================================
+   READ BUY NOW DATA
+============================================================ */
+
+function readBuyNowData() {
+
+    try {
+
+        const saved =
+            sessionStorage.getItem(
+                BUY_NOW_STORAGE_KEY
+            );
+
+
+        if (!saved) {
+
+            return null;
+
+        }
+
+
+        const parsed =
+            JSON.parse(
+                saved
+            );
+
+
+        if (
+            !parsed ||
+            !parsed.product
+        ) {
+
+            return null;
+
+        }
+
+
+        return parsed;
+
+    }
+    catch (error) {
+
+        console.error(
+            "Unable to read Buy Now product:",
+            error
+        );
+
+
+        return null;
+
+    }
 
 }
 
@@ -96,10 +154,130 @@ function Checkout() {
     const {
         items,
         loading: cartLoading,
-        totalQuantity,
-        subtotal
+        totalQuantity: cartTotalQuantity,
+        subtotal: cartSubtotal
     } =
         useCart();
+
+
+    /* ========================================================
+       CHECKOUT MODE
+    ======================================================== */
+
+    const searchParams =
+        new URLSearchParams(
+            location.search
+        );
+
+
+    const isBuyNow =
+        searchParams.get(
+            "mode"
+        ) ===
+        "buy-now";
+
+
+    /* ========================================================
+       BUY NOW DATA
+    ======================================================== */
+
+    const buyNowData =
+        isBuyNow
+            ? (
+                location.state?.buyNow ||
+                readBuyNowData()
+            )
+            : null;
+
+
+    const buyNowProduct =
+        buyNowData?.product ||
+        null;
+
+
+    const buyNowQuantity =
+        Math.max(
+            1,
+            Number(
+                buyNowData?.quantity ||
+                1
+            )
+        );
+
+
+    const buyNowVariant =
+        buyNowProduct?.variant ||
+        {};
+
+
+    const buyNowPrice =
+        Number(
+            buyNowVariant?.price ??
+            buyNowProduct?.price ??
+            0
+        );
+
+
+    /* ========================================================
+       BUY NOW ITEM
+    ======================================================== */
+
+    const buyNowItems =
+        buyNowProduct
+            ? [
+                {
+                    id:
+                        `buy-now-${buyNowProduct.id}`,
+
+                    quantity:
+                        buyNowQuantity,
+
+                    price:
+                        buyNowPrice,
+
+                    line_total:
+                        buyNowPrice *
+                        buyNowQuantity,
+
+                    product:
+                        buyNowProduct,
+
+                    variant:
+                        buyNowVariant
+                }
+            ]
+            : [];
+
+
+    /* ========================================================
+       CHECKOUT ITEMS
+    ======================================================== */
+
+    const checkoutItems =
+        isBuyNow
+            ? buyNowItems
+            : items;
+
+
+    const checkoutTotalQuantity =
+        isBuyNow
+            ? buyNowQuantity
+            : Number(
+                cartTotalQuantity ||
+                0
+            );
+
+
+    const checkoutSubtotal =
+        isBuyNow
+            ? (
+                buyNowPrice *
+                buyNowQuantity
+            )
+            : Number(
+                cartSubtotal ||
+                0
+            );
 
 
     /* ========================================================
@@ -109,25 +287,29 @@ function Checkout() {
     const [
         addresses,
         setAddresses
-    ] = useState([]);
+    ] =
+        useState([]);
 
 
     const [
         addressesLoading,
         setAddressesLoading
-    ] = useState(true);
+    ] =
+        useState(true);
 
 
     const [
         addressError,
         setAddressError
-    ] = useState("");
+    ] =
+        useState("");
 
 
     const [
         selectedAddressId,
         setSelectedAddressId
-    ] = useState("");
+    ] =
+        useState("");
 
 
     /* ========================================================
@@ -137,7 +319,8 @@ function Checkout() {
     const [
         paymentMethod,
         setPaymentMethod
-    ] = useState("cod");
+    ] =
+        useState("cod");
 
 
     /* ========================================================
@@ -151,20 +334,21 @@ function Checkout() {
             !isAuthenticated
         ) {
 
+            const destination =
+                `${location.pathname}${location.search}`;
+
+
             navigate(
                 "/login",
                 {
                     replace: true,
 
                     state: {
-
                         from: {
                             pathname:
-                                location.pathname
+                                destination
                         }
-
                     }
-
                 }
             );
 
@@ -174,12 +358,13 @@ function Checkout() {
         authLoading,
         isAuthenticated,
         navigate,
-        location.pathname
+        location.pathname,
+        location.search
     ]);
 
 
     /* ========================================================
-       LOAD CUSTOMER ADDRESSES
+       LOAD ADDRESSES
     ======================================================== */
 
     useEffect(() => {
@@ -306,23 +491,16 @@ function Checkout() {
     ======================================================== */
 
     const selectedAddress =
-        useMemo(
-            () =>
-                addresses.find(
-                    address =>
-                        String(
-                            address.id
-                        ) ===
-                        String(
-                            selectedAddressId
-                        )
-                ) ||
-                null,
-            [
-                addresses,
-                selectedAddressId
-            ]
-        );
+        addresses.find(
+            address =>
+                String(
+                    address.id
+                ) ===
+                String(
+                    selectedAddressId
+                )
+        ) ||
+        null;
 
 
     /* ========================================================
@@ -334,15 +512,55 @@ function Checkout() {
 
 
     const total =
-        Number(
-            subtotal || 0
-        ) +
+        checkoutSubtotal +
         deliveryCharge;
 
 
     /* ========================================================
+       BACK
+    ======================================================== */
+
+    function handleBack() {
+
+        if (isBuyNow) {
+
+            navigate(
+                "/products"
+            );
+
+
+            return;
+
+        }
+
+
+        navigate(
+            "/cart"
+        );
+
+    }
+
+
+    /* ========================================================
+       PAYMENT CHANGE
+    ======================================================== */
+
+    function handlePaymentChange(
+        method
+    ) {
+
+        setPaymentMethod(
+            method
+        );
+
+
+        setAddressError("");
+
+    }
+
+
+    /* ========================================================
        PLACE ORDER
-       Real backend order creation comes next.
     ======================================================== */
 
     function handlePlaceOrder() {
@@ -356,6 +574,7 @@ function Checkout() {
                 "Please select a delivery address before continuing."
             );
 
+
             return;
 
         }
@@ -367,8 +586,21 @@ function Checkout() {
         ) {
 
             setAddressError(
-                "Online payment integration is coming next. Please select Cash on Delivery for now."
+                "Online payment integration is coming next. Please select Cash on Delivery for current testing."
             );
+
+
+            return;
+
+        }
+
+
+        if (isBuyNow) {
+
+            window.alert(
+                "Buy Now checkout is ready. Real order creation will be connected next."
+            );
+
 
             return;
 
@@ -376,14 +608,14 @@ function Checkout() {
 
 
         window.alert(
-            "Checkout is ready. The real order creation API will be connected next."
+            "Cart checkout is ready. Real order creation will be connected next."
         );
 
     }
 
 
     /* ========================================================
-       INITIAL LOADING
+       AUTH LOADING
     ======================================================== */
 
     if (authLoading) {
@@ -391,15 +623,22 @@ function Checkout() {
         return (
 
             <main
-                className="checkout-page checkout-page--loading"
+                className="
+                    checkout-page
+                    checkout-page--loading
+                "
             >
 
                 <div
-                    className="checkout-loading"
+                    className="
+                        checkout-loading
+                    "
                 >
 
                     <div
-                        className="checkout-loading__spinner"
+                        className="
+                            checkout-loading__spinner
+                        "
                     />
 
 
@@ -432,6 +671,7 @@ function Checkout() {
     ======================================================== */
 
     if (
+        !isBuyNow &&
         cartLoading &&
         !items.length
     ) {
@@ -439,15 +679,22 @@ function Checkout() {
         return (
 
             <main
-                className="checkout-page checkout-page--loading"
+                className="
+                    checkout-page
+                    checkout-page--loading
+                "
             >
 
                 <div
-                    className="checkout-loading"
+                    className="
+                        checkout-loading
+                    "
                 >
 
                     <div
-                        className="checkout-loading__spinner"
+                        className="
+                            checkout-loading__spinner
+                        "
                     />
 
 
@@ -465,23 +712,30 @@ function Checkout() {
 
 
     /* ========================================================
-       EMPTY CART
+       EMPTY CHECKOUT
     ======================================================== */
 
-    if (!items.length) {
+    if (!checkoutItems.length) {
 
         return (
 
             <main
-                className="checkout-page checkout-page--empty"
+                className="
+                    checkout-page
+                    checkout-page--empty
+                "
             >
 
                 <div
-                    className="checkout-empty"
+                    className="
+                        checkout-empty
+                    "
                 >
 
                     <div
-                        className="checkout-empty__icon"
+                        className="
+                            checkout-empty__icon
+                        "
                     >
 
                         <ShoppingBag
@@ -497,14 +751,24 @@ function Checkout() {
 
 
                     <h1>
-                        Your cart is empty
+
+                        {
+                            isBuyNow
+                                ? "Product unavailable"
+                                : "Your cart is empty"
+                        }
+
                     </h1>
 
 
                     <p>
-                        Add your preferred Ayurvedic
-                        products before proceeding
-                        to checkout.
+
+                        {
+                            isBuyNow
+                                ? "Please return to our products and select an item to purchase."
+                                : "Add your preferred Ayurvedic products before proceeding to checkout."
+                        }
+
                     </p>
 
 
@@ -536,11 +800,15 @@ function Checkout() {
     return (
 
         <main
-            className="checkout-page"
+            className="
+                checkout-page
+            "
         >
 
             <div
-                className="checkout-container"
+                className="
+                    checkout-container
+                "
             >
 
                 {/* =================================================
@@ -548,15 +816,15 @@ function Checkout() {
                 ================================================= */}
 
                 <div
-                    className="checkout-top"
+                    className="
+                        checkout-top
+                    "
                 >
 
                     <button
                         type="button"
-                        onClick={() =>
-                            navigate(
-                                "/cart"
-                            )
+                        onClick={
+                            handleBack
                         }
                     >
 
@@ -564,13 +832,20 @@ function Checkout() {
                             size={16}
                         />
 
-                        Back to Cart
+
+                        {
+                            isBuyNow
+                                ? "Back to Products"
+                                : "Back to Cart"
+                        }
 
                     </button>
 
 
                     <div
-                        className="checkout-secure"
+                        className="
+                            checkout-secure
+                        "
                     >
 
                         <ShieldCheck
@@ -589,11 +864,19 @@ function Checkout() {
                 ================================================= */}
 
                 <header
-                    className="checkout-header"
+                    className="
+                        checkout-header
+                    "
                 >
 
                     <span>
-                        COMPLETE YOUR ORDER
+
+                        {
+                            isBuyNow
+                                ? "BUY NOW"
+                                : "COMPLETE YOUR ORDER"
+                        }
+
                     </span>
 
 
@@ -603,8 +886,13 @@ function Checkout() {
 
 
                     <p>
-                        Confirm your delivery address
-                        and review your AUMVEDA order.
+
+                        {
+                            isBuyNow
+                                ? "Complete your purchase for the selected AUMVEDA product."
+                                : "Confirm your delivery address and review your AUMVEDA order."
+                        }
+
                     </p>
 
                 </header>
@@ -615,27 +903,38 @@ function Checkout() {
                 ================================================= */}
 
                 <div
-                    className="checkout-layout"
+                    className="
+                        checkout-layout
+                    "
                 >
 
                     <div
-                        className="checkout-main"
+                        className="
+                            checkout-main
+                        "
                     >
 
                         {/* =================================================
-                            STEP 1 - ADDRESS
+                            STEP 1
+                            DELIVERY ADDRESS
                         ================================================= */}
 
                         <section
-                            className="checkout-card"
+                            className="
+                                checkout-card
+                            "
                         >
 
                             <div
-                                className="checkout-card__heading"
+                                className="
+                                    checkout-card__heading
+                                "
                             >
 
                                 <div
-                                    className="checkout-step-icon"
+                                    className="
+                                        checkout-step-icon
+                                    "
                                 >
 
                                     <MapPin
@@ -659,7 +958,7 @@ function Checkout() {
 
                                     <p>
                                         Select one of your saved
-                                        addresses.
+                                        delivery addresses.
                                     </p>
 
                                 </div>
@@ -671,9 +970,14 @@ function Checkout() {
                                 addressError && (
 
                                     <div
-                                        className="checkout-message checkout-message--error"
+                                        className="
+                                            checkout-message
+                                            checkout-message--error
+                                        "
                                     >
+
                                         {addressError}
+
                                     </div>
 
                                 )
@@ -685,11 +989,15 @@ function Checkout() {
                                     ? (
 
                                         <div
-                                            className="checkout-address-loading"
+                                            className="
+                                                checkout-address-loading
+                                            "
                                         >
 
                                             <div
-                                                className="checkout-mini-spinner"
+                                                className="
+                                                    checkout-mini-spinner
+                                                "
                                             />
 
                                             Loading your addresses...
@@ -701,7 +1009,9 @@ function Checkout() {
                                         ? (
 
                                             <div
-                                                className="checkout-no-address"
+                                                className="
+                                                    checkout-no-address
+                                                "
                                             >
 
                                                 <MapPin
@@ -743,7 +1053,9 @@ function Checkout() {
                                         : (
 
                                             <div
-                                                className="checkout-addresses"
+                                                className="
+                                                    checkout-addresses
+                                                "
                                             >
 
                                                 {
@@ -777,13 +1089,16 @@ function Checkout() {
                                                                             address.id
                                                                         );
 
+
                                                                         setAddressError("");
 
                                                                     }}
                                                                 >
 
                                                                     <div
-                                                                        className="checkout-address__radio"
+                                                                        className="
+                                                                            checkout-address__radio
+                                                                        "
                                                                     >
 
                                                                         {
@@ -800,11 +1115,15 @@ function Checkout() {
 
 
                                                                     <div
-                                                                        className="checkout-address__content"
+                                                                        className="
+                                                                            checkout-address__content
+                                                                        "
                                                                     >
 
                                                                         <div
-                                                                            className="checkout-address__top"
+                                                                            className="
+                                                                                checkout-address__top
+                                                                            "
                                                                         >
 
                                                                             <strong>
@@ -841,13 +1160,22 @@ function Checkout() {
                                                                                 address.address_line1
                                                                             }
 
+
                                                                             {
-                                                                                address.address_line2
-                                                                                    ? `, ${address.address_line2}`
-                                                                                    : ""
+                                                                                address.address_line2 && (
+                                                                                    <>
+                                                                                        <br />
+
+                                                                                        {
+                                                                                            address.address_line2
+                                                                                        }
+                                                                                    </>
+                                                                                )
                                                                             }
 
+
                                                                             <br />
+
 
                                                                             {
                                                                                 address.city
@@ -863,7 +1191,9 @@ function Checkout() {
                                                                                 address.postal_code
                                                                             }
 
+
                                                                             <br />
+
 
                                                                             {
                                                                                 address.country
@@ -873,7 +1203,7 @@ function Checkout() {
 
 
                                                                         <small>
-                                                                            {
+                                                                            Phone: {
                                                                                 address.phone
                                                                             }
                                                                         </small>
@@ -895,7 +1225,9 @@ function Checkout() {
 
 
                             <div
-                                className="checkout-manage-address"
+                                className="
+                                    checkout-manage-address
+                                "
                             >
 
                                 <Link
@@ -916,19 +1248,26 @@ function Checkout() {
 
 
                         {/* =================================================
-                            STEP 2 - ITEMS
+                            STEP 2
+                            REVIEW ITEMS
                         ================================================= */}
 
                         <section
-                            className="checkout-card"
+                            className="
+                                checkout-card
+                            "
                         >
 
                             <div
-                                className="checkout-card__heading"
+                                className="
+                                    checkout-card__heading
+                                "
                             >
 
                                 <div
-                                    className="checkout-step-icon"
+                                    className="
+                                        checkout-step-icon
+                                    "
                                 >
 
                                     <Package
@@ -951,8 +1290,13 @@ function Checkout() {
 
 
                                     <p>
-                                        Confirm the products in
-                                        your wellness order.
+
+                                        {
+                                            isBuyNow
+                                                ? "Review the product selected with Buy Now."
+                                                : "Confirm the products in your wellness order."
+                                        }
+
                                     </p>
 
                                 </div>
@@ -961,11 +1305,13 @@ function Checkout() {
 
 
                             <div
-                                className="checkout-products"
+                                className="
+                                    checkout-products
+                                "
                             >
 
                                 {
-                                    items.map(
+                                    checkoutItems.map(
                                         item => {
 
                                             const product =
@@ -987,8 +1333,9 @@ function Checkout() {
 
                                             const price =
                                                 Number(
-                                                    variant.price ||
-                                                    item.price ||
+                                                    variant.price ??
+                                                    item.price ??
+                                                    product.price ??
                                                     0
                                                 );
 
@@ -997,8 +1344,10 @@ function Checkout() {
                                                 Number(
                                                     item.line_total ??
                                                     item.subtotal ??
-                                                    price *
-                                                    quantity
+                                                    (
+                                                        price *
+                                                        quantity
+                                                    )
                                                 );
 
 
@@ -1008,11 +1357,15 @@ function Checkout() {
                                                     key={
                                                         item.id
                                                     }
-                                                    className="checkout-product"
+                                                    className="
+                                                        checkout-product
+                                                    "
                                                 >
 
                                                     <div
-                                                        className="checkout-product__image"
+                                                        className="
+                                                            checkout-product__image
+                                                        "
                                                     >
 
                                                         {
@@ -1043,7 +1396,9 @@ function Checkout() {
 
 
                                                     <div
-                                                        className="checkout-product__details"
+                                                        className="
+                                                            checkout-product__details
+                                                        "
                                                     >
 
                                                         <strong>
@@ -1077,7 +1432,9 @@ function Checkout() {
 
 
                                                     <div
-                                                        className="checkout-product__price"
+                                                        className="
+                                                            checkout-product__price
+                                                        "
                                                     >
 
                                                         ₹
@@ -1103,19 +1460,26 @@ function Checkout() {
 
 
                         {/* =================================================
-                            STEP 3 - PAYMENT
+                            STEP 3
+                            PAYMENT
                         ================================================= */}
 
                         <section
-                            className="checkout-card"
+                            className="
+                                checkout-card
+                            "
                         >
 
                             <div
-                                className="checkout-card__heading"
+                                className="
+                                    checkout-card__heading
+                                "
                             >
 
                                 <div
-                                    className="checkout-step-icon"
+                                    className="
+                                        checkout-step-icon
+                                    "
                                 >
 
                                     <CreditCard
@@ -1148,7 +1512,9 @@ function Checkout() {
 
 
                             <div
-                                className="checkout-payment-options"
+                                className="
+                                    checkout-payment-options
+                                "
                             >
 
                                 {/* COD */}
@@ -1161,19 +1527,17 @@ function Checkout() {
                                             ? "checkout-payment checkout-payment--selected"
                                             : "checkout-payment"
                                     }
-                                    onClick={() => {
-
-                                        setPaymentMethod(
+                                    onClick={() =>
+                                        handlePaymentChange(
                                             "cod"
-                                        );
-
-                                        setAddressError("");
-
-                                    }}
+                                        )
+                                    }
                                 >
 
                                     <span
-                                        className="checkout-payment__radio"
+                                        className="
+                                            checkout-payment__radio
+                                        "
                                     >
 
                                         {
@@ -1203,8 +1567,7 @@ function Checkout() {
 
 
                                         <small>
-                                            Pay when your
-                                            order arrives
+                                            Pay when your order arrives
                                         </small>
 
                                     </span>
@@ -1222,19 +1585,17 @@ function Checkout() {
                                             ? "checkout-payment checkout-payment--selected"
                                             : "checkout-payment"
                                     }
-                                    onClick={() => {
-
-                                        setPaymentMethod(
+                                    onClick={() =>
+                                        handlePaymentChange(
                                             "online"
-                                        );
-
-                                        setAddressError("");
-
-                                    }}
+                                        )
+                                    }
                                 >
 
                                     <span
-                                        className="checkout-payment__radio"
+                                        className="
+                                            checkout-payment__radio
+                                        "
                                     >
 
                                         {
@@ -1264,8 +1625,8 @@ function Checkout() {
 
 
                                         <small>
-                                            UPI, cards and
-                                            supported online methods
+                                            UPI, cards and supported
+                                            online methods
                                         </small>
 
                                     </span>
@@ -1276,7 +1637,9 @@ function Checkout() {
 
 
                             <div
-                                className="checkout-payment-note"
+                                className="
+                                    checkout-payment-note
+                                "
                             >
 
                                 {
@@ -1285,16 +1648,14 @@ function Checkout() {
                                         ? (
                                             <>
                                                 Online payment integration
-                                                will be connected in the
-                                                payment stage. Use Cash on
+                                                will be connected next.
+                                                Please select Cash on
                                                 Delivery for current testing.
                                             </>
                                         )
                                         : (
                                             <>
-                                                Your order can be placed
-                                                using Cash on Delivery once
-                                                the order API is connected.
+                                                Cash on Delivery is selected.
                                             </>
                                         )
                                 }
@@ -1311,15 +1672,25 @@ function Checkout() {
                     ================================================= */}
 
                     <aside
-                        className="checkout-summary"
+                        className="
+                            checkout-summary
+                        "
                     >
 
                         <div
-                            className="checkout-summary__header"
+                            className="
+                                checkout-summary__header
+                            "
                         >
 
                             <span>
-                                ORDER SUMMARY
+
+                                {
+                                    isBuyNow
+                                        ? "BUY NOW SUMMARY"
+                                        : "ORDER SUMMARY"
+                                }
+
                             </span>
 
 
@@ -1331,7 +1702,9 @@ function Checkout() {
 
 
                         <div
-                            className="checkout-summary__rows"
+                            className="
+                                checkout-summary__rows
+                            "
                         >
 
                             <div>
@@ -1342,7 +1715,9 @@ function Checkout() {
 
 
                                 <strong>
-                                    {totalQuantity}
+                                    {
+                                        checkoutTotalQuantity
+                                    }
                                 </strong>
 
                             </div>
@@ -1356,14 +1731,12 @@ function Checkout() {
 
 
                                 <strong>
-
                                     ₹
                                     {
                                         formatPrice(
-                                            subtotal
+                                            checkoutSubtotal
                                         )
                                     }
-
                                 </strong>
 
                             </div>
@@ -1377,7 +1750,9 @@ function Checkout() {
 
 
                                 <strong
-                                    className="checkout-free"
+                                    className="
+                                        checkout-free
+                                    "
                                 >
                                     FREE
                                 </strong>
@@ -1388,12 +1763,16 @@ function Checkout() {
 
 
                         <div
-                            className="checkout-summary__divider"
+                            className="
+                                checkout-summary__divider
+                            "
                         />
 
 
                         <div
-                            className="checkout-summary__total"
+                            className="
+                                checkout-summary__total
+                            "
                         >
 
                             <span>
@@ -1402,27 +1781,35 @@ function Checkout() {
 
 
                             <strong>
-
                                 ₹
                                 {
                                     formatPrice(
                                         total
                                     )
                                 }
-
                             </strong>
 
                         </div>
 
 
+                        {/* =================================================
+                            FULL DELIVERY ADDRESS
+                        ================================================= */}
+
                         {
                             selectedAddress && (
 
                                 <div
-                                    className="checkout-summary-address"
+                                    className="
+                                        checkout-summary-address
+                                    "
                                 >
 
-                                    <div>
+                                    <div
+                                        className="
+                                            checkout-summary-address__label
+                                        "
+                                    >
 
                                         <Home
                                             size={15}
@@ -1433,30 +1820,114 @@ function Checkout() {
                                     </div>
 
 
-                                    <strong>
+                                    <strong
+                                        className="
+                                            checkout-summary-address__name
+                                        "
+                                    >
+
                                         {
-                                            selectedAddress.recipient_name
+                                            selectedAddress
+                                                .recipient_name
                                         }
+
                                     </strong>
 
 
-                                    <p>
+                                    <div
+                                        className="
+                                            checkout-summary-address__full
+                                        "
+                                    >
 
                                         {
-                                            selectedAddress.city
-                                        },{" "}
+                                            selectedAddress
+                                                .address_line1 && (
 
-                                        {
-                                            selectedAddress.state
-                                        }{" "}
+                                                <p>
+                                                    {
+                                                        selectedAddress
+                                                            .address_line1
+                                                    }
+                                                </p>
 
-                                        -{" "}
-
-                                        {
-                                            selectedAddress.postal_code
+                                            )
                                         }
 
-                                    </p>
+
+                                        {
+                                            selectedAddress
+                                                .address_line2 && (
+
+                                                <p>
+                                                    {
+                                                        selectedAddress
+                                                            .address_line2
+                                                    }
+                                                </p>
+
+                                            )
+                                        }
+
+
+                                        <p>
+
+                                            {
+                                                selectedAddress.city
+                                            },{" "}
+
+                                            {
+                                                selectedAddress.state
+                                            }{" "}
+
+                                            -{" "}
+
+                                            {
+                                                selectedAddress
+                                                    .postal_code
+                                            }
+
+                                        </p>
+
+
+                                        {
+                                            selectedAddress
+                                                .country && (
+
+                                                <p>
+                                                    {
+                                                        selectedAddress
+                                                            .country
+                                                    }
+                                                </p>
+
+                                            )
+                                        }
+
+
+                                        {
+                                            selectedAddress
+                                                .phone && (
+
+                                                <p
+                                                    className="
+                                                        checkout-summary-address__phone
+                                                    "
+                                                >
+
+                                                    Phone:{" "}
+
+                                                    {
+                                                        selectedAddress
+                                                            .phone
+                                                    }
+
+                                                </p>
+
+                                            )
+                                        }
+
+                                    </div>
 
                                 </div>
 
@@ -1464,9 +1935,15 @@ function Checkout() {
                         }
 
 
+                        {/* =================================================
+                            PLACE ORDER
+                        ================================================= */}
+
                         <button
                             type="button"
-                            className="checkout-place-order"
+                            className="
+                                checkout-place-order
+                            "
                             onClick={
                                 handlePlaceOrder
                             }
@@ -1489,18 +1966,28 @@ function Checkout() {
                             !selectedAddress && (
 
                                 <p
-                                    className="checkout-summary-warning"
+                                    className="
+                                        checkout-summary-warning
+                                    "
                                 >
+
                                     Select a delivery address
                                     to continue.
+
                                 </p>
 
                             )
                         }
 
 
+                        {/* =================================================
+                            TRUST
+                        ================================================= */}
+
                         <div
-                            className="checkout-summary-trust"
+                            className="
+                                checkout-summary-trust
+                            "
                         >
 
                             <ShieldCheck
@@ -1526,7 +2013,9 @@ function Checkout() {
 
 
                         <div
-                            className="checkout-summary-trust"
+                            className="
+                                checkout-summary-trust
+                            "
                         >
 
                             <Leaf
@@ -1542,8 +2031,8 @@ function Checkout() {
 
 
                                 <span>
-                                    Carefully selected
-                                    AUMVEDA wellness products.
+                                    Carefully selected AUMVEDA
+                                    wellness products.
                                 </span>
 
                             </div>

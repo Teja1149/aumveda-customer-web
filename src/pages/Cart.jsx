@@ -119,30 +119,90 @@ function Cart() {
 
 
     /* ========================================================
-       QUANTITY UPDATE
+       DECREASE QUANTITY
+
+       Quantity 1:
+       clicking minus removes product completely.
     ======================================================== */
 
-    async function changeQuantity(
-        item,
-        nextQuantity
+    async function decreaseQuantity(
+        item
     ) {
 
-        const quantity =
-            Number(
-                nextQuantity
-            );
-
-
         if (
-            !Number.isInteger(
-                quantity
-            ) ||
-            quantity < 1
+            !item ||
+            loading
         ) {
 
             return;
 
         }
+
+
+        const currentQuantity =
+            Number(
+                item.quantity ||
+                1
+            );
+
+
+        try {
+
+            if (
+                currentQuantity <= 1
+            ) {
+
+                await removeFromCart(
+                    item.id
+                );
+
+
+                return;
+
+            }
+
+
+            await updateCartItem(
+                item.id,
+                currentQuantity - 1
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Cart quantity decrease failed:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       INCREASE QUANTITY
+    ======================================================== */
+
+    async function increaseQuantity(
+        item
+    ) {
+
+        if (
+            !item ||
+            loading
+        ) {
+
+            return;
+
+        }
+
+
+        const currentQuantity =
+            Number(
+                item.quantity ||
+                1
+            );
 
 
         const stock =
@@ -155,7 +215,7 @@ function Cart() {
 
         if (
             stock > 0 &&
-            quantity > stock
+            currentQuantity >= stock
         ) {
 
             return;
@@ -167,41 +227,14 @@ function Cart() {
 
             await updateCartItem(
                 item.id,
-                quantity
+                currentQuantity + 1
             );
 
         }
         catch (error) {
 
             console.error(
-                "Cart quantity update failed:",
-                error
-            );
-
-        }
-
-    }
-
-
-    /* ========================================================
-       REMOVE ITEM
-    ======================================================== */
-
-    async function handleRemove(
-        itemId
-    ) {
-
-        try {
-
-            await removeFromCart(
-                itemId
-            );
-
-        }
-        catch (error) {
-
-            console.error(
-                "Remove cart item failed:",
+                "Cart quantity increase failed:",
                 error
             );
 
@@ -258,13 +291,6 @@ function Cart() {
     ======================================================== */
 
     function handleCheckout() {
-
-        /*
-         * We already have the cart items.
-         *
-         * Do not block navigation merely because CartContext
-         * is performing another background operation.
-         */
 
         if (!items.length) {
 
@@ -604,15 +630,17 @@ function Cart() {
 
                                     const price =
                                         Number(
-                                            variant.price ||
-                                            item.price ||
+                                            variant.price ??
+                                            item.price ??
+                                            product.price ??
                                             0
                                         );
 
 
                                     const comparePrice =
                                         Number(
-                                            variant.compare_at_price ||
+                                            variant.compare_at_price ??
+                                            product.compare_at_price ??
                                             0
                                         );
 
@@ -628,8 +656,10 @@ function Cart() {
                                         Number(
                                             item.line_total ??
                                             item.subtotal ??
-                                            price *
-                                            quantity
+                                            (
+                                                price *
+                                                quantity
+                                            )
                                         );
 
 
@@ -642,7 +672,9 @@ function Cart() {
                                             className="aumveda-cart-item"
                                         >
 
-                                            {/* IMAGE */}
+                                            {/* =================================
+                                                IMAGE
+                                            ================================= */}
 
                                             <Link
                                                 to={
@@ -686,7 +718,9 @@ function Cart() {
                                             </Link>
 
 
-                                            {/* DETAILS */}
+                                            {/* =================================
+                                                DETAILS
+                                            ================================= */}
 
                                             <div
                                                 className="aumveda-cart-item__details"
@@ -715,7 +749,9 @@ function Cart() {
                                                         <span
                                                             className="aumveda-cart-item__variant"
                                                         >
-                                                            {variant.name}
+                                                            {
+                                                                variant.name
+                                                            }
                                                         </span>
 
                                                     )
@@ -723,12 +759,18 @@ function Cart() {
 
 
                                                 {
-                                                    product.short_description && (
+                                                    (
+                                                        product.short_description ||
+                                                        product.description
+                                                    ) && (
 
                                                         <p>
+
                                                             {
-                                                                product.short_description
+                                                                product.short_description ||
+                                                                product.description
                                                             }
+
                                                         </p>
 
                                                     )
@@ -774,7 +816,9 @@ function Cart() {
                                             </div>
 
 
-                                            {/* QUANTITY */}
+                                            {/* =================================
+                                                QUANTITY
+                                            ================================= */}
 
                                             <div
                                                 className="aumveda-cart-item__quantity"
@@ -791,15 +835,22 @@ function Cart() {
 
                                                     <button
                                                         type="button"
-                                                        aria-label="Decrease quantity"
+                                                        aria-label={
+                                                            quantity <= 1
+                                                                ? "Remove product from cart"
+                                                                : "Decrease quantity"
+                                                        }
+                                                        title={
+                                                            quantity <= 1
+                                                                ? "Remove from cart"
+                                                                : "Decrease quantity"
+                                                        }
                                                         disabled={
-                                                            quantity <= 1 ||
                                                             loading
                                                         }
                                                         onClick={() =>
-                                                            changeQuantity(
-                                                                item,
-                                                                quantity - 1
+                                                            decreaseQuantity(
+                                                                item
                                                             )
                                                         }
                                                     >
@@ -812,25 +863,31 @@ function Cart() {
 
 
                                                     <strong>
-                                                        {quantity}
+                                                        {
+                                                            quantity
+                                                        }
                                                     </strong>
 
 
                                                     <button
                                                         type="button"
                                                         aria-label="Increase quantity"
+                                                        title={
+                                                            stock > 0 &&
+                                                            quantity >= stock
+                                                                ? "Maximum stock reached"
+                                                                : "Increase quantity"
+                                                        }
                                                         disabled={
                                                             loading ||
                                                             (
                                                                 stock > 0 &&
-                                                                quantity >=
-                                                                stock
+                                                                quantity >= stock
                                                             )
                                                         }
                                                         onClick={() =>
-                                                            changeQuantity(
-                                                                item,
-                                                                quantity + 1
+                                                            increaseQuantity(
+                                                                item
                                                             )
                                                         }
                                                     >
@@ -860,7 +917,9 @@ function Cart() {
                                             </div>
 
 
-                                            {/* TOTAL */}
+                                            {/* =================================
+                                                TOTAL
+                                            ================================= */}
 
                                             <div
                                                 className="aumveda-cart-item__total"
@@ -881,32 +940,6 @@ function Cart() {
                                                     }
 
                                                 </strong>
-
-
-                                                <button
-                                                    type="button"
-                                                    aria-label={
-                                                        `Remove ${
-                                                            product.name ||
-                                                            "product"
-                                                        }`
-                                                    }
-                                                    className="aumveda-cart-item__remove"
-                                                    onClick={() =>
-                                                        handleRemove(
-                                                            item.id
-                                                        )
-                                                    }
-                                                    disabled={
-                                                        loading
-                                                    }
-                                                >
-
-                                                    <Trash2
-                                                        size={16}
-                                                    />
-
-                                                </button>
 
                                             </div>
 

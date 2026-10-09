@@ -1,42 +1,40 @@
 import {
     Heart,
+    Minus,
+    Plus,
     ShoppingBag,
-    Star,
-    Check
+    Star
 } from "lucide-react";
-
 
 import {
     motion
 } from "framer-motion";
 
-
 import {
     useState
 } from "react";
-
 
 import {
     useNavigate
 } from "react-router-dom";
 
-
 import {
     useCart
 } from "../../context/CartContext";
-
 
 import {
     useAuth
 } from "../../context/AuthContext";
 
-
 import {
     useWishlist
 } from "../../context/WishlistContext";
 
-
 import "../../styles/product-card.css";
+
+
+const BUY_NOW_STORAGE_KEY =
+    "aumveda_buy_now";
 
 
 /* ============================================================
@@ -72,9 +70,7 @@ function formatPrice(value) {
 ============================================================ */
 
 function ProductCard({
-
     product
-
 }) {
 
     const navigate =
@@ -87,7 +83,8 @@ function ProductCard({
 
     const {
         isAuthenticated
-    } = useAuth();
+    } =
+        useAuth();
 
 
     /* ========================================================
@@ -96,8 +93,11 @@ function ProductCard({
 
     const {
         addToCart,
-        getCartItem
-    } = useCart();
+        getCartItem,
+        updateCartItem,
+        removeFromCart
+    } =
+        useCart();
 
 
     /* ========================================================
@@ -107,7 +107,8 @@ function ProductCard({
     const {
         isWishlisted,
         toggleWishlist
-    } = useWishlist();
+    } =
+        useWishlist();
 
 
     const productIsWishlisted =
@@ -117,13 +118,21 @@ function ProductCard({
 
 
     /* ========================================================
-       CART LOADING
+       ACTION LOADING
     ======================================================== */
 
     const [
-        addingToCart,
-        setAddingToCart
-    ] = useState(false);
+        cartActionLoading,
+        setCartActionLoading
+    ] =
+        useState(false);
+
+
+    const [
+        buyNowLoading,
+        setBuyNowLoading
+    ] =
+        useState(false);
 
 
     /* ========================================================
@@ -142,25 +151,19 @@ function ProductCard({
         )
 
             ? Math.round(
-
                 (
                     (
                         Number(
                             product.compare_at_price
                         ) -
-
                         Number(
                             product.price
                         )
-
                     ) /
-
                     Number(
                         product.compare_at_price
                     )
-
                 ) * 100
-
             )
 
             : 0;
@@ -172,9 +175,7 @@ function ProductCard({
 
     function openProduct() {
 
-        if (
-            !product?.slug
-        ) {
+        if (!product?.slug) {
 
             return;
 
@@ -184,6 +185,24 @@ function ProductCard({
         navigate(
             `/products/${product.slug}`
         );
+
+    }
+
+
+    function handleProductKeyDown(
+        event
+    ) {
+
+        if (
+            event.key === "Enter" ||
+            event.key === " "
+        ) {
+
+            event.preventDefault();
+
+            openProduct();
+
+        }
 
     }
 
@@ -207,6 +226,47 @@ function ProductCard({
 
 
     /* ========================================================
+       REAL CART STATE
+    ======================================================== */
+
+    const cartItem =
+        getCartItem(
+            product
+        );
+
+
+    const productIsInCart =
+        Boolean(
+            cartItem
+        );
+
+
+    const cartQuantity =
+        Number(
+            cartItem?.quantity ||
+            0
+        );
+
+
+    /* ========================================================
+       STOCK
+    ======================================================== */
+
+    const stockQuantity =
+        Number(
+            cartItem?.variant?.stock_quantity ??
+            product?.variant?.stock_quantity ??
+            product?.stock_quantity ??
+            0
+        );
+
+
+    const maximumStockReached =
+        stockQuantity > 0 &&
+        cartQuantity >= stockQuantity;
+
+
+    /* ========================================================
        ADD TO CART
     ======================================================== */
 
@@ -216,10 +276,6 @@ function ProductCard({
 
         event.stopPropagation();
 
-
-        /* ----------------------------------------------------
-           OUT OF STOCK
-        ---------------------------------------------------- */
 
         if (
             product.in_stock ===
@@ -231,31 +287,18 @@ function ProductCard({
         }
 
 
-        /* ----------------------------------------------------
-           LOGIN REQUIRED
-        ---------------------------------------------------- */
-
-        if (
-            !isAuthenticated
-        ) {
+        if (!isAuthenticated) {
 
             navigate(
                 "/login"
             );
-
 
             return;
 
         }
 
 
-        /* ----------------------------------------------------
-           PREVENT DOUBLE CLICK
-        ---------------------------------------------------- */
-
-        if (
-            addingToCart
-        ) {
+        if (cartActionLoading) {
 
             return;
 
@@ -264,7 +307,7 @@ function ProductCard({
 
         try {
 
-            setAddingToCart(
+            setCartActionLoading(
                 true
             );
 
@@ -285,7 +328,7 @@ function ProductCard({
         }
         finally {
 
-            setAddingToCart(
+            setCartActionLoading(
                 false
             );
 
@@ -295,19 +338,231 @@ function ProductCard({
 
 
     /* ========================================================
-       CHECK REAL CART STATE
+       DECREASE QUANTITY
     ======================================================== */
 
-    const cartItem =
-        getCartItem(
-            product
-        );
+    async function handleDecreaseQuantity(
+        event
+    ) {
+
+        event.stopPropagation();
 
 
-    const productIsInCart =
-        Boolean(
-            cartItem
-        );
+        if (
+            !cartItem ||
+            cartActionLoading
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            setCartActionLoading(
+                true
+            );
+
+
+            if (
+                cartQuantity <= 1
+            ) {
+
+                await removeFromCart(
+                    cartItem.id
+                );
+
+
+                return;
+
+            }
+
+
+            await updateCartItem(
+                cartItem.id,
+                cartQuantity - 1
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Decrease cart quantity failed:",
+                error
+            );
+
+        }
+        finally {
+
+            setCartActionLoading(
+                false
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       INCREASE QUANTITY
+    ======================================================== */
+
+    async function handleIncreaseQuantity(
+        event
+    ) {
+
+        event.stopPropagation();
+
+
+        if (
+            !cartItem ||
+            cartActionLoading ||
+            maximumStockReached
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            setCartActionLoading(
+                true
+            );
+
+
+            await updateCartItem(
+                cartItem.id,
+                cartQuantity + 1
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Increase cart quantity failed:",
+                error
+            );
+
+        }
+        finally {
+
+            setCartActionLoading(
+                false
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       BUY NOW
+    ======================================================== */
+
+    function handleBuyNow(
+        event
+    ) {
+
+        event.stopPropagation();
+
+
+        if (
+            product.in_stock ===
+            false ||
+            buyNowLoading
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            setBuyNowLoading(
+                true
+            );
+
+
+            const buyNowPayload = {
+                product,
+                quantity: 1
+            };
+
+
+            sessionStorage.setItem(
+                BUY_NOW_STORAGE_KEY,
+                JSON.stringify(
+                    buyNowPayload
+                )
+            );
+
+
+            /*
+             * If already authenticated:
+             *
+             * Product → Checkout directly.
+             */
+
+            if (isAuthenticated) {
+
+                navigate(
+                    "/checkout?mode=buy-now",
+                    {
+                        state: {
+                            buyNow:
+                                buyNowPayload
+                        }
+                    }
+                );
+
+
+                return;
+
+            }
+
+
+            /*
+             * If not authenticated:
+             *
+             * Login first, then LoginPage's existing
+             * "from.pathname" redirect takes customer
+             * back to the Buy Now checkout.
+             *
+             * sessionStorage preserves the selected product.
+             */
+
+            navigate(
+                "/login",
+                {
+                    state: {
+                        from: {
+                            pathname:
+                                "/checkout?mode=buy-now"
+                        }
+                    }
+                }
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Buy now failed:",
+                error
+            );
+
+
+            setBuyNowLoading(
+                false
+            );
+
+        }
+
+    }
 
 
     /* ========================================================
@@ -317,7 +572,6 @@ function ProductCard({
     return (
 
         <motion.article
-
             className="product-card"
 
             initial={{
@@ -342,7 +596,6 @@ function ProductCard({
             whileHover={{
                 y: -6
             }}
-
         >
 
             {/* =================================================
@@ -350,87 +603,51 @@ function ProductCard({
             ================================================= */}
 
             <div
-
                 className="
                     product-card__image-box
                     product-card__clickable
                 "
-
                 onClick={
                     openProduct
                 }
-
                 role="button"
-
                 tabIndex={0}
-
                 onKeyDown={
-                    event => {
-
-                        if (
-                            event.key ===
-                            "Enter" ||
-                            event.key ===
-                            " "
-                        ) {
-
-                            event.preventDefault();
-
-                            openProduct();
-
-                        }
-
-                    }
+                    handleProductKeyDown
                 }
-
             >
 
-                {/* DISCOUNT */}
-
                 {
-                    discount > 0 &&
+                    discount > 0 && (
 
-                    <span
-                        className="
-                            product-card__discount
-                        "
-                    >
+                        <span
+                            className="
+                                product-card__discount
+                            "
+                        >
+                            Save {discount}%
+                        </span>
 
-                        Save {discount}%
-
-                    </span>
+                    )
                 }
 
 
-                {/* PRODUCT IMAGE */}
-
                 <img
-
                     src={
                         product.image
                     }
-
                     alt={
                         product.name
                     }
-
                     className="
                         product-card__image
                     "
-
                     loading="lazy"
-
                 />
 
 
-                {/* =================================================
-                    WISHLIST
-                ================================================= */}
-
                 <button
-
                     type="button"
-
                     className={`
                         product-card__wishlist
                         ${
@@ -439,35 +656,28 @@ function ProductCard({
                                 : ""
                         }
                     `}
-
                     onClick={
                         handleWishlist
                     }
-
                     aria-label={
                         productIsWishlisted
                             ? "Remove from wishlist"
                             : "Add to wishlist"
                     }
-
                     title={
                         productIsWishlisted
                             ? "Remove from wishlist"
                             : "Add to wishlist"
                     }
-
                 >
 
                     <Heart
-
                         size={18}
-
                         fill={
                             productIsWishlisted
                                 ? "currentColor"
                                 : "none"
                         }
-
                     />
 
                 </button>
@@ -485,7 +695,7 @@ function ProductCard({
                 "
             >
 
-                {/* PRODUCT TITLE */}
+                {/* TITLE */}
 
                 <div
                     className="
@@ -494,44 +704,19 @@ function ProductCard({
                 >
 
                     <h3
-
                         className="
                             product-card__title-link
                         "
-
                         onClick={
                             openProduct
                         }
-
                         role="button"
-
                         tabIndex={0}
-
                         onKeyDown={
-                            event => {
-
-                                if (
-                                    event.key ===
-                                    "Enter" ||
-                                    event.key ===
-                                    " "
-                                ) {
-
-                                    event.preventDefault();
-
-                                    openProduct();
-
-                                }
-
-                            }
+                            handleProductKeyDown
                         }
-
                     >
-
-                        {
-                            product.name
-                        }
-
+                        {product.name}
                     </h3>
 
                 </div>
@@ -544,18 +729,14 @@ function ProductCard({
                         product-card__description
                     "
                 >
-
                     {
                         product.short_description ||
                         product.description
                     }
-
                 </p>
 
 
-                {/* =================================================
-                    RATING
-                ================================================= */}
+                {/* RATING */}
 
                 <div
                     className="
@@ -570,34 +751,28 @@ function ProductCard({
 
 
                     <span>
-
                         {
                             Number(
                                 product.rating ||
                                 0
                             ).toFixed(1)
                         }
-
                     </span>
 
 
                     <small>
-
                         (
                         {
                             product.review_count ||
                             0
                         }
                         )
-
                     </small>
 
                 </div>
 
 
-                {/* =================================================
-                    PRICE
-                ================================================= */}
+                {/* PRICE */}
 
                 <div
                     className="
@@ -612,38 +787,34 @@ function ProductCard({
                     >
 
                         <strong>
-
                             ₹
                             {
                                 formatPrice(
                                     product.price
                                 )
                             }
-
                         </strong>
 
 
                         {
                             product.compare_at_price &&
-
                             Number(
                                 product.compare_at_price
                             ) >
-
                             Number(
                                 product.price
-                            ) &&
+                            ) && (
 
-                            <del>
+                                <del>
+                                    ₹
+                                    {
+                                        formatPrice(
+                                            product.compare_at_price
+                                        )
+                                    }
+                                </del>
 
-                                ₹
-                                {
-                                    formatPrice(
-                                        product.compare_at_price
-                                    )
-                                }
-
-                            </del>
+                            )
                         }
 
                     </div>
@@ -652,91 +823,162 @@ function ProductCard({
 
 
                 {/* =================================================
-                    CART BUTTON
+                    ACTIONS
                 ================================================= */}
 
-                <button
-
-                    type="button"
-
-                    className={`
-                        product-card__cart
-                        ${
-                            productIsInCart
-                                ? "is-added"
-                                : ""
-                        }
-                        ${
-                            product.in_stock === false
-                                ? "is-disabled"
-                                : ""
-                        }
-                    `}
-
-                    onClick={
-                        handleAddToCart
-                    }
-
-                    disabled={
-                        product.in_stock === false ||
-                        addingToCart
-                    }
-
+                <div
+                    className="
+                        product-card__actions
+                    "
                 >
 
+                    {/* =============================================
+                        CART SIDE
+                    ============================================= */}
+
                     {
-                        product.in_stock === false ? (
+                        productIsInCart
+                            ? (
 
-                            <>
+                                <div
+                                    className="
+                                        product-card__quantity-control
+                                    "
+                                    onClick={
+                                        event =>
+                                            event.stopPropagation()
+                                    }
+                                >
 
-                                <ShoppingBag
-                                    size={16}
-                                />
+                                    <button
+                                        type="button"
+                                        aria-label={
+                                            cartQuantity <= 1
+                                                ? "Remove from cart"
+                                                : "Decrease quantity"
+                                        }
+                                        title={
+                                            cartQuantity <= 1
+                                                ? "Remove from cart"
+                                                : "Decrease quantity"
+                                        }
+                                        disabled={
+                                            cartActionLoading
+                                        }
+                                        onClick={
+                                            handleDecreaseQuantity
+                                        }
+                                    >
 
-                                Out of Stock
+                                        <Minus
+                                            size={15}
+                                        />
 
-                            </>
+                                    </button>
 
-                        ) : addingToCart ? (
 
-                            <>
+                                    <strong>
+                                        {cartQuantity}
+                                    </strong>
 
-                                <ShoppingBag
-                                    size={16}
-                                />
 
-                                Adding...
+                                    <button
+                                        type="button"
+                                        aria-label="Increase quantity"
+                                        title={
+                                            maximumStockReached
+                                                ? "Maximum stock reached"
+                                                : "Increase quantity"
+                                        }
+                                        disabled={
+                                            cartActionLoading ||
+                                            maximumStockReached
+                                        }
+                                        onClick={
+                                            handleIncreaseQuantity
+                                        }
+                                    >
 
-                            </>
+                                        <Plus
+                                            size={15}
+                                        />
 
-                        ) : productIsInCart ? (
+                                    </button>
 
-                            <>
+                                </div>
 
-                                <Check
-                                    size={16}
-                                />
+                            )
+                            : (
 
-                                Added to Cart
+                                <button
+                                    type="button"
+                                    className={`
+                                        product-card__cart
+                                        ${
+                                            product.in_stock ===
+                                            false
+                                                ? "is-disabled"
+                                                : ""
+                                        }
+                                    `}
+                                    onClick={
+                                        handleAddToCart
+                                    }
+                                    disabled={
+                                        product.in_stock ===
+                                        false ||
+                                        cartActionLoading
+                                    }
+                                >
 
-                            </>
+                                    <ShoppingBag
+                                        size={15}
+                                    />
 
-                        ) : (
 
-                            <>
+                                    {
+                                        product.in_stock ===
+                                        false
+                                            ? "Out of Stock"
+                                            : cartActionLoading
+                                                ? "Adding..."
+                                                : "Add to Cart"
+                                    }
 
-                                <ShoppingBag
-                                    size={16}
-                                />
+                                </button>
 
-                                Add To Cart
-
-                            </>
-
-                        )
+                            )
                     }
 
-                </button>
+
+                    {/* =============================================
+                        BUY NOW
+                    ============================================= */}
+
+                    <button
+                        type="button"
+                        className="
+                            product-card__buy-now
+                        "
+                        onClick={
+                            handleBuyNow
+                        }
+                        disabled={
+                            product.in_stock ===
+                            false ||
+                            buyNowLoading
+                        }
+                    >
+
+                        {
+                            buyNowLoading
+                                ? "Opening..."
+                                : "Buy Now"
+                        }
+
+                    </button>
+
+                </div>
 
             </div>
 

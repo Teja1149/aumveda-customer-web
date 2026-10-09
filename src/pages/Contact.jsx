@@ -7,65 +7,113 @@ import {
     MessageCircle,
     Phone,
     Send,
-    Sparkles,
+    Sparkles
 } from "lucide-react";
 
 import {
-    useState,
+    useState
 } from "react";
 
 import {
-    Link,
+    Link
 } from "react-router-dom";
 
 import "../styles/contact.css";
 
 
+/* ============================================================
+   CONTACT CONFIGURATION
+============================================================ */
+
+const CONTACT_EMAIL =
+    "aumvedawellness@gmail.com";
+
+
+const CONTACT_PHONE =
+    "+919000006000";
+
+
+const CONTACT_PHONE_DISPLAY =
+    "+91 90000 06000";
+
+
+const CONTACT_ADDRESS =
+    "1-8-15/2FF8-1, GK Nilayam, North Kamala Nagar, Hyderabad, Telangana 500062";
+
+
+const GOOGLE_MAPS_URL =
+    "https://www.google.com/maps/search/?api=1&query=1-8-15%2F2FF8-1%2C%20GK%20Nilayam%2C%20North%20Kamala%20Nagar%2C%20Hyderabad%2C%20Telangana%20500062";
+
+
+const GOOGLE_MAPS_EMBED_URL =
+    "https://www.google.com/maps?q=1-8-15%2F2FF8-1%2C%20GK%20Nilayam%2C%20North%20Kamala%20Nagar%2C%20Hyderabad%2C%20Telangana%20500062&output=embed";
+
+
 const CONTACT_HERO_IMAGE =
-    "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1500&q=85";
+    "https://images.unsplash.com/photo-1492552181161-62217fc3076d?auto=format&fit=crop&w=1500&q=85";
 
 
-const CONTACT_NATURE_IMAGE =
-    "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&w=1200&q=85";
-
+/* ============================================================
+   CONTACT
+============================================================ */
 
 function Contact() {
 
     const [
         formData,
         setFormData
-    ] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-    });
+    ] =
+        useState({
+            name: "",
+            email: "",
+            phone: "",
+            subject: "",
+            message: ""
+        });
 
 
     const [
         submitted,
         setSubmitted
-    ] = useState(false);
+    ] =
+        useState(false);
 
+
+    /* ========================================================
+       FORM CHANGE
+    ======================================================== */
 
     function handleChange(event) {
 
         const {
             name,
-            value,
-        } = event.target;
+            value
+        } =
+            event.target;
 
 
         setFormData(
             previous => ({
                 ...previous,
-                [name]: value,
+                [name]: value
             })
         );
 
+
+        if (submitted) {
+
+            setSubmitted(
+                false
+            );
+
+        }
+
     }
 
+
+    /* ========================================================
+       FORM SUBMIT
+    ======================================================== */
 
     function handleSubmit(event) {
 
@@ -80,7 +128,7 @@ function Contact() {
         const body = `
 Name: ${formData.name}
 Email: ${formData.email}
-Phone: ${formData.phone}
+Phone: ${formData.phone || "Not provided"}
 
 Message:
 ${formData.message}
@@ -88,49 +136,85 @@ ${formData.message}
 
 
         const mailto =
-            `mailto:aumvedawellness@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+                subject
+            )}&body=${encodeURIComponent(
+                body
+            )}`;
+
+
+        setSubmitted(
+            true
+        );
 
 
         window.location.href =
             mailto;
 
-
-        setSubmitted(true);
-
     }
 
 
+    /* ========================================================
+       RENDER
+    ======================================================== */
+
     return (
 
-        <main className="aumveda-contact-page">
+        <main
+            className="aumveda-contact-page"
+        >
 
-            {/* =====================================================
+            {/* =================================================
                 HERO
-            ===================================================== */}
+            ================================================= */}
 
-            <section className="aumveda-contact-hero">
+            <section
+                className="aumveda-contact-hero"
+            >
 
-                <div className="contact-hero-glow glow-one" />
+                <div
+                    className="
+                        contact-hero-glow
+                        glow-one
+                    "
+                />
 
-                <div className="contact-hero-glow glow-two" />
+
+                <div
+                    className="
+                        contact-hero-glow
+                        glow-two
+                    "
+                />
 
 
-                <div className="aumveda-contact-container">
+                <div
+                    className="aumveda-contact-container"
+                >
 
-                    <div className="aumveda-contact-hero-grid">
+                    <div
+                        className="aumveda-contact-hero-grid"
+                    >
 
-                        <div className="aumveda-contact-hero-copy">
+                        {/* =========================================
+                            HERO COPY
+                        ========================================= */}
 
-                            <span className="aumveda-contact-eyebrow">
+                        <div
+                            className="aumveda-contact-hero-copy"
+                        >
 
-                                LET'S CONNECT
-
+                            <span
+                                className="aumveda-contact-eyebrow"
+                            >
+                                LET&apos;S CONNECT
                             </span>
 
 
                             <h1>
 
                                 Good wellness
+
                                 <span>
                                     begins with a conversation.
                                 </span>
@@ -151,7 +235,9 @@ ${formData.message}
                             </p>
 
 
-                            <div className="contact-hero-actions">
+                            <div
+                                className="contact-hero-actions"
+                            >
 
                                 <a
                                     href="#contact-form"
@@ -168,7 +254,7 @@ ${formData.message}
 
 
                                 <a
-                                    href="mailto:aumvedawellness@gmail.com"
+                                    href={`mailto:${CONTACT_EMAIL}`}
                                     className="contact-text-link"
                                 >
 
@@ -185,18 +271,36 @@ ${formData.message}
                         </div>
 
 
-                        {/* =================================================
-                            3D MESSAGE VISUAL
-                        ================================================= */}
+                        {/* =========================================
+                            HERO VISUAL
+                        ========================================= */}
 
-                        <div className="aumveda-contact-hero-visual">
+                        <div
+                            className="aumveda-contact-hero-visual"
+                        >
 
-                            <div className="contact-orbit contact-orbit-one" />
+                            <div
+                                className="
+                                    contact-orbit
+                                    contact-orbit-one
+                                "
+                            />
 
-                            <div className="contact-orbit contact-orbit-two" />
+
+                            <div
+                                className="
+                                    contact-orbit
+                                    contact-orbit-two
+                                "
+                            />
 
 
-                            <div className="contact-floating-chip chip-top">
+                            <div
+                                className="
+                                    contact-floating-chip
+                                    chip-top
+                                "
+                            >
 
                                 <Sparkles
                                     size={15}
@@ -207,24 +311,31 @@ ${formData.message}
                             </div>
 
 
-                            <div className="contact-letter-card">
+                            <div
+                                className="contact-letter-card"
+                            >
 
-                                <div className="letter-card-top">
+                                <div
+                                    className="letter-card-top"
+                                >
 
-                                    <div className="letter-logo-mark">
-
+                                    <div
+                                        className="letter-logo-mark"
+                                    >
                                         A
-
                                     </div>
+
 
                                     <span>
 
                                         AUMVEDA
+
                                         <small>
                                             WELLNESS
                                         </small>
 
                                     </span>
+
 
                                     <Mail
                                         size={19}
@@ -233,29 +344,39 @@ ${formData.message}
                                 </div>
 
 
-                                <div className="letter-card-lines">
+                                <div
+                                    className="letter-card-lines"
+                                >
 
                                     <span />
+
                                     <span />
-                                    <span className="short" />
+
+                                    <span
+                                        className="short"
+                                    />
 
                                 </div>
 
 
-                                <div className="letter-card-message">
+                                <div
+                                    className="letter-card-message"
+                                >
 
                                     <MessageCircle
                                         size={26}
                                     />
 
+
                                     <div>
 
                                         <strong>
-                                            We're listening.
+                                            We&apos;re listening.
                                         </strong>
 
+
                                         <span>
-                                            Let's create a more
+                                            Let&apos;s create a more
                                             conscious wellness journey.
                                         </span>
 
@@ -264,14 +385,17 @@ ${formData.message}
                                 </div>
 
 
-                                <div className="letter-card-footer">
+                                <div
+                                    className="letter-card-footer"
+                                >
 
                                     <span>
                                         ROOTED IN NATURE
                                     </span>
 
+
                                     <span>
-                                        REFined BY AYURVEDA
+                                        REFINED BY AYURVEDA
                                     </span>
 
                                 </div>
@@ -279,7 +403,12 @@ ${formData.message}
                             </div>
 
 
-                            <div className="contact-floating-chip chip-bottom">
+                            <div
+                                className="
+                                    contact-floating-chip
+                                    chip-bottom
+                                "
+                            >
 
                                 <MapPin
                                     size={15}
@@ -298,23 +427,36 @@ ${formData.message}
             </section>
 
 
-            {/* =====================================================
+            {/* =================================================
                 CONTACT CHANNELS
-            ===================================================== */}
+            ================================================= */}
 
-            <section className="aumveda-contact-channels">
+            <section
+                className="aumveda-contact-channels"
+            >
 
-                <div className="aumveda-contact-container">
+                <div
+                    className="aumveda-contact-container"
+                >
 
-                    <div className="contact-channel-header">
+                    <div
+                        className="contact-channel-header"
+                    >
 
-                        <span className="aumveda-contact-eyebrow dark">
+                        <span
+                            className="
+                                aumveda-contact-eyebrow
+                                dark
+                            "
+                        >
                             REACH US
                         </span>
+
 
                         <h2>
 
                             Choose the way
+
                             <span>
                                 that feels right.
                             </span>
@@ -324,14 +466,23 @@ ${formData.message}
                     </div>
 
 
-                    <div className="contact-channel-grid">
+                    <div
+                        className="contact-channel-grid"
+                    >
+
+                        {/* =========================================
+                            EMAIL
+                        ========================================= */}
 
                         <a
-                            href="mailto:aumvedawellness@gmail.com"
+                            href={`mailto:${CONTACT_EMAIL}`}
                             className="contact-channel-card"
+                            aria-label="Email AUMVEDA"
                         >
 
-                            <div className="channel-icon">
+                            <div
+                                className="channel-icon"
+                            >
 
                                 <Mail
                                     size={21}
@@ -339,18 +490,24 @@ ${formData.message}
 
                             </div>
 
-                            <span className="channel-label">
+
+                            <span
+                                className="channel-label"
+                            >
                                 EMAIL
                             </span>
 
+
                             <h3>
-                                aumvedawellness@gmail.com
+                                {CONTACT_EMAIL}
                             </h3>
+
 
                             <p>
                                 For general enquiries,
                                 partnerships and support.
                             </p>
+
 
                             <ArrowRight
                                 size={17}
@@ -360,12 +517,19 @@ ${formData.message}
                         </a>
 
 
+                        {/* =========================================
+                            CALL
+                        ========================================= */}
+
                         <a
-                            href="tel:+919000006000"
+                            href={`tel:${CONTACT_PHONE}`}
                             className="contact-channel-card"
+                            aria-label="Call AUMVEDA"
                         >
 
-                            <div className="channel-icon">
+                            <div
+                                className="channel-icon"
+                            >
 
                                 <Phone
                                     size={21}
@@ -373,18 +537,24 @@ ${formData.message}
 
                             </div>
 
-                            <span className="channel-label">
+
+                            <span
+                                className="channel-label"
+                            >
                                 CALL
                             </span>
 
+
                             <h3>
-                                +91 90000 06000
+                                {CONTACT_PHONE_DISPLAY}
                             </h3>
+
 
                             <p>
                                 Speak directly with
                                 the AUMVEDA team.
                             </p>
+
 
                             <ArrowRight
                                 size={17}
@@ -394,9 +564,23 @@ ${formData.message}
                         </a>
 
 
-                        <div className="contact-channel-card">
+                        {/* =========================================
+                            VISIT
+                        ========================================= */}
 
-                            <div className="channel-icon">
+                        <a
+                            href={
+                                GOOGLE_MAPS_URL
+                            }
+                            target="_blank"
+                            rel="noreferrer"
+                            className="contact-channel-card"
+                            aria-label="Open AUMVEDA location in Google Maps"
+                        >
+
+                            <div
+                                className="channel-icon"
+                            >
 
                                 <MapPin
                                     size={21}
@@ -404,25 +588,31 @@ ${formData.message}
 
                             </div>
 
-                            <span className="channel-label">
+
+                            <span
+                                className="channel-label"
+                            >
                                 VISIT
                             </span>
+
 
                             <h3>
                                 Hyderabad
                             </h3>
+
 
                             <p>
                                 North Kamala Nagar,
                                 Hyderabad – 500062.
                             </p>
 
+
                             <ArrowRight
                                 size={17}
                                 className="channel-arrow"
                             />
 
-                        </div>
+                        </a>
 
                     </div>
 
@@ -431,43 +621,58 @@ ${formData.message}
             </section>
 
 
-            {/* =====================================================
+            {/* =================================================
                 FORM + IMAGE
-            ===================================================== */}
+            ================================================= */}
 
             <section
                 id="contact-form"
                 className="aumveda-contact-form-section"
             >
 
-                <div className="aumveda-contact-container">
+                <div
+                    className="aumveda-contact-container"
+                >
 
-                    <div className="contact-form-grid">
+                    <div
+                        className="contact-form-grid"
+                    >
 
-                        {/* IMAGE SIDE */}
+                        {/* =========================================
+                            IMAGE SIDE
+                        ========================================= */}
 
-                        <div className="contact-form-visual">
+                        <div
+                            className="contact-form-visual"
+                        >
 
                             <img
-                                src={CONTACT_HERO_IMAGE}
-                                alt="Natural ingredients and wellness"
+                                src={
+                                    CONTACT_HERO_IMAGE
+                                }
+                                alt="Natural Ayurvedic wellness"
                             />
 
-                            <div className="contact-form-visual-overlay" />
+
+                            <div
+                                className="contact-form-visual-overlay"
+                            />
 
 
-                            <div className="contact-form-quote">
+                            <div
+                                className="contact-form-quote"
+                            >
 
                                 <span>
                                     “
                                 </span>
 
-                                <p>
 
+                                <p>
                                     Rooted in tradition,
                                     refined for modern living.
-
                                 </p>
+
 
                                 <small>
                                     AUMVEDA WELLNESS
@@ -476,17 +681,21 @@ ${formData.message}
                             </div>
 
 
-                            <div className="contact-form-mini-card">
+                            <div
+                                className="contact-form-mini-card"
+                            >
 
                                 <CheckCircle2
                                     size={18}
                                 />
+
 
                                 <div>
 
                                     <strong>
                                         Thoughtful support
                                     </strong>
+
 
                                     <span>
                                         Every enquiry matters.
@@ -499,11 +708,20 @@ ${formData.message}
                         </div>
 
 
-                        {/* FORM */}
+                        {/* =========================================
+                            FORM
+                        ========================================= */}
 
-                        <div className="contact-form-wrapper">
+                        <div
+                            className="contact-form-wrapper"
+                        >
 
-                            <span className="aumveda-contact-eyebrow dark">
+                            <span
+                                className="
+                                    aumveda-contact-eyebrow
+                                    dark
+                                "
+                            >
                                 SEND A MESSAGE
                             </span>
 
@@ -511,6 +729,7 @@ ${formData.message}
                             <h2>
 
                                 Tell us
+
                                 <span>
                                     what you need.
                                 </span>
@@ -518,22 +737,26 @@ ${formData.message}
                             </h2>
 
 
-                            <p className="contact-form-intro">
-
+                            <p
+                                className="contact-form-intro"
+                            >
                                 Whether you are exploring a product,
                                 looking for a partnership, or simply
                                 want to know more about AUMVEDA,
                                 send us a message.
-
                             </p>
 
 
                             <form
-                                onSubmit={handleSubmit}
+                                onSubmit={
+                                    handleSubmit
+                                }
                                 className="aumveda-contact-form"
                             >
 
-                                <div className="contact-input-row">
+                                <div
+                                    className="contact-input-row"
+                                >
 
                                     <label>
 
@@ -542,8 +765,12 @@ ${formData.message}
                                         <input
                                             type="text"
                                             name="name"
-                                            value={formData.name}
-                                            onChange={handleChange}
+                                            value={
+                                                formData.name
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
                                             placeholder="Your name"
                                             required
                                         />
@@ -558,8 +785,12 @@ ${formData.message}
                                         <input
                                             type="email"
                                             name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
+                                            value={
+                                                formData.email
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
                                             placeholder="you@example.com"
                                             required
                                         />
@@ -569,7 +800,9 @@ ${formData.message}
                                 </div>
 
 
-                                <div className="contact-input-row">
+                                <div
+                                    className="contact-input-row"
+                                >
 
                                     <label>
 
@@ -578,8 +811,12 @@ ${formData.message}
                                         <input
                                             type="tel"
                                             name="phone"
-                                            value={formData.phone}
-                                            onChange={handleChange}
+                                            value={
+                                                formData.phone
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
                                             placeholder="+91"
                                         />
 
@@ -593,8 +830,12 @@ ${formData.message}
                                         <input
                                             type="text"
                                             name="subject"
-                                            value={formData.subject}
-                                            onChange={handleChange}
+                                            value={
+                                                formData.subject
+                                            }
+                                            onChange={
+                                                handleChange
+                                            }
                                             placeholder="How can we help?"
                                         />
 
@@ -609,8 +850,12 @@ ${formData.message}
 
                                     <textarea
                                         name="message"
-                                        value={formData.message}
-                                        onChange={handleChange}
+                                        value={
+                                            formData.message
+                                        }
+                                        onChange={
+                                            handleChange
+                                        }
                                         placeholder="Write your message here..."
                                         rows="6"
                                         required
@@ -619,7 +864,9 @@ ${formData.message}
                                 </label>
 
 
-                                <div className="contact-form-bottom">
+                                <div
+                                    className="contact-form-bottom"
+                                >
 
                                     <button
                                         type="submit"
@@ -638,7 +885,9 @@ ${formData.message}
                                     {
                                         submitted && (
 
-                                            <span className="contact-form-success">
+                                            <span
+                                                className="contact-form-success"
+                                            >
 
                                                 <CheckCircle2
                                                     size={16}
@@ -665,25 +914,38 @@ ${formData.message}
             </section>
 
 
-            {/* =====================================================
+            {/* =================================================
                 TEAM CONTACTS
-            ===================================================== */}
+            ================================================= */}
 
-            <section className="aumveda-contact-team">
+            <section
+                className="aumveda-contact-team"
+            >
 
-                <div className="aumveda-contact-container">
+                <div
+                    className="aumveda-contact-container"
+                >
 
-                    <div className="contact-team-header">
+                    <div
+                        className="contact-team-header"
+                    >
 
                         <div>
 
-                            <span className="aumveda-contact-eyebrow dark">
+                            <span
+                                className="
+                                    aumveda-contact-eyebrow
+                                    dark
+                                "
+                            >
                                 DIRECT CONTACT
                             </span>
+
 
                             <h2>
 
                                 Connect with
+
                                 <span>
                                     our team.
                                 </span>
@@ -692,27 +954,34 @@ ${formData.message}
 
                         </div>
 
+
                         <p>
-
-                            For a direct conversation, you can also
-                            reach the AUMVEDA team through the contacts
-                            below.
-
+                            For a direct conversation,
+                            you can also reach the
+                            AUMVEDA team through the
+                            contacts below.
                         </p>
 
                     </div>
 
 
-                    <div className="contact-team-grid">
+                    <div
+                        className="contact-team-grid"
+                    >
+
+                        {/* SUMANNTH */}
 
                         <a
                             href="tel:+919000006000"
                             className="contact-person-card"
                         >
 
-                            <div className="person-avatar">
+                            <div
+                                className="person-avatar"
+                            >
                                 S
                             </div>
+
 
                             <div>
 
@@ -720,9 +989,11 @@ ${formData.message}
                                     TEAM CONTACT
                                 </span>
 
+
                                 <h3>
                                     Sumannth
                                 </h3>
+
 
                                 <p>
                                     +91 90000 06000
@@ -730,6 +1001,7 @@ ${formData.message}
 
                             </div>
 
+
                             <Phone
                                 size={18}
                             />
@@ -737,14 +1009,19 @@ ${formData.message}
                         </a>
 
 
+                        {/* SRISHA */}
+
                         <a
                             href="tel:+919704300006"
                             className="contact-person-card"
                         >
 
-                            <div className="person-avatar">
+                            <div
+                                className="person-avatar"
+                            >
                                 S
                             </div>
+
 
                             <div>
 
@@ -752,9 +1029,11 @@ ${formData.message}
                                     TEAM CONTACT
                                 </span>
 
+
                                 <h3>
                                     Srisha
                                 </h3>
+
 
                                 <p>
                                     +91 97043 00006
@@ -762,6 +1041,7 @@ ${formData.message}
 
                             </div>
 
+
                             <Phone
                                 size={18}
                             />
@@ -769,14 +1049,19 @@ ${formData.message}
                         </a>
 
 
+                        {/* SRIKANTH */}
+
                         <a
                             href="tel:+918501042547"
                             className="contact-person-card"
                         >
 
-                            <div className="person-avatar">
+                            <div
+                                className="person-avatar"
+                            >
                                 S
                             </div>
+
 
                             <div>
 
@@ -784,15 +1069,18 @@ ${formData.message}
                                     TEAM CONTACT
                                 </span>
 
+
                                 <h3>
                                     Srikanth
                                 </h3>
+
 
                                 <p>
                                     +91 85010 42547
                                 </p>
 
                             </div>
+
 
                             <Phone
                                 size={18}
@@ -807,54 +1095,77 @@ ${formData.message}
             </section>
 
 
-            {/* =====================================================
-                LOCATION
-            ===================================================== */}
+            {/* =================================================
+                REAL GOOGLE MAP LOCATION
+            ================================================= */}
 
-            <section className="aumveda-contact-location">
+            <section
+                className="aumveda-contact-location"
+            >
 
-                <div className="location-map-art">
+                {/* =============================================
+                    GOOGLE MAP
+                ============================================= */}
 
-                    <div className="map-grid" />
+                <div
+                    className="location-map-live"
+                >
 
-                    <div className="map-ring ring-a" />
-
-                    <div className="map-ring ring-b" />
-
-                    <div className="map-pin">
-
-                        <MapPin
-                            size={27}
-                        />
-
-                    </div>
-
-
-                    <div className="map-label label-main">
-
-                        <strong>
-                            AUMVEDA
-                        </strong>
-
-                        <span>
-                            Hyderabad
-                        </span>
-
-                    </div>
+                    <iframe
+                        src={
+                            GOOGLE_MAPS_EMBED_URL
+                        }
+                        title="AUMVEDA Wellness Hyderabad location"
+                        loading="lazy"
+                        allowFullScreen
+                        referrerPolicy="no-referrer-when-downgrade"
+                    />
 
 
-                    <div className="map-label label-small">
+                    <div
+                        className="location-map-overlay"
+                    >
 
-                        NORTH KAMALA NAGAR
+                        <a
+                            href={
+                                GOOGLE_MAPS_URL
+                            }
+                            target="_blank"
+                            rel="noreferrer"
+                            className="location-map-open"
+                        >
+
+                            <MapPin
+                                size={16}
+                            />
+
+                            Open in Google Maps
+
+                            <ArrowRight
+                                size={15}
+                            />
+
+                        </a>
 
                     </div>
 
                 </div>
 
 
-                <div className="location-content">
+                {/* =============================================
+                    LOCATION COPY
+                ============================================= */}
 
-                    <span className="aumveda-contact-eyebrow dark">
+                <div
+                    className="location-content"
+                >
+
+                    <span
+                        className="
+                            aumveda-contact-eyebrow
+                            dark
+                        "
+                    >
                         OUR LOCATION
                     </span>
 
@@ -862,6 +1173,7 @@ ${formData.message}
                     <h2>
 
                         Rooted in
+
                         <span>
                             Hyderabad.
                         </span>
@@ -870,26 +1182,31 @@ ${formData.message}
 
 
                     <p>
-
                         AUMVEDA Wellness is based in Hyderabad,
                         Telangana, and is building a connected
                         natural wellness ecosystem from India.
-
                     </p>
 
 
-                    <div className="location-address">
+                    <div
+                        className="location-address"
+                    >
 
                         <MapPin
                             size={19}
                         />
 
+
                         <span>
 
                             1-8-15/2FF8-1, GK Nilayam,
+
                             <br />
+
                             North Kamala Nagar,
+
                             <br />
+
                             Hyderabad – 500062
 
                         </span>
@@ -897,60 +1214,84 @@ ${formData.message}
                     </div>
 
 
-                    <div className="location-hours">
+                    <div
+                        className="location-hours"
+                    >
 
                         <Clock3
                             size={17}
                         />
 
+
                         <span>
-
-                            Reach out by email or phone for
-                            enquiries and support.
-
+                            Reach out by email or phone
+                            for enquiries and support.
                         </span>
 
                     </div>
 
 
-                    <Link
-                        to="/products"
+                    <a
+                        href={
+                            GOOGLE_MAPS_URL
+                        }
+                        target="_blank"
+                        rel="noreferrer"
                         className="contact-location-button"
                     >
 
-                        Explore AUMVEDA
+                        Get Directions
 
                         <ArrowRight
                             size={16}
                         />
 
-                    </Link>
+                    </a>
 
                 </div>
 
             </section>
 
 
-            {/* =====================================================
+            {/* =================================================
                 FINAL CTA
-            ===================================================== */}
+            ================================================= */}
 
-            <section className="aumveda-contact-final">
+            <section
+                className="aumveda-contact-final"
+            >
 
-                <div className="contact-final-orb orb-left" />
-                <div className="contact-final-orb orb-right" />
+                <div
+                    className="
+                        contact-final-orb
+                        orb-left
+                    "
+                />
 
 
-                <div className="contact-final-content">
+                <div
+                    className="
+                        contact-final-orb
+                        orb-right
+                    "
+                />
 
-                    <span className="aumveda-contact-eyebrow">
+
+                <div
+                    className="contact-final-content"
+                >
+
+                    <span
+                        className="aumveda-contact-eyebrow"
+                    >
                         STAY CONNECTED
                     </span>
 
 
                     <h2>
 
-                        Let's build a more
+                        Let&apos;s build a more
+
                         <span>
                             conscious future.
                         </span>
@@ -959,18 +1300,19 @@ ${formData.message}
 
 
                     <p>
-
                         Discover authentic wellness,
                         support conscious choices,
-                        and become part of the AUMVEDA journey.
-
+                        and become part of the
+                        AUMVEDA journey.
                     </p>
 
 
-                    <div className="contact-final-actions">
+                    <div
+                        className="contact-final-actions"
+                    >
 
                         <a
-                            href="mailto:aumvedawellness@gmail.com"
+                            href={`mailto:${CONTACT_EMAIL}`}
                             className="contact-primary-button"
                         >
 
@@ -987,9 +1329,7 @@ ${formData.message}
                             to="/products"
                             className="contact-final-link"
                         >
-
                             Browse Products
-
                         </Link>
 
                     </div>

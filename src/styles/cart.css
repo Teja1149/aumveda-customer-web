@@ -4,7 +4,8 @@
 
 .aumveda-cart-page {
 
-    min-height: calc(100vh - 82px);
+    min-height:
+        calc(100vh - 82px);
 
     padding:
         64px
@@ -80,6 +81,14 @@
     margin:
         0;
 
+    color:
+        #381f12;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
     font-size:
         clamp(
             34px,
@@ -135,13 +144,13 @@
 
     border:
         1px solid
-        rgba(87,102,84,.22);
+        rgba(87, 102, 84, .22);
 
     border-radius:
         999px;
 
     background:
-        rgba(255,255,255,.65);
+        rgba(255, 255, 255, .65);
 
     color:
         #576654;
@@ -179,7 +188,7 @@
         #576654;
 
     color:
-        white;
+        #ffffff;
 
     font-size:
         11px;
@@ -229,17 +238,17 @@
 
     border:
         1px solid
-        rgba(56,31,18,.09);
+        rgba(56, 31, 18, .09);
 
     border-radius:
         24px;
 
     background:
-        rgba(255,255,255,.76);
+        rgba(255, 255, 255, .76);
 
     box-shadow:
         0 16px 45px
-        rgba(56,31,18,.06);
+        rgba(56, 31, 18, .06);
 
 }
 
@@ -260,7 +269,7 @@
 
     border-bottom:
         1px solid
-        rgba(56,31,18,.08);
+        rgba(56, 31, 18, .08);
 
 }
 
@@ -281,6 +290,9 @@
 
 .aumveda-cart-items__top strong {
 
+    color:
+        #381f12;
+
     font-size:
         17px;
 
@@ -300,6 +312,10 @@
 
 }
 
+
+/* ============================================================
+   CLEAR CART
+============================================================ */
 
 .aumveda-cart-clear {
 
@@ -324,6 +340,9 @@
     color:
         #8a6b61;
 
+    font-family:
+        inherit;
+
     font-size:
         12px;
 
@@ -331,15 +350,27 @@
         pointer;
 
     transition:
-        .2s ease;
+        color .2s ease,
+        opacity .2s ease;
 
 }
 
 
-.aumveda-cart-clear:hover {
+.aumveda-cart-clear:hover:not(:disabled) {
 
     color:
         #381f12;
+
+}
+
+
+.aumveda-cart-clear:disabled {
+
+    opacity:
+        .4;
+
+    cursor:
+        not-allowed;
 
 }
 
@@ -373,12 +404,15 @@
     gap:
         20px;
 
+    align-items:
+        center;
+
     padding:
         24px 0;
 
     border-bottom:
         1px solid
-        rgba(56,31,18,.08);
+        rgba(56, 31, 18, .08);
 
 }
 
@@ -423,7 +457,7 @@
 
     border:
         1px solid
-        rgba(56,31,18,.07);
+        rgba(56, 31, 18, .07);
 
 }
 
@@ -490,6 +524,11 @@
     color:
         #381f12;
 
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
     font-size:
         17px;
 
@@ -501,6 +540,9 @@
 
     text-decoration:
         none;
+
+    transition:
+        color .2s ease;
 
 }
 
@@ -655,7 +697,7 @@
 
     border:
         1px solid
-        rgba(56,31,18,.15);
+        rgba(56, 31, 18, .15);
 
     border-radius:
         999px;
@@ -664,7 +706,7 @@
         hidden;
 
     background:
-        white;
+        #ffffff;
 
 }
 
@@ -686,6 +728,12 @@
     justify-content:
         center;
 
+    flex-shrink:
+        0;
+
+    padding:
+        0;
+
     border:
         0;
 
@@ -698,6 +746,11 @@
     cursor:
         pointer;
 
+    transition:
+        background .2s ease,
+        color .2s ease,
+        opacity .2s ease;
+
 }
 
 
@@ -705,6 +758,9 @@
 
     background:
         #ede4d4;
+
+    color:
+        #381f12;
 
 }
 
@@ -725,11 +781,20 @@
     width:
         30px;
 
+    color:
+        #381f12;
+
     text-align:
         center;
 
     font-size:
         12px;
+
+    font-weight:
+        700;
+
+    font-variant-numeric:
+        tabular-nums;
 
 }
 
@@ -764,7 +829,7 @@
         center;
 
     gap:
-        9px;
+        7px;
 
 }
 
@@ -797,72 +862,14 @@
     font-size:
         16px;
 
-}
-
-
-.aumveda-cart-item__remove {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    width:
-        32px;
-
-    height:
-        32px;
-
-    border:
-        1px solid
-        rgba(138,107,97,.18);
-
-    border-radius:
-        50%;
-
-    background:
-        transparent;
-
-    color:
-        #8a6b61;
-
-    cursor:
-        pointer;
-
-    transition:
-        .2s ease;
-
-}
-
-
-.aumveda-cart-item__remove:hover {
-
-    background:
-        #f5e9e4;
-
-    color:
-        #7c4437;
-
-}
-
-
-.aumveda-cart-item__remove:disabled {
-
-    opacity:
-        .35;
-
-    cursor:
-        not-allowed;
+    font-weight:
+        700;
 
 }
 
 
 /* ============================================================
-   CONTINUE
+   CONTINUE SHOPPING
 ============================================================ */
 
 .aumveda-cart-continue {
@@ -891,6 +898,9 @@
     text-decoration:
         none;
 
+    transition:
+        color .2s ease;
+
 }
 
 
@@ -903,7 +913,7 @@
 
 
 /* ============================================================
-   SUMMARY
+   ORDER SUMMARY
 ============================================================ */
 
 .aumveda-cart-summary {
@@ -919,7 +929,7 @@
 
     border:
         1px solid
-        rgba(56,31,18,.10);
+        rgba(56, 31, 18, .10);
 
     border-radius:
         24px;
@@ -928,11 +938,11 @@
         #381f12;
 
     color:
-        #fff;
+        #ffffff;
 
     box-shadow:
         0 20px 50px
-        rgba(56,31,18,.18);
+        rgba(56, 31, 18, .18);
 
 }
 
@@ -958,6 +968,14 @@
 
     margin:
         7px 0 0;
+
+    color:
+        #ffffff;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
     font-size:
         24px;
@@ -1012,6 +1030,9 @@
 
 .aumveda-cart-summary__rows strong {
 
+    color:
+        #ffffff;
+
     font-size:
         13px;
 
@@ -1021,7 +1042,7 @@
 .aumveda-free {
 
     color:
-        #c4d1bc;
+        #c4d1bc !important;
 
 }
 
@@ -1035,7 +1056,7 @@
         23px 0;
 
     background:
-        rgba(255,255,255,.13);
+        rgba(255, 255, 255, .13);
 
 }
 
@@ -1068,7 +1089,7 @@
 .aumveda-cart-summary__total strong {
 
     color:
-        #fff;
+        #ffffff;
 
     font-size:
         25px;
@@ -1078,6 +1099,10 @@
 
 }
 
+
+/* ============================================================
+   CHECKOUT BUTTON
+============================================================ */
 
 .aumveda-checkout-button {
 
@@ -1114,6 +1139,9 @@
     color:
         #381f12;
 
+    font-family:
+        inherit;
+
     font-size:
         12px;
 
@@ -1124,18 +1152,31 @@
         pointer;
 
     transition:
-        .25s ease;
+        background .25s ease,
+        transform .25s ease,
+        opacity .25s ease;
 
 }
 
 
-.aumveda-checkout-button:hover {
+.aumveda-checkout-button:hover:not(:disabled) {
 
     background:
         #ffffff;
 
     transform:
         translateY(-2px);
+
+}
+
+
+.aumveda-checkout-button:disabled {
+
+    opacity:
+        .45;
+
+    cursor:
+        not-allowed;
 
 }
 
@@ -1177,7 +1218,7 @@
 
     border:
         1px solid
-        rgba(255,255,255,.09);
+        rgba(255, 255, 255, .09);
 
     border-radius:
         12px;
@@ -1220,7 +1261,7 @@
 
 
 /* ============================================================
-   EMPTY
+   EMPTY CART
 ============================================================ */
 
 .aumveda-cart-empty {
@@ -1271,13 +1312,13 @@
 
     border:
         1px solid
-        rgba(87,102,84,.20);
+        rgba(87, 102, 84, .20);
 
     border-radius:
         50%;
 
     background:
-        rgba(255,255,255,.65);
+        rgba(255, 255, 255, .65);
 
     color:
         #576654;
@@ -1309,6 +1350,14 @@
 
     margin:
         9px 0 0;
+
+    color:
+        #381f12;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
     font-size:
         38px;
@@ -1364,7 +1413,7 @@
         #576654;
 
     color:
-        white;
+        #ffffff;
 
     font-size:
         12px;
@@ -1376,7 +1425,8 @@
         none;
 
     transition:
-        .25s ease;
+        background .25s ease,
+        transform .25s ease;
 
 }
 
@@ -1435,7 +1485,7 @@
 
     border:
         2px solid
-        rgba(87,102,84,.18);
+        rgba(87, 102, 84, .18);
 
     border-top-color:
         #576654;
@@ -1479,13 +1529,13 @@
 
     border:
         1px solid
-        rgba(150,70,50,.18);
+        rgba(150, 70, 50, .18);
 
     border-radius:
         12px;
 
     background:
-        rgba(255,240,235,.8);
+        rgba(255, 240, 235, .8);
 
     color:
         #804638;
@@ -1523,18 +1573,19 @@
         grid-template-columns:
             100px
             minmax(0, 1fr)
-            120px;
+            120px
+            95px;
 
     }
 
 
-    .aumveda-cart-item__total {
+    .aumveda-cart-item__image {
 
-        grid-column:
-            3;
+        width:
+            100px;
 
-        grid-row:
-            1;
+        height:
+            120px;
 
     }
 
@@ -1550,7 +1601,8 @@
     .aumveda-cart-page {
 
         padding:
-            35px 16px 60px;
+            35px 16px
+            60px;
 
     }
 
@@ -1596,6 +1648,9 @@
 
         gap:
             14px;
+
+        align-items:
+            start;
 
     }
 
@@ -1736,6 +1791,51 @@
 
         font-size:
             14px;
+
+    }
+
+
+    .aumveda-cart-item {
+
+        grid-template-columns:
+            74px
+            minmax(0, 1fr);
+
+        gap:
+            12px;
+
+    }
+
+
+    .aumveda-cart-item__image {
+
+        width:
+            74px;
+
+        height:
+            92px;
+
+    }
+
+
+    .aumveda-quantity-control button {
+
+        width:
+            29px;
+
+        height:
+            29px;
+
+    }
+
+
+    .aumveda-quantity-control strong {
+
+        width:
+            28px;
+
+        font-size:
+            11px;
 
     }
 

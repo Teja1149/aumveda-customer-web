@@ -1,8 +1,20 @@
 import {
+    useLayoutEffect
+} from "react";
+
+
+import {
     BrowserRouter,
     Routes,
-    Route
+    Route,
+    useLocation
 } from "react-router-dom";
+
+
+import {
+    motion,
+    AnimatePresence
+} from "framer-motion";
 
 
 import MainLayout
@@ -54,15 +66,106 @@ import Contact
 
 
 
-function AppRouter() {
+/* ============================================================
+   PAGE TRANSITION
+============================================================ */
+
+function AnimatedRoutes() {
+
+    const location =
+        useLocation();
+
+
+    /*
+     * Reset scroll immediately before
+     * the new route is painted.
+     *
+     * No smooth scrolling.
+     */
+
+    useLayoutEffect(() => {
+
+        if (
+            "scrollRestoration" in
+            window.history
+        ) {
+
+            window.history.scrollRestoration =
+                "manual";
+
+        }
+
+
+        const html =
+            document.documentElement;
+
+
+        const body =
+            document.body;
+
+
+        html.style.scrollBehavior =
+            "auto";
+
+
+        body.style.scrollBehavior =
+            "auto";
+
+
+        html.scrollTop =
+            0;
+
+
+        body.scrollTop =
+            0;
+
+
+        window.scrollTo(
+            0,
+            0
+        );
+
+    }, [
+        location.pathname,
+        location.search
+    ]);
+
 
     return (
 
-        <BrowserRouter>
+        <AnimatePresence
+            mode="wait"
+            initial={false}
+        >
 
-            <MainLayout>
+            <motion.div
+                key={
+                    `${location.pathname}${location.search}`
+                }
 
-                <Routes>
+                initial={{
+                    opacity: 0
+                }}
+
+                animate={{
+                    opacity: 1
+                }}
+
+                exit={{
+                    opacity: 0
+                }}
+
+                transition={{
+                    duration: 0.28,
+                    ease: "easeOut"
+                }}
+            >
+
+                <Routes
+                    location={
+                        location
+                    }
+                >
 
 
                     {/* =================================================
@@ -210,6 +313,30 @@ function AppRouter() {
 
 
                 </Routes>
+
+            </motion.div>
+
+        </AnimatePresence>
+
+    );
+
+}
+
+
+
+/* ============================================================
+   APP ROUTER
+============================================================ */
+
+function AppRouter() {
+
+    return (
+
+        <BrowserRouter>
+
+            <MainLayout>
+
+                <AnimatedRoutes />
 
             </MainLayout>
 

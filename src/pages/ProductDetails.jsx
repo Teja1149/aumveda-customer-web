@@ -1,20 +1,18 @@
 import {
     useEffect,
-    useMemo,
     useState
 } from "react";
 
 import {
-    Heart,
-    ShoppingBag,
-    Star,
-    Minus,
-    Plus,
-    Check,
     ArrowLeft,
-    ShieldCheck,
+    Heart,
     Leaf,
-    PackageCheck
+    Minus,
+    PackageCheck,
+    Plus,
+    ShieldCheck,
+    ShoppingBag,
+    Star
 } from "lucide-react";
 
 import {
@@ -27,19 +25,31 @@ import {
     getProducts
 } from "../services/productService";
 
-import ProductGrid from "../components/products/ProductGrid";
+import {
+    useAuth
+} from "../context/AuthContext";
+
+import {
+    useCart
+} from "../context/CartContext";
+
+import {
+    useWishlist
+} from "../context/WishlistContext";
+
+import ProductGrid
+    from "../components/products/ProductGrid";
 
 import "../styles/product-details.css";
 
 
-
-const WISHLIST_KEY =
-    "aumveda_wishlist";
-
-const CART_KEY =
-    "aumveda_cart";
+const BUY_NOW_STORAGE_KEY =
+    "aumveda_buy_now";
 
 
+/* ============================================================
+   FORMAT PRICE
+============================================================ */
 
 function formatPrice(value) {
 
@@ -51,6 +61,7 @@ function formatPrice(value) {
         return "—";
 
     }
+
 
     return new Intl.NumberFormat(
         "en-IN",
@@ -64,143 +75,163 @@ function formatPrice(value) {
 }
 
 
-
-function readWishlist() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                WISHLIST_KEY
-            );
-
-        return new Set(
-            saved
-                ? JSON.parse(saved)
-                : []
-        );
-
-    } catch {
-
-        return new Set();
-
-    }
-
-}
-
-
-
-function readCart() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                CART_KEY
-            );
-
-        return saved
-            ? JSON.parse(saved)
-            : [];
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
+/* ============================================================
+   PRODUCT DETAILS
+============================================================ */
 
 function ProductDetails() {
 
     const {
         slug
-    } = useParams();
+    } =
+        useParams();
 
 
     const navigate =
         useNavigate();
 
 
+    /* ========================================================
+       AUTH
+    ======================================================== */
+
+    const {
+        isAuthenticated
+    } =
+        useAuth();
+
+
+    /* ========================================================
+       CART
+    ======================================================== */
+
+    const {
+        items,
+        addToCart,
+        updateCartItem,
+        removeFromCart
+    } =
+        useCart();
+
+
+    /* ========================================================
+       WISHLIST
+    ======================================================== */
+
+    const {
+        isWishlisted,
+        toggleWishlist
+    } =
+        useWishlist();
+
+
+    /* ========================================================
+       PRODUCT STATE
+    ======================================================== */
 
     const [
         product,
         setProduct
-    ] = useState(null);
+    ] =
+        useState(null);
 
 
     const [
         relatedProducts,
         setRelatedProducts
-    ] = useState([]);
+    ] =
+        useState([]);
 
 
     const [
         loading,
         setLoading
-    ] = useState(true);
+    ] =
+        useState(true);
 
 
     const [
         error,
         setError
-    ] = useState("");
+    ] =
+        useState("");
+
+
+    /* ========================================================
+       PRODUCT SELECTION
+    ======================================================== */
+
+    const [
+        productImages,
+        setProductImages
+    ] =
+        useState([]);
+
+
+    const [
+        variants,
+        setVariants
+    ] =
+        useState([]);
 
 
     const [
         selectedImage,
         setSelectedImage
-    ] = useState(null);
+    ] =
+        useState(null);
 
 
     const [
         selectedVariant,
         setSelectedVariant
-    ] = useState(null);
+    ] =
+        useState(null);
+
+
+    /* ========================================================
+       ACTION STATE
+    ======================================================== */
+
+    const [
+        cartActionLoading,
+        setCartActionLoading
+    ] =
+        useState(false);
 
 
     const [
-        quantity,
-        setQuantity
-    ] = useState(1);
+        buyNowLoading,
+        setBuyNowLoading
+    ] =
+        useState(false);
 
 
-    const [
-        wishlistIds,
-        setWishlistIds
-    ] = useState(
-        () => readWishlist()
-    );
-
-
-    const [
-        cartItems,
-        setCartItems
-    ] = useState(
-        () => readCart()
-    );
-
-
-    const [
-        addedToCart,
-        setAddedToCart
-    ] = useState(false);
-
-
-
-    // ========================================================
-    // LOAD PRODUCT
-    // ========================================================
+    /* ========================================================
+       LOAD PRODUCT
+    ======================================================== */
 
     useEffect(() => {
+
+        if (!slug) {
+
+            return;
+
+        }
+
+
+        let cancelled =
+            false;
+
 
         async function loadProduct() {
 
             try {
 
-                setLoading(true);
+                setLoading(
+                    true
+                );
+
 
                 setError("");
 
@@ -209,6 +240,13 @@ function ProductDetails() {
                     await getProductBySlug(
                         slug
                     );
+
+
+                if (cancelled) {
+
+                    return;
+
+                }
 
 
                 if (!productData) {
@@ -225,73 +263,94 @@ function ProductDetails() {
                 );
 
 
-                // ------------------------------------------------
-                // IMAGES
-                // ------------------------------------------------
+                /* =============================================
+                   IMAGES
+                ============================================= */
 
                 const images =
-                    productData.product_images ||
-                    [];
-
-
-                const sortedImages =
-                    [...images].sort(
-                        (a, b) => {
+                    [
+                        ...(
+                            productData.product_images ||
+                            []
+                        )
+                    ].sort(
+                        (
+                            first,
+                            second
+                        ) => {
 
                             if (
-                                a.is_primary &&
-                                !b.is_primary
+                                first.is_primary &&
+                                !second.is_primary
                             ) {
+
                                 return -1;
+
                             }
 
+
                             if (
-                                !a.is_primary &&
-                                b.is_primary
+                                !first.is_primary &&
+                                second.is_primary
                             ) {
+
                                 return 1;
+
                             }
+
 
                             return (
-                                (a.sort_order || 9999) -
-                                (b.sort_order || 9999)
+                                Number(
+                                    first.sort_order ||
+                                    9999
+                                ) -
+                                Number(
+                                    second.sort_order ||
+                                    9999
+                                )
                             );
 
                         }
                     );
 
 
-                if (
-                    sortedImages.length > 0
-                ) {
-
-                    setSelectedImage(
-                        sortedImages[0]
-                    );
-
-                }
+                setProductImages(
+                    images
+                );
 
 
-                // ------------------------------------------------
-                // VARIANTS
-                // ------------------------------------------------
+                setSelectedImage(
+                    images[0] ||
+                    null
+                );
 
-                const variants =
+
+                /* =============================================
+                   VARIANTS
+                ============================================= */
+
+                const activeVariants =
                     (
                         productData.product_variants ||
                         []
                     ).filter(
                         variant =>
-                            variant.is_active !== false
+                            variant.is_active !==
+                            false
                     );
 
 
+                setVariants(
+                    activeVariants
+                );
+
+
                 const defaultVariant =
-                    variants.find(
+                    activeVariants.find(
                         variant =>
                             variant.is_default
                     ) ||
-                    variants[0] ||
+                    activeVariants[0] ||
                     null;
 
 
@@ -300,9 +359,9 @@ function ProductDetails() {
                 );
 
 
-                // ------------------------------------------------
-                // RELATED PRODUCTS
-                // ------------------------------------------------
+                /* =============================================
+                   RELATED PRODUCTS
+                ============================================= */
 
                 try {
 
@@ -310,8 +369,21 @@ function ProductDetails() {
                         await getProducts();
 
 
+                    if (cancelled) {
+
+                        return;
+
+                    }
+
+
                     const related =
-                        allProducts
+                        (
+                            Array.isArray(
+                                allProducts
+                            )
+                                ? allProducts
+                                : []
+                        )
                             .filter(
                                 item =>
                                     item.id !==
@@ -319,21 +391,44 @@ function ProductDetails() {
                                     item.category_id ===
                                     productData.category_id
                             )
-                            .slice(0, 4);
+                            .slice(
+                                0,
+                                4
+                            );
 
 
                     setRelatedProducts(
                         related
                     );
 
-                } catch {
+                }
+                catch (relatedError) {
 
-                    setRelatedProducts([]);
+                    console.error(
+                        "Related products loading failed:",
+                        relatedError
+                    );
+
+
+                    if (!cancelled) {
+
+                        setRelatedProducts(
+                            []
+                        );
+
+                    }
 
                 }
 
+            }
+            catch (loadError) {
 
-            } catch (loadError) {
+                if (cancelled) {
+
+                    return;
+
+                }
+
 
                 console.error(
                     "Product details loading failed:",
@@ -345,138 +440,57 @@ function ProductDetails() {
                     "Unable to load this product."
                 );
 
-            } finally {
-
-                setLoading(false);
-
             }
+            finally {
 
-        }
+                if (!cancelled) {
 
-
-        if (slug) {
-
-            loadProduct();
-
-        }
-
-    }, [slug]);
-
-
-
-    // ========================================================
-    // SAVE WISHLIST
-    // ========================================================
-
-    useEffect(() => {
-
-        localStorage.setItem(
-            WISHLIST_KEY,
-            JSON.stringify(
-                [...wishlistIds]
-            )
-        );
-
-    }, [wishlistIds]);
-
-
-
-    // ========================================================
-    // SAVE CART
-    // ========================================================
-
-    useEffect(() => {
-
-        localStorage.setItem(
-            CART_KEY,
-            JSON.stringify(
-                cartItems
-            )
-        );
-
-
-        window.dispatchEvent(
-            new CustomEvent(
-                "aumveda-cart-updated"
-            )
-        );
-
-    }, [cartItems]);
-
-
-
-    // ========================================================
-    // PRODUCT IMAGES
-    // ========================================================
-
-    const productImages =
-        useMemo(() => {
-
-            if (!product) {
-
-                return [];
-
-            }
-
-
-            return [
-                ...(product.product_images || [])
-            ].sort(
-                (a, b) => {
-
-                    if (
-                        a.is_primary &&
-                        !b.is_primary
-                    ) {
-                        return -1;
-                    }
-
-                    if (
-                        !a.is_primary &&
-                        b.is_primary
-                    ) {
-                        return 1;
-                    }
-
-                    return (
-                        (a.sort_order || 9999) -
-                        (b.sort_order || 9999)
+                    setLoading(
+                        false
                     );
 
                 }
-            );
 
-        }, [product]);
+            }
 
-
-
-    // ========================================================
-    // VARIANTS
-    // ========================================================
-
-    const variants =
-        useMemo(() => {
-
-            return (
-                product?.product_variants ||
-                []
-            ).filter(
-                variant =>
-                    variant.is_active !== false
-            );
-
-        }, [product]);
+        }
 
 
+        loadProduct();
 
-    // ========================================================
-    // CURRENT PRICE
-    // ========================================================
+
+        return () => {
+
+            cancelled =
+                true;
+
+        };
+
+    }, [
+        slug
+    ]);
+
+
+    /* ========================================================
+       MAIN IMAGE
+    ======================================================== */
+
+    const mainImage =
+        selectedImage?.image_url ||
+        product?.image ||
+        null;
+
+
+    /* ========================================================
+       PRICE
+    ======================================================== */
 
     const currentPrice =
-        selectedVariant?.price ??
-        product?.price ??
-        0;
+        Number(
+            selectedVariant?.price ??
+            product?.price ??
+            0
+        );
 
 
     const comparePrice =
@@ -485,91 +499,174 @@ function ProductDetails() {
         null;
 
 
+    /* ========================================================
+       STOCK
+    ======================================================== */
+
     const stockQuantity =
-        selectedVariant?.stock_quantity ??
-        0;
+        Number(
+            selectedVariant?.stock_quantity ??
+            0
+        );
 
 
     const inStock =
         stockQuantity > 0;
 
 
+    /* ========================================================
+       DISCOUNT
+    ======================================================== */
 
     const discount =
         comparePrice &&
-        Number(comparePrice) >
-        Number(currentPrice)
-
+        Number(
+            comparePrice
+        ) >
+        currentPrice
             ? Math.round(
-
                 (
                     (
-                        Number(comparePrice) -
-                        Number(currentPrice)
+                        Number(
+                            comparePrice
+                        ) -
+                        currentPrice
                     ) /
-                    Number(comparePrice)
+                    Number(
+                        comparePrice
+                    )
                 ) * 100
-
             )
-
             : 0;
 
 
+    /* ========================================================
+       ACTIONABLE PRODUCT
+    ======================================================== */
 
-    // ========================================================
-    // WISHLIST
-    // ========================================================
+    const actionableProduct =
+        product
+            ? {
+                ...product,
 
-    function toggleWishlist() {
+                image:
+                    mainImage,
+
+                price:
+                    currentPrice,
+
+                compare_at_price:
+                    comparePrice,
+
+                variant:
+                    selectedVariant
+            }
+            : null;
+
+
+    /* ========================================================
+       FIND SELECTED VARIANT IN REAL CART
+    ======================================================== */
+
+    const cartItem =
+        product &&
+        selectedVariant
+            ? (
+                items.find(
+                    item => {
+
+                        const itemProductId =
+                            item?.product?.id ??
+                            item?.product_id ??
+                            null;
+
+
+                        const itemVariantId =
+                            item?.variant?.id ??
+                            item?.variant_id ??
+                            null;
+
+
+                        return (
+                            String(
+                                itemProductId
+                            ) ===
+                            String(
+                                product.id
+                            ) &&
+                            String(
+                                itemVariantId
+                            ) ===
+                            String(
+                                selectedVariant.id
+                            )
+                        );
+
+                    }
+                ) ||
+                null
+            )
+            : null;
+
+
+    const productIsInCart =
+        Boolean(
+            cartItem
+        );
+
+
+    const cartQuantity =
+        Number(
+            cartItem?.quantity ||
+            0
+        );
+
+
+    const maximumStockReached =
+        stockQuantity > 0 &&
+        cartQuantity >=
+        stockQuantity;
+
+
+    /* ========================================================
+       WISHLIST
+    ======================================================== */
+
+    const productIsWishlisted =
+        product
+            ? isWishlisted(
+                product.id
+            )
+            : false;
+
+
+    function handleWishlist() {
 
         if (!product) {
+
             return;
+
         }
 
 
-        setWishlistIds(
-            previous => {
-
-                const next =
-                    new Set(previous);
-
-
-                if (
-                    next.has(product.id)
-                ) {
-
-                    next.delete(
-                        product.id
-                    );
-
-                } else {
-
-                    next.add(
-                        product.id
-                    );
-
-                }
-
-
-                return next;
-
-            }
+        toggleWishlist(
+            product.id
         );
 
     }
 
 
+    /* ========================================================
+       VARIANT CHANGE
+    ======================================================== */
 
-    // ========================================================
-    // ADD TO CART
-    // ========================================================
-
-    function addToCart() {
+    function handleVariantChange(
+        variant
+    ) {
 
         if (
-            !product ||
-            !selectedVariant ||
-            !inStock
+            cartActionLoading ||
+            buyNowLoading
         ) {
 
             return;
@@ -577,164 +674,336 @@ function ProductDetails() {
         }
 
 
-        const cartProduct = {
+        setSelectedVariant(
+            variant
+        );
 
-            id:
-                product.id,
-
-            variant_id:
-                selectedVariant.id,
-
-            variant_name:
-                selectedVariant.name,
-
-            name:
-                product.name,
-
-            slug:
-                product.slug,
-
-            image:
-                productImages[0]?.image_url ||
-                null,
-
-            price:
-                Number(currentPrice),
-
-            compare_at_price:
-                comparePrice
-                    ? Number(comparePrice)
-                    : null,
-
-            quantity
-
-        };
+    }
 
 
-        setCartItems(
-            previous => {
+    /* ========================================================
+       ADD TO CART
 
-                const existingIndex =
-                    previous.findIndex(
-                        item =>
-                            item.id ===
-                                product.id &&
-                            item.variant_id ===
-                                selectedVariant.id
-                    );
+       Initial quantity is always 1.
+    ======================================================== */
+
+    async function handleAddToCart() {
+
+        if (
+            !product ||
+            !selectedVariant ||
+            !actionableProduct ||
+            !inStock ||
+            cartActionLoading
+        ) {
+
+            return;
+
+        }
 
 
-                if (
-                    existingIndex >= 0
-                ) {
+        if (!isAuthenticated) {
 
-                    return previous.map(
-                        (item, index) =>
-
-                            index ===
-                            existingIndex
-
-                                ? {
-
-                                    ...item,
-
-                                    quantity:
-                                        Number(
-                                            item.quantity || 0
-                                        ) +
-                                        quantity
-
-                                }
-
-                                : item
-                    );
-
+            navigate(
+                "/login",
+                {
+                    state: {
+                        from: {
+                            pathname:
+                                `/products/${product.slug}`
+                        }
+                    }
                 }
+            );
 
 
-                return [
-                    ...previous,
-                    cartProduct
-                ];
+            return;
 
-            }
-        );
+        }
 
 
-        setAddedToCart(
-            true
-        );
+        try {
+
+            setCartActionLoading(
+                true
+            );
 
 
-        setTimeout(() => {
+            await addToCart(
+                actionableProduct,
+                1
+            );
 
-            setAddedToCart(
+        }
+        catch (cartError) {
+
+            console.error(
+                "Product details add to cart failed:",
+                cartError
+            );
+
+        }
+        finally {
+
+            setCartActionLoading(
                 false
             );
 
-        }, 1800);
+        }
 
     }
 
 
+    /* ========================================================
+       DECREASE CART QUANTITY
+    ======================================================== */
 
-    // ========================================================
-    // QUANTITY
-    // ========================================================
+    async function handleDecreaseQuantity() {
 
-    function decreaseQuantity() {
+        if (
+            !productIsInCart ||
+            !cartItem ||
+            cartActionLoading
+        ) {
 
-        setQuantity(
-            previous =>
-                Math.max(
-                    1,
-                    previous - 1
-                )
-        );
+            return;
 
-    }
-
+        }
 
 
-    function increaseQuantity() {
+        try {
 
-        setQuantity(
-            previous => {
-
-                if (
-                    stockQuantity <= 0
-                ) {
-
-                    return previous;
-
-                }
+            setCartActionLoading(
+                true
+            );
 
 
-                return Math.min(
-                    stockQuantity,
-                    previous + 1
+            /*
+             * Quantity 1:
+             * remove the entire item.
+             */
+
+            if (
+                cartQuantity <= 1
+            ) {
+
+                await removeFromCart(
+                    cartItem.id
                 );
 
+
+                return;
+
             }
-        );
+
+
+            await updateCartItem(
+                cartItem.id,
+                cartQuantity - 1
+            );
+
+        }
+        catch (cartError) {
+
+            console.error(
+                "Product details quantity decrease failed:",
+                cartError
+            );
+
+        }
+        finally {
+
+            setCartActionLoading(
+                false
+            );
+
+        }
 
     }
 
 
+    /* ========================================================
+       INCREASE CART QUANTITY
+    ======================================================== */
 
-    // ========================================================
-    // LOADING
-    // ========================================================
+    async function handleIncreaseQuantity() {
+
+        if (
+            !productIsInCart ||
+            !cartItem ||
+            cartActionLoading ||
+            maximumStockReached
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            setCartActionLoading(
+                true
+            );
+
+
+            await updateCartItem(
+                cartItem.id,
+                cartQuantity + 1
+            );
+
+        }
+        catch (cartError) {
+
+            console.error(
+                "Product details quantity increase failed:",
+                cartError
+            );
+
+        }
+        finally {
+
+            setCartActionLoading(
+                false
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       BUY NOW
+    ======================================================== */
+
+    function handleBuyNow() {
+
+        if (
+            !product ||
+            !selectedVariant ||
+            !actionableProduct ||
+            !inStock ||
+            buyNowLoading
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            setBuyNowLoading(
+                true
+            );
+
+
+            /*
+             * Not in cart:
+             * Buy Now quantity = 1
+             *
+             * Already in cart:
+             * Buy Now uses current cart quantity.
+             */
+
+            const buyNowQuantity =
+                productIsInCart
+                    ? cartQuantity
+                    : 1;
+
+
+            const buyNowPayload = {
+
+                product:
+                    actionableProduct,
+
+                quantity:
+                    buyNowQuantity
+
+            };
+
+
+            /*
+             * Buy Now remains separate
+             * from the normal cart.
+             */
+
+            sessionStorage.setItem(
+                BUY_NOW_STORAGE_KEY,
+                JSON.stringify(
+                    buyNowPayload
+                )
+            );
+
+
+            if (isAuthenticated) {
+
+                navigate(
+                    "/checkout?mode=buy-now",
+                    {
+                        state: {
+                            buyNow:
+                                buyNowPayload
+                        }
+                    }
+                );
+
+
+                return;
+
+            }
+
+
+            navigate(
+                "/login",
+                {
+                    state: {
+                        from: {
+                            pathname:
+                                "/checkout?mode=buy-now"
+                        }
+                    }
+                }
+            );
+
+        }
+        catch (buyError) {
+
+            console.error(
+                "Buy Now failed:",
+                buyError
+            );
+
+
+            setBuyNowLoading(
+                false
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       LOADING
+    ======================================================== */
 
     if (loading) {
 
         return (
 
-            <main className="product-details-page">
+            <main
+                className="product-details-page"
+            >
 
-                <div className="product-details-loading">
+                <div
+                    className="product-details-loading"
+                >
 
-                    <div className="product-details-spinner" />
+                    <div
+                        className="product-details-spinner"
+                    />
+
 
                     <p>
                         Loading product...
@@ -749,10 +1018,9 @@ function ProductDetails() {
     }
 
 
-
-    // ========================================================
-    // ERROR
-    // ========================================================
+    /* ========================================================
+       ERROR
+    ======================================================== */
 
     if (
         error ||
@@ -761,24 +1029,33 @@ function ProductDetails() {
 
         return (
 
-            <main className="product-details-page">
+            <main
+                className="product-details-page"
+            >
 
-                <div className="product-details-error">
+                <div
+                    className="product-details-error"
+                >
 
                     <PackageCheck
                         size={48}
                     />
 
+
                     <h1>
                         Product unavailable
                     </h1>
 
+
                     <p>
+
                         {
                             error ||
                             "This product could not be found."
                         }
+
                     </p>
+
 
                     <button
                         type="button"
@@ -788,11 +1065,13 @@ function ProductDetails() {
                             )
                         }
                     >
+
                         <ArrowLeft
                             size={17}
                         />
 
                         Back to Products
+
                     </button>
 
                 </div>
@@ -804,20 +1083,23 @@ function ProductDetails() {
     }
 
 
-
-    // ========================================================
-    // RENDER
-    // ========================================================
+    /* ========================================================
+       RENDER
+    ======================================================== */
 
     return (
 
-        <main className="product-details-page">
+        <main
+            className="product-details-page"
+        >
 
-            {/* =================================================
-                BREADCRUMB
-            ================================================= */}
+            <div
+                className="product-details-container"
+            >
 
-            <div className="product-details-container">
+                {/* =================================================
+                    BACK
+                ================================================= */}
 
                 <button
                     type="button"
@@ -838,332 +1120,64 @@ function ProductDetails() {
                 </button>
 
 
-
                 {/* =================================================
-                    MAIN PRODUCT
+                    MAIN PRODUCT AREA
                 ================================================= */}
 
-                <section className="product-details-main">
-
-
-                    {/* IMAGE GALLERY */}
-
-                    <div className="product-details-gallery">
-
-
-                        <div className="product-details-thumbnails">
-
-                            {
-                                productImages.map(
-                                    image => (
-
-                                        <button
-                                            key={
-                                                image.id
-                                            }
-
-                                            type="button"
-
-                                            className={
-                                                `
-                                                product-details-thumbnail
-                                                ${
-                                                    selectedImage?.id ===
-                                                    image.id
-                                                        ? "is-active"
-                                                        : ""
-                                                }
-                                                `
-                                            }
-
-                                            onClick={() =>
-                                                setSelectedImage(
-                                                    image
-                                                )
-                                            }
-
-                                        >
-
-                                            <img
-                                                src={
-                                                    image.image_url
-                                                }
-
-                                                alt={
-                                                    image.alt_text ||
-                                                    product.name
-                                                }
-                                            />
-
-                                        </button>
-
-                                    )
-                                )
-                            }
-
-                        </div>
-
-
-
-                        <div className="product-details-main-image">
-
-                            {
-                                discount > 0 &&
-
-                                <span className="product-details-discount">
-
-                                    Save {discount}%
-
-                                </span>
-                            }
-
-
-                            <button
-                                type="button"
-                                className={
-                                    `
-                                    product-details-wishlist
-                                    ${
-                                        wishlistIds.has(
-                                            product.id
-                                        )
-                                            ? "is-active"
-                                            : ""
-                                    }
-                                    `
-                                }
-                                onClick={
-                                    toggleWishlist
-                                }
-                                aria-label="Wishlist"
-                            >
-
-                                <Heart
-                                    size={21}
-                                    fill={
-                                        wishlistIds.has(
-                                            product.id
-                                        )
-                                            ? "currentColor"
-                                            : "none"
-                                    }
-                                />
-
-                            </button>
-
-
-                            {
-                                selectedImage ? (
-
-                                    <img
-                                        src={
-                                            selectedImage.image_url
-                                        }
-                                        alt={
-                                            selectedImage.alt_text ||
-                                            product.name
-                                        }
-                                    />
-
-                                ) : (
-
-                                    <div className="product-details-no-image">
-
-                                        <Leaf
-                                            size={50}
-                                        />
-
-                                        <span>
-                                            Image unavailable
-                                        </span>
-
-                                    </div>
-
-                                )
-                            }
-
-                        </div>
-
-                    </div>
-
-
-
-                    {/* PRODUCT INFORMATION */}
-
-                    <div className="product-details-info">
-
-
-                        <p className="product-details-eyebrow">
-                            AYURVEDIC WELLNESS
-                        </p>
-
-
-                        <h1>
-                            {product.name}
-                        </h1>
-
-
-                        <div className="product-details-rating">
-
-                            <div>
-
-                                <Star
-                                    size={17}
-                                    fill="currentColor"
-                                />
-
-                                <strong>
-                                    {
-                                        Number(
-                                            product.average_rating ||
-                                            0
-                                        ).toFixed(1)
-                                    }
-                                </strong>
-
-                            </div>
-
-                            <span>
-                                {
-                                    product.review_count ||
-                                    0
-                                } reviews
-                            </span>
-
-                        </div>
-
-
-
-                        <p className="product-details-short-description">
-
-                            {
-                                product.short_description ||
-                                product.description
-                            }
-
-                        </p>
-
-
-
-                        {/* PRICE */}
-
-                        <div className="product-details-price">
-
-                            <strong>
-                                ₹
-                                {
-                                    formatPrice(
-                                        currentPrice
-                                    )
-                                }
-                            </strong>
-
-
-                            {
-                                comparePrice &&
-                                Number(
-                                    comparePrice
-                                ) >
-                                Number(
-                                    currentPrice
-                                ) &&
-
-                                <del>
-                                    ₹
-                                    {
-                                        formatPrice(
-                                            comparePrice
-                                        )
-                                    }
-                                </del>
-                            }
-
-
-                            {
-                                discount > 0 &&
-
-                                <span>
-                                    {discount}% OFF
-                                </span>
-                            }
-
-                        </div>
-
-
-
-                        {/* VARIANTS */}
+                <section
+                    className="product-details-main"
+                >
+
+                    {/* =================================================
+                        IMAGE GALLERY
+                    ================================================= */}
+
+                    <div
+                        className="product-details-gallery"
+                    >
 
                         {
-                            variants.length > 0 &&
+                            productImages.length >
+                            0 && (
 
-                            <div className="product-details-option">
-
-                                <div className="product-details-option-header">
-
-                                    <span>
-                                        Size
-                                    </span>
-
-                                    <strong>
-                                        {
-                                            selectedVariant?.name ||
-                                            "Select"
-                                        }
-                                    </strong>
-
-                                </div>
-
-
-                                <div className="product-details-variants">
+                                <div
+                                    className="product-details-thumbnails"
+                                >
 
                                     {
-                                        variants.map(
-                                            variant => (
+                                        productImages.map(
+                                            image => (
 
                                                 <button
-
                                                     key={
-                                                        variant.id
+                                                        image.id
                                                     }
-
                                                     type="button"
-
-                                                    className={
-                                                        `
-                                                        product-details-variant
+                                                    className={`
+                                                        product-details-thumbnail
                                                         ${
-                                                            selectedVariant?.id ===
-                                                            variant.id
+                                                            selectedImage?.id ===
+                                                            image.id
                                                                 ? "is-active"
                                                                 : ""
                                                         }
-                                                        `
+                                                    `}
+                                                    onClick={() =>
+                                                        setSelectedImage(
+                                                            image
+                                                        )
                                                     }
-
-                                                    disabled={
-                                                        Number(
-                                                            variant.stock_quantity ||
-                                                            0
-                                                        ) <= 0
-                                                    }
-
-                                                    onClick={() => {
-
-                                                        setSelectedVariant(
-                                                            variant
-                                                        );
-
-                                                        setQuantity(
-                                                            1
-                                                        );
-
-                                                    }}
-
                                                 >
 
-                                                    {
-                                                        variant.name
-                                                    }
+                                                    <img
+                                                        src={
+                                                            image.image_url
+                                                        }
+                                                        alt={
+                                                            image.alt_text ||
+                                                            product.name
+                                                        }
+                                                    />
 
                                                 </button>
 
@@ -1173,15 +1187,334 @@ function ProductDetails() {
 
                                 </div>
 
-                            </div>
-
+                            )
                         }
 
 
+                        <div
+                            className="product-details-main-image"
+                        >
 
-                        {/* STOCK */}
+                            {
+                                discount > 0 && (
 
-                        <div className="product-details-stock">
+                                    <span
+                                        className="product-details-discount"
+                                    >
+                                        Save {discount}%
+                                    </span>
+
+                                )
+                            }
+
+
+                            <button
+                                type="button"
+                                className={`
+                                    product-details-wishlist
+                                    ${
+                                        productIsWishlisted
+                                            ? "is-active"
+                                            : ""
+                                    }
+                                `}
+                                onClick={
+                                    handleWishlist
+                                }
+                                aria-label={
+                                    productIsWishlisted
+                                        ? "Remove from wishlist"
+                                        : "Add to wishlist"
+                                }
+                                title={
+                                    productIsWishlisted
+                                        ? "Remove from wishlist"
+                                        : "Add to wishlist"
+                                }
+                            >
+
+                                <Heart
+                                    size={21}
+                                    fill={
+                                        productIsWishlisted
+                                            ? "currentColor"
+                                            : "none"
+                                    }
+                                />
+
+                            </button>
+
+
+                            {
+                                mainImage
+                                    ? (
+
+                                        <img
+                                            src={
+                                                mainImage
+                                            }
+                                            alt={
+                                                selectedImage?.alt_text ||
+                                                product.name
+                                            }
+                                        />
+
+                                    )
+                                    : (
+
+                                        <div
+                                            className="product-details-no-image"
+                                        >
+
+                                            <Leaf
+                                                size={50}
+                                            />
+
+
+                                            <span>
+                                                Image unavailable
+                                            </span>
+
+                                        </div>
+
+                                    )
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =================================================
+                        PRODUCT INFORMATION
+                    ================================================= */}
+
+                    <div
+                        className="product-details-info"
+                    >
+
+                        <p
+                            className="product-details-eyebrow"
+                        >
+                            AYURVEDIC WELLNESS
+                        </p>
+
+
+                        <h1>
+                            {product.name}
+                        </h1>
+
+
+                        {/* =================================================
+                            RATING
+                        ================================================= */}
+
+                        <div
+                            className="product-details-rating"
+                        >
+
+                            <div>
+
+                                <Star
+                                    size={17}
+                                    fill="currentColor"
+                                />
+
+
+                                <strong>
+
+                                    {
+                                        Number(
+                                            product.average_rating ??
+                                            product.rating ??
+                                            0
+                                        ).toFixed(
+                                            1
+                                        )
+                                    }
+
+                                </strong>
+
+                            </div>
+
+
+                            <span>
+
+                                {
+                                    product.review_count ||
+                                    0
+                                } reviews
+
+                            </span>
+
+                        </div>
+
+
+                        {/* =================================================
+                            DESCRIPTION
+                        ================================================= */}
+
+                        <p
+                            className="product-details-short-description"
+                        >
+
+                            {
+                                product.short_description ||
+                                product.description
+                            }
+
+                        </p>
+
+
+                        {/* =================================================
+                            PRICE
+                        ================================================= */}
+
+                        <div
+                            className="product-details-price"
+                        >
+
+                            <strong>
+
+                                ₹
+                                {
+                                    formatPrice(
+                                        currentPrice
+                                    )
+                                }
+
+                            </strong>
+
+
+                            {
+                                comparePrice &&
+                                Number(
+                                    comparePrice
+                                ) >
+                                currentPrice && (
+
+                                    <del>
+
+                                        ₹
+                                        {
+                                            formatPrice(
+                                                comparePrice
+                                            )
+                                        }
+
+                                    </del>
+
+                                )
+                            }
+
+
+                            {
+                                discount > 0 && (
+
+                                    <span>
+                                        {discount}% OFF
+                                    </span>
+
+                                )
+                            }
+
+                        </div>
+
+
+                        {/* =================================================
+                            VARIANTS
+                        ================================================= */}
+
+                        {
+                            variants.length >
+                            0 && (
+
+                                <div
+                                    className="product-details-option"
+                                >
+
+                                    <div
+                                        className="product-details-option-header"
+                                    >
+
+                                        <span>
+                                            Size
+                                        </span>
+
+
+                                        <strong>
+
+                                            {
+                                                selectedVariant?.name ||
+                                                "Select"
+                                            }
+
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div
+                                        className="product-details-variants"
+                                    >
+
+                                        {
+                                            variants.map(
+                                                variant => (
+
+                                                    <button
+                                                        key={
+                                                            variant.id
+                                                        }
+                                                        type="button"
+                                                        className={`
+                                                            product-details-variant
+                                                            ${
+                                                                selectedVariant?.id ===
+                                                                variant.id
+                                                                    ? "is-active"
+                                                                    : ""
+                                                            }
+                                                        `}
+                                                        disabled={
+                                                            Number(
+                                                                variant.stock_quantity ||
+                                                                0
+                                                            ) <= 0 ||
+                                                            cartActionLoading
+                                                        }
+                                                        onClick={() =>
+                                                            handleVariantChange(
+                                                                variant
+                                                            )
+                                                        }
+                                                    >
+
+                                                        {
+                                                            variant.name
+                                                        }
+
+                                                    </button>
+
+                                                )
+                                            )
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        }
+
+
+                        {/* =================================================
+                            STOCK
+                        ================================================= */}
+
+                        <div
+                            className="product-details-stock"
+                        >
 
                             <span
                                 className={
@@ -1192,6 +1525,7 @@ function ProductDetails() {
                             >
 
                                 <span />
+
 
                                 {
                                     inStock
@@ -1206,108 +1540,165 @@ function ProductDetails() {
                         </div>
 
 
+                        {/* =================================================
+                            PURCHASE
 
-                        {/* QUANTITY + CART */}
+                            NOT IN CART:
+                            Add To Cart + Buy Now
 
-                        <div className="product-details-purchase">
+                            IN CART:
+                            Quantity + Buy Now
+                        ================================================= */}
 
-                            <div className="product-details-quantity">
+                        <div
+                            className={`
+                                product-details-purchase
+                                ${
+                                    productIsInCart
+                                        ? "is-in-cart"
+                                        : ""
+                                }
+                            `}
+                        >
 
-                                <button
-                                    type="button"
-                                    onClick={
-                                        decreaseQuantity
-                                    }
-                                    disabled={
-                                        !inStock ||
-                                        quantity <= 1
-                                    }
-                                    aria-label="Decrease quantity"
-                                >
+                            {/* =============================================
+                                NOT IN CART
+                                ADD TO CART
+                            ============================================= */}
 
-                                    <Minus
-                                        size={16}
-                                    />
+                            {
+                                !productIsInCart && (
 
-                                </button>
+                                    <button
+                                        type="button"
+                                        className="product-details-cart"
+                                        disabled={
+                                            !inStock ||
+                                            !selectedVariant ||
+                                            cartActionLoading
+                                        }
+                                        onClick={
+                                            handleAddToCart
+                                        }
+                                    >
 
-
-                                <span>
-                                    {quantity}
-                                </span>
-
-
-                                <button
-                                    type="button"
-                                    onClick={
-                                        increaseQuantity
-                                    }
-                                    disabled={
-                                        !inStock ||
-                                        quantity >=
-                                            stockQuantity
-                                    }
-                                    aria-label="Increase quantity"
-                                >
-
-                                    <Plus
-                                        size={16}
-                                    />
-
-                                </button>
-
-                            </div>
+                                        <ShoppingBag
+                                            size={18}
+                                        />
 
 
+                                        {
+                                            cartActionLoading
+                                                ? "Adding..."
+                                                : "Add To Cart"
+                                        }
+
+                                    </button>
+
+                                )
+                            }
+
+
+                            {/* =============================================
+                                IN CART
+                                REAL BACKEND QUANTITY
+                            ============================================= */}
+
+                            {
+                                productIsInCart && (
+
+                                    <div
+                                        className="product-details-quantity"
+                                    >
+
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                handleDecreaseQuantity
+                                            }
+                                            disabled={
+                                                cartActionLoading
+                                            }
+                                            aria-label={
+                                                cartQuantity <= 1
+                                                    ? "Remove product from cart"
+                                                    : "Decrease quantity"
+                                            }
+                                            title={
+                                                cartQuantity <= 1
+                                                    ? "Remove from cart"
+                                                    : "Decrease quantity"
+                                            }
+                                        >
+
+                                            <Minus
+                                                size={16}
+                                            />
+
+                                        </button>
+
+
+                                        <span>
+
+                                            {
+                                                cartActionLoading
+                                                    ? "..."
+                                                    : cartQuantity
+                                            }
+
+                                        </span>
+
+
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                handleIncreaseQuantity
+                                            }
+                                            disabled={
+                                                cartActionLoading ||
+                                                maximumStockReached
+                                            }
+                                            aria-label="Increase quantity"
+                                            title={
+                                                maximumStockReached
+                                                    ? "Maximum stock reached"
+                                                    : "Increase quantity"
+                                            }
+                                        >
+
+                                            <Plus
+                                                size={16}
+                                            />
+
+                                        </button>
+
+                                    </div>
+
+                                )
+                            }
+
+
+                            {/* =============================================
+                                BUY NOW
+                            ============================================= */}
 
                             <button
-
                                 type="button"
-
-                                className={
-                                    `
-                                    product-details-cart
-                                    ${
-                                        addedToCart
-                                            ? "is-added"
-                                            : ""
-                                    }
-                                    `
-                                }
-
+                                className="product-details-buy-now"
                                 disabled={
                                     !inStock ||
-                                    !selectedVariant
+                                    !selectedVariant ||
+                                    buyNowLoading
                                 }
-
                                 onClick={
-                                    addToCart
+                                    handleBuyNow
                                 }
-
                             >
 
                                 {
-                                    addedToCart ? (
-
-                                        <>
-                                            <Check
-                                                size={18}
-                                            />
-
-                                            Added to Cart
-                                        </>
-
-                                    ) : (
-
-                                        <>
-                                            <ShoppingBag
-                                                size={18}
-                                            />
-
-                                            Add To Cart
-                                        </>
-
-                                    )
+                                    buyNowLoading
+                                        ? "Opening..."
+                                        : "Buy Now"
                                 }
 
                             </button>
@@ -1315,10 +1706,37 @@ function ProductDetails() {
                         </div>
 
 
+                        {/* =================================================
+                            CART STATUS
+                        ================================================= */}
 
-                        {/* TRUST INFORMATION */}
+                        {
+                            productIsInCart && (
 
-                        <div className="product-details-trust">
+                                <div
+                                    className="product-details-cart-status"
+                                >
+
+                                    <ShoppingBag
+                                        size={14}
+                                    />
+
+                                    Added to cart — quantity changes
+                                    are reflected in your cart.
+
+                                </div>
+
+                            )
+                        }
+
+
+                        {/* =================================================
+                            TRUST
+                        ================================================= */}
+
+                        <div
+                            className="product-details-trust"
+                        >
 
                             <div>
 
@@ -1365,18 +1783,22 @@ function ProductDetails() {
                 </section>
 
 
-
                 {/* =================================================
                     PRODUCT INFORMATION
                 ================================================= */}
 
-                <section className="product-details-description">
+                <section
+                    className="product-details-description"
+                >
 
-                    <div className="product-details-description-header">
+                    <div
+                        className="product-details-description-header"
+                    >
 
                         <p>
                             ROOTED IN AYURVEDA
                         </p>
+
 
                         <h2>
                             Product Information
@@ -1385,105 +1807,117 @@ function ProductDetails() {
                     </div>
 
 
-                    <div className="product-details-information-grid">
-
+                    <div
+                        className="product-details-information-grid"
+                    >
 
                         {
-                            product.description &&
+                            product.description && (
 
-                            <article>
+                                <article>
 
-                                <h3>
-                                    Description
-                                </h3>
+                                    <h3>
+                                        Description
+                                    </h3>
 
-                                <p>
-                                    {
-                                        product.description
-                                    }
-                                </p>
 
-                            </article>
+                                    <p>
+                                        {
+                                            product.description
+                                        }
+                                    </p>
+
+                                </article>
+
+                            )
                         }
 
 
-
                         {
-                            product.ingredients &&
+                            product.ingredients && (
 
-                            <article>
+                                <article>
 
-                                <h3>
-                                    Ingredients
-                                </h3>
+                                    <h3>
+                                        Ingredients
+                                    </h3>
 
-                                <p>
-                                    {
-                                        product.ingredients
-                                    }
-                                </p>
 
-                            </article>
+                                    <p>
+                                        {
+                                            product.ingredients
+                                        }
+                                    </p>
+
+                                </article>
+
+                            )
                         }
 
 
-
                         {
-                            product.benefits &&
+                            product.benefits && (
 
-                            <article>
+                                <article>
 
-                                <h3>
-                                    Benefits
-                                </h3>
+                                    <h3>
+                                        Benefits
+                                    </h3>
 
-                                <p>
-                                    {
-                                        product.benefits
-                                    }
-                                </p>
 
-                            </article>
+                                    <p>
+                                        {
+                                            product.benefits
+                                        }
+                                    </p>
+
+                                </article>
+
+                            )
                         }
 
 
-
                         {
-                            product.directions &&
+                            product.directions && (
 
-                            <article>
+                                <article>
 
-                                <h3>
-                                    Directions
-                                </h3>
+                                    <h3>
+                                        Directions
+                                    </h3>
 
-                                <p>
-                                    {
-                                        product.directions
-                                    }
-                                </p>
 
-                            </article>
+                                    <p>
+                                        {
+                                            product.directions
+                                        }
+                                    </p>
+
+                                </article>
+
+                            )
                         }
 
 
-
                         {
-                            product.warnings &&
+                            product.warnings && (
 
-                            <article>
+                                <article>
 
-                                <h3>
-                                    Warnings
-                                </h3>
+                                    <h3>
+                                        Warnings
+                                    </h3>
 
-                                <p>
-                                    {
-                                        product.warnings
-                                    }
-                                </p>
 
-                            </article>
+                                    <p>
+                                        {
+                                            product.warnings
+                                        }
+                                    </p>
+
+                                </article>
+
+                            )
                         }
 
                     </div>
@@ -1491,145 +1925,43 @@ function ProductDetails() {
                 </section>
 
 
-
                 {/* =================================================
                     RELATED PRODUCTS
                 ================================================= */}
 
                 {
-                    relatedProducts.length > 0 &&
+                    relatedProducts.length >
+                    0 && (
 
-                    <section className="product-details-related">
+                        <section
+                            className="product-details-related"
+                        >
 
-                        <div className="product-details-related-header">
+                            <div
+                                className="product-details-related-header"
+                            >
 
-                            <p>
-                                YOU MAY ALSO LIKE
-                            </p>
-
-                            <h2>
-                                Related Products
-                            </h2>
-
-                        </div>
-
-
-                        <ProductGrid
-
-                            products={
-                                relatedProducts
-                            }
-
-                            wishlistIds={
-                                wishlistIds
-                            }
-
-                            addedProductId={
-                                null
-                            }
-
-                            onToggleWishlist={
-                                productId => {
-
-                                    setWishlistIds(
-                                        previous => {
-
-                                            const next =
-                                                new Set(
-                                                    previous
-                                                );
+                                <p>
+                                    YOU MAY ALSO LIKE
+                                </p>
 
 
-                                            if (
-                                                next.has(
-                                                    productId
-                                                )
-                                            ) {
+                                <h2>
+                                    Related Products
+                                </h2>
 
-                                                next.delete(
-                                                    productId
-                                                );
-
-                                            } else {
-
-                                                next.add(
-                                                    productId
-                                                );
-
-                                            }
+                            </div>
 
 
-                                            return next;
-
-                                        }
-                                    );
-
+                            <ProductGrid
+                                products={
+                                    relatedProducts
                                 }
-                            }
+                            />
 
-                            onAddToCart={
-                                relatedProduct => {
+                        </section>
 
-                                    setCartItems(
-                                        previous => {
-
-                                            const existing =
-                                                previous.find(
-                                                    item =>
-                                                        item.id ===
-                                                        relatedProduct.id
-                                                );
-
-
-                                            if (
-                                                existing
-                                            ) {
-
-                                                return previous.map(
-                                                    item =>
-
-                                                        item.id ===
-                                                        relatedProduct.id
-
-                                                            ? {
-
-                                                                ...item,
-
-                                                                quantity:
-                                                                    Number(
-                                                                        item.quantity || 0
-                                                                    ) +
-                                                                    1
-
-                                                            }
-
-                                                            : item
-                                                );
-
-                                            }
-
-
-                                            return [
-
-                                                ...previous,
-
-                                                {
-                                                    ...relatedProduct,
-                                                    quantity: 1
-                                                }
-
-                                            ];
-
-                                        }
-                                    );
-
-                                }
-                            }
-
-                        />
-
-                    </section>
-
+                    )
                 }
 
             </div>
