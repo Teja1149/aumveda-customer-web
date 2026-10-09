@@ -1,40 +1,155 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import {
     createContext,
     useContext,
     useEffect,
-    useState,
+    useState
 } from "react";
 
-import { supabase } from "../services/supabase";
+import {
+    supabase
+} from "../services/supabase";
 
 
-// ============================================================
-// AUTH CONTEXT
-// ============================================================
+/* ============================================================
+   AUTH CONTEXT
+============================================================ */
 
-const AuthContext = createContext(null);
-
-
-// ============================================================
-// AUTH PROVIDER
-// ============================================================
-
-export function AuthProvider({ children }) {
-
-    const [user, setUser] = useState(null);
-
-    const [session, setSession] = useState(null);
-
-    const [loading, setLoading] = useState(true);
+const AuthContext =
+    createContext(
+        null
+    );
 
 
-    // ========================================================
-    // INITIAL SESSION
-    // ========================================================
+/* ============================================================
+   PHONE NORMALIZATION
+============================================================ */
+
+function normalizePhoneNumber(
+    value
+) {
+
+    const raw =
+        String(
+            value || ""
+        ).trim();
+
+
+    if (!raw) {
+
+        throw new Error(
+            "Please enter your phone number."
+        );
+
+    }
+
+
+    /*
+     * Keep only numbers and optional leading +
+     */
+
+    let cleaned =
+        raw.replace(
+            /[^\d+]/g,
+            ""
+        );
+
+
+    /*
+     * Indian 10-digit mobile number:
+     * automatically add +91.
+     */
+
+    if (
+        /^\d{10}$/.test(
+            cleaned
+        )
+    ) {
+
+        cleaned =
+            `+91${cleaned}`;
+
+    }
+
+
+    /*
+     * Number entered as 91XXXXXXXXXX
+     */
+
+    if (
+        /^91\d{10}$/.test(
+            cleaned
+        )
+    ) {
+
+        cleaned =
+            `+${cleaned}`;
+
+    }
+
+
+    if (
+        !cleaned.startsWith(
+            "+"
+        )
+    ) {
+
+        throw new Error(
+            "Please include your country code. Example: +91 9876543210."
+        );
+
+    }
+
+
+    return cleaned;
+
+}
+
+
+/* ============================================================
+   AUTH PROVIDER
+============================================================ */
+
+export function AuthProvider({
+    children
+}) {
+
+    const [
+        user,
+        setUser
+    ] =
+        useState(
+            null
+        );
+
+
+    const [
+        session,
+        setSession
+    ] =
+        useState(
+            null
+        );
+
+
+    const [
+        loading,
+        setLoading
+    ] =
+        useState(
+            true
+        );
+
+
+    /* ========================================================
+       INITIAL SESSION + AUTH LISTENER
+    ======================================================== */
 
     useEffect(() => {
 
-        let mounted = true;
+        let mounted =
+            true;
 
 
         async function loadSession() {
@@ -43,65 +158,66 @@ export function AuthProvider({ children }) {
 
                 const {
                     data,
-                    error,
-                } = await supabase.auth.getSession();
+                    error
+                } =
+                    await supabase.auth.getSession();
 
 
                 if (error) {
 
-                    console.error(
-                        "Failed to get Supabase session:",
-                        error
-                    );
+                    throw error;
 
-                    if (mounted) {
-
-                        setSession(null);
-                        setUser(null);
-
-                    }
-
-                    return;
                 }
 
 
                 if (!mounted) {
+
                     return;
+
                 }
 
 
                 setSession(
-                    data?.session || null
+                    data?.session ||
+                    null
                 );
 
+
                 setUser(
-                    data?.session?.user || null
+                    data?.session?.user ||
+                    null
                 );
 
             }
-
-            catch (error) {
+            catch (sessionError) {
 
                 console.error(
-                    "Auth session initialization failed:",
-                    error
+                    "AUMVEDA auth initialization failed:",
+                    sessionError
                 );
 
 
                 if (mounted) {
 
-                    setSession(null);
-                    setUser(null);
+                    setSession(
+                        null
+                    );
+
+
+                    setUser(
+                        null
+                    );
 
                 }
 
             }
-
             finally {
 
                 if (mounted) {
 
-                    setLoading(false);
+                    setLoading(
+                        false
+                    );
 
                 }
 
@@ -113,55 +229,66 @@ export function AuthProvider({ children }) {
         loadSession();
 
 
-        // ====================================================
-        // AUTH STATE LISTENER
-        // ====================================================
-
         const {
-            data: authListener,
-        } = supabase.auth.onAuthStateChange(
-            (
-                event,
-                nextSession
-            ) => {
+            data: authListener
+        } =
+            supabase.auth.onAuthStateChange(
+                (
+                    event,
+                    nextSession
+                ) => {
 
-                if (!mounted) {
-                    return;
+                    if (!mounted) {
+
+                        return;
+
+                    }
+
+
+                    console.log(
+                        "AUMVEDA Auth Event:",
+                        event
+                    );
+
+
+                    setSession(
+                        nextSession ||
+                        null
+                    );
+
+
+                    setUser(
+                        nextSession?.user ||
+                        null
+                    );
+
+
+                    setLoading(
+                        false
+                    );
+
                 }
-
-
-                console.log(
-                    "AUMVEDA Auth Event:",
-                    event
-                );
-
-
-                setSession(
-                    nextSession || null
-                );
-
-                setUser(
-                    nextSession?.user || null
-                );
-
-            }
-        );
+            );
 
 
         return () => {
 
-            mounted = false;
+            mounted =
+                false;
 
-            authListener?.subscription?.unsubscribe();
+
+            authListener
+                ?.subscription
+                ?.unsubscribe();
 
         };
 
     }, []);
 
 
-    // ========================================================
-    // LOGIN
-    // ========================================================
+    /* ========================================================
+       EMAIL + PASSWORD LOGIN
+    ======================================================== */
 
     async function login(
         email,
@@ -169,7 +296,11 @@ export function AuthProvider({ children }) {
     ) {
 
         const cleanEmail =
-            email?.trim();
+            String(
+                email || ""
+            )
+                .trim()
+                .toLowerCase();
 
 
         if (!cleanEmail) {
@@ -192,14 +323,15 @@ export function AuthProvider({ children }) {
 
         const {
             data,
-            error,
-        } = await supabase.auth.signInWithPassword({
+            error
+        } =
+            await supabase.auth
+                .signInWithPassword({
+                    email:
+                        cleanEmail,
 
-            email: cleanEmail,
-
-            password,
-
-        });
+                    password
+                });
 
 
         if (error) {
@@ -212,11 +344,14 @@ export function AuthProvider({ children }) {
 
 
         setSession(
-            data?.session || null
+            data?.session ||
+            null
         );
 
+
         setUser(
-            data?.user || null
+            data?.user ||
+            null
         );
 
 
@@ -225,21 +360,37 @@ export function AuthProvider({ children }) {
     }
 
 
-    // ========================================================
-    // SIGNUP
-    // ========================================================
+    /* ========================================================
+       EMAIL + PASSWORD SIGNUP
+    ======================================================== */
 
     async function signup({
         fullName,
         email,
-        password,
+        phone,
+        password
     }) {
 
         const cleanName =
-            fullName?.trim();
+            String(
+                fullName || ""
+            ).trim();
+
 
         const cleanEmail =
-            email?.trim();
+            String(
+                email || ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        const cleanPhone =
+            phone
+                ? normalizePhoneNumber(
+                    phone
+                )
+                : "";
 
 
         if (!cleanName) {
@@ -269,7 +420,10 @@ export function AuthProvider({ children }) {
         }
 
 
-        if (password.length < 6) {
+        if (
+            password.length <
+            6
+        ) {
 
             throw new Error(
                 "Password must contain at least 6 characters."
@@ -278,31 +432,32 @@ export function AuthProvider({ children }) {
         }
 
 
-        // ====================================================
-        // SUPABASE SIGNUP
-        // ====================================================
-
         const {
             data,
-            error,
-        } = await supabase.auth.signUp({
+            error
+        } =
+            await supabase.auth
+                .signUp({
+                    email:
+                        cleanEmail,
 
-            email: cleanEmail,
+                    password,
 
-            password,
+                    options: {
 
-            options: {
+                        data: {
 
-                data: {
+                            full_name:
+                                cleanName,
 
-                    full_name:
-                        cleanName,
+                            phone:
+                                cleanPhone
 
-                },
+                        }
 
-            },
+                    }
 
-        });
+                });
 
 
         if (error) {
@@ -314,29 +469,15 @@ export function AuthProvider({ children }) {
         }
 
 
-        /*
-         * DATABASE TRIGGER
-         *
-         * auth.users
-         *      ↓
-         * handle_new_customer()
-         *      ↓
-         * profiles
-         *      ↓
-         * customer_profiles
-         *
-         * full_name is received from:
-         *
-         * NEW.raw_user_meta_data ->> 'full_name'
-         */
-
-
         setSession(
-            data?.session || null
+            data?.session ||
+            null
         );
 
+
         setUser(
-            data?.user || null
+            data?.user ||
+            null
         );
 
 
@@ -345,15 +486,58 @@ export function AuthProvider({ children }) {
     }
 
 
-    // ========================================================
-    // LOGOUT
-    // ========================================================
+    /* ========================================================
+       SEND PHONE OTP
+    ======================================================== */
 
-    async function logout() {
+    async function sendPhoneOtp({
+        phone,
+        shouldCreateUser = false,
+        fullName = ""
+    }) {
+
+        const cleanPhone =
+            normalizePhoneNumber(
+                phone
+            );
+
+
+        const options = {
+
+            shouldCreateUser:
+                Boolean(
+                    shouldCreateUser
+                )
+
+        };
+
+
+        if (
+            shouldCreateUser &&
+            fullName?.trim()
+        ) {
+
+            options.data = {
+
+                full_name:
+                    fullName.trim()
+
+            };
+
+        }
+
 
         const {
-            error,
-        } = await supabase.auth.signOut();
+            data,
+            error
+        } =
+            await supabase.auth
+                .signInWithOtp({
+                    phone:
+                        cleanPhone,
+
+                    options
+                });
 
 
         if (error) {
@@ -365,16 +549,190 @@ export function AuthProvider({ children }) {
         }
 
 
-        setSession(null);
-
-        setUser(null);
+        return {
+            data,
+            phone:
+                cleanPhone
+        };
 
     }
 
 
-    // ========================================================
-    // AUTHENTICATION STATE
-    // ========================================================
+    /* ========================================================
+       VERIFY PHONE OTP
+    ======================================================== */
+
+    async function verifyPhoneOtp({
+        phone,
+        token
+    }) {
+
+        const cleanPhone =
+            normalizePhoneNumber(
+                phone
+            );
+
+
+        const cleanToken =
+            String(
+                token || ""
+            )
+                .replace(
+                    /\D/g,
+                    ""
+                )
+                .trim();
+
+
+        if (
+            cleanToken.length <
+            6
+        ) {
+
+            throw new Error(
+                "Please enter the complete OTP."
+            );
+
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabase.auth
+                .verifyOtp({
+                    phone:
+                        cleanPhone,
+
+                    token:
+                        cleanToken,
+
+                    type:
+                        "sms"
+                });
+
+
+        if (error) {
+
+            throw new Error(
+                error.message
+            );
+
+        }
+
+
+        setSession(
+            data?.session ||
+            null
+        );
+
+
+        setUser(
+            data?.user ||
+            null
+        );
+
+
+        return data;
+
+    }
+
+
+    /* ========================================================
+       GOOGLE LOGIN / SIGNUP
+    ======================================================== */
+
+    async function continueWithGoogle({
+        redirectTo
+    } = {}) {
+
+        const finalRedirect =
+            redirectTo ||
+            `${window.location.origin}/login`;
+
+
+        const {
+            data,
+            error
+        } =
+            await supabase.auth
+                .signInWithOAuth({
+
+                    provider:
+                        "google",
+
+                    options: {
+
+                        redirectTo:
+                            finalRedirect,
+
+                        queryParams: {
+
+                            access_type:
+                                "offline",
+
+                            prompt:
+                                "consent"
+
+                        }
+
+                    }
+
+                });
+
+
+        if (error) {
+
+            throw new Error(
+                error.message
+            );
+
+        }
+
+
+        return data;
+
+    }
+
+
+    /* ========================================================
+       LOGOUT
+    ======================================================== */
+
+    async function logout() {
+
+        const {
+            error
+        } =
+            await supabase.auth
+                .signOut();
+
+
+        if (error) {
+
+            throw new Error(
+                error.message
+            );
+
+        }
+
+
+        setSession(
+            null
+        );
+
+
+        setUser(
+            null
+        );
+
+    }
+
+
+    /* ========================================================
+       AUTH STATE
+    ======================================================== */
 
     const isAuthenticated =
         Boolean(
@@ -383,19 +741,34 @@ export function AuthProvider({ children }) {
         );
 
 
-    // ========================================================
-    // USER DISPLAY NAME
-    // ========================================================
+    /* ========================================================
+       DISPLAY NAME
+    ======================================================== */
 
     const displayName =
-        user?.user_metadata?.full_name ||
-        user?.email?.split("@")[0] ||
+        user
+            ?.user_metadata
+            ?.full_name ||
+
+        user
+            ?.user_metadata
+            ?.name ||
+
+        user
+            ?.email
+            ?.split(
+                "@"
+            )[0] ||
+
+        user
+            ?.phone ||
+
         "AUMVEDA Customer";
 
 
-    // ========================================================
-    // CONTEXT VALUE
-    // ========================================================
+    /* ========================================================
+       CONTEXT VALUE
+    ======================================================== */
 
     const value = {
 
@@ -413,7 +786,13 @@ export function AuthProvider({ children }) {
 
         signup,
 
-        logout,
+        sendPhoneOtp,
+
+        verifyPhoneOtp,
+
+        continueWithGoogle,
+
+        logout
 
     };
 
@@ -421,7 +800,9 @@ export function AuthProvider({ children }) {
     return (
 
         <AuthContext.Provider
-            value={value}
+            value={
+                value
+            }
         >
 
             {children}
@@ -433,9 +814,9 @@ export function AuthProvider({ children }) {
 }
 
 
-// ============================================================
-// USE AUTH HOOK
-// ============================================================
+/* ============================================================
+   USE AUTH
+============================================================ */
 
 export function useAuth() {
 

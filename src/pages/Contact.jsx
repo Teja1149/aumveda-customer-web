@@ -1,9 +1,7 @@
 import {
     ArrowRight,
     CheckCircle2,
-    Clock3,
     Mail,
-    MapPin,
     MessageCircle,
     Phone,
     Send,
@@ -37,24 +35,12 @@ const CONTACT_PHONE_DISPLAY =
     "+91 90000 06000";
 
 
-const CONTACT_ADDRESS =
-    "1-8-15/2FF8-1, GK Nilayam, North Kamala Nagar, Hyderabad, Telangana 500062";
-
-
-const GOOGLE_MAPS_URL =
-    "https://www.google.com/maps/search/?api=1&query=1-8-15%2F2FF8-1%2C%20GK%20Nilayam%2C%20North%20Kamala%20Nagar%2C%20Hyderabad%2C%20Telangana%20500062";
-
-
-const GOOGLE_MAPS_EMBED_URL =
-    "https://www.google.com/maps?q=1-8-15%2F2FF8-1%2C%20GK%20Nilayam%2C%20North%20Kamala%20Nagar%2C%20Hyderabad%2C%20Telangana%20500062&output=embed";
-
-
 const CONTACT_HERO_IMAGE =
     "https://images.unsplash.com/photo-1492552181161-62217fc3076d?auto=format&fit=crop&w=1500&q=85";
 
 
 /* ============================================================
-   CONTACT
+   CONTACT PAGE
 ============================================================ */
 
 function Contact() {
@@ -95,7 +81,8 @@ function Contact() {
         setFormData(
             previous => ({
                 ...previous,
-                [name]: value
+                [name]:
+                    value
             })
         );
 
@@ -402,22 +389,6 @@ ${formData.message}
 
                             </div>
 
-
-                            <div
-                                className="
-                                    contact-floating-chip
-                                    chip-bottom
-                                "
-                            >
-
-                                <MapPin
-                                    size={15}
-                                />
-
-                                Hyderabad, India
-
-                            </div>
-
                         </div>
 
                     </div>
@@ -553,57 +524,6 @@ ${formData.message}
                             <p>
                                 Speak directly with
                                 the AUMVEDA team.
-                            </p>
-
-
-                            <ArrowRight
-                                size={17}
-                                className="channel-arrow"
-                            />
-
-                        </a>
-
-
-                        {/* =========================================
-                            VISIT
-                        ========================================= */}
-
-                        <a
-                            href={
-                                GOOGLE_MAPS_URL
-                            }
-                            target="_blank"
-                            rel="noreferrer"
-                            className="contact-channel-card"
-                            aria-label="Open AUMVEDA location in Google Maps"
-                        >
-
-                            <div
-                                className="channel-icon"
-                            >
-
-                                <MapPin
-                                    size={21}
-                                />
-
-                            </div>
-
-
-                            <span
-                                className="channel-label"
-                            >
-                                VISIT
-                            </span>
-
-
-                            <h3>
-                                Hyderabad
-                            </h3>
-
-
-                            <p>
-                                North Kamala Nagar,
-                                Hyderabad – 500062.
                             </p>
 
 
@@ -772,6 +692,7 @@ ${formData.message}
                                                 handleChange
                                             }
                                             placeholder="Your name"
+                                            autoComplete="name"
                                             required
                                         />
 
@@ -792,6 +713,7 @@ ${formData.message}
                                                 handleChange
                                             }
                                             placeholder="you@example.com"
+                                            autoComplete="email"
                                             required
                                         />
 
@@ -818,6 +740,7 @@ ${formData.message}
                                                 handleChange
                                             }
                                             placeholder="+91"
+                                            autoComplete="tel"
                                         />
 
                                     </label>
@@ -969,7 +892,9 @@ ${formData.message}
                         className="contact-team-grid"
                     >
 
-                        {/* SUMANNTH */}
+                        {/* =========================================
+                            SUMANNTH
+                        ========================================= */}
 
                         <a
                             href="tel:+919000006000"
@@ -1009,7 +934,9 @@ ${formData.message}
                         </a>
 
 
-                        {/* SRISHA */}
+                        {/* =========================================
+                            SRISHA
+                        ========================================= */}
 
                         <a
                             href="tel:+919704300006"
@@ -1049,7 +976,9 @@ ${formData.message}
                         </a>
 
 
-                        {/* SRIKANTH */}
+                        {/* =========================================
+                            SRIKANTH
+                        ========================================= */}
 
                         <a
                             href="tel:+918501042547"
@@ -1089,164 +1018,6 @@ ${formData.message}
                         </a>
 
                     </div>
-
-                </div>
-
-            </section>
-
-
-            {/* =================================================
-                REAL GOOGLE MAP LOCATION
-            ================================================= */}
-
-            <section
-                className="aumveda-contact-location"
-            >
-
-                {/* =============================================
-                    GOOGLE MAP
-                ============================================= */}
-
-                <div
-                    className="location-map-live"
-                >
-
-                    <iframe
-                        src={
-                            GOOGLE_MAPS_EMBED_URL
-                        }
-                        title="AUMVEDA Wellness Hyderabad location"
-                        loading="lazy"
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                    />
-
-
-                    <div
-                        className="location-map-overlay"
-                    >
-
-                        <a
-                            href={
-                                GOOGLE_MAPS_URL
-                            }
-                            target="_blank"
-                            rel="noreferrer"
-                            className="location-map-open"
-                        >
-
-                            <MapPin
-                                size={16}
-                            />
-
-                            Open in Google Maps
-
-                            <ArrowRight
-                                size={15}
-                            />
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-                {/* =============================================
-                    LOCATION COPY
-                ============================================= */}
-
-                <div
-                    className="location-content"
-                >
-
-                    <span
-                        className="
-                            aumveda-contact-eyebrow
-                            dark
-                        "
-                    >
-                        OUR LOCATION
-                    </span>
-
-
-                    <h2>
-
-                        Rooted in
-
-                        <span>
-                            Hyderabad.
-                        </span>
-
-                    </h2>
-
-
-                    <p>
-                        AUMVEDA Wellness is based in Hyderabad,
-                        Telangana, and is building a connected
-                        natural wellness ecosystem from India.
-                    </p>
-
-
-                    <div
-                        className="location-address"
-                    >
-
-                        <MapPin
-                            size={19}
-                        />
-
-
-                        <span>
-
-                            1-8-15/2FF8-1, GK Nilayam,
-
-                            <br />
-
-                            North Kamala Nagar,
-
-                            <br />
-
-                            Hyderabad – 500062
-
-                        </span>
-
-                    </div>
-
-
-                    <div
-                        className="location-hours"
-                    >
-
-                        <Clock3
-                            size={17}
-                        />
-
-
-                        <span>
-                            Reach out by email or phone
-                            for enquiries and support.
-                        </span>
-
-                    </div>
-
-
-                    <a
-                        href={
-                            GOOGLE_MAPS_URL
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                        className="contact-location-button"
-                    >
-
-                        Get Directions
-
-                        <ArrowRight
-                            size={16}
-                        />
-
-                    </a>
 
                 </div>
 
