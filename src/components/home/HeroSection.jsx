@@ -103,7 +103,7 @@ const DEFAULT_HERO = {
         "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/hero/home/hero.webp",
 
     video_url:
-        "",
+        "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/videos/hero/aumveda-hero-video.mp4",
 
     primary_cta_text:
         "Explore Products",
