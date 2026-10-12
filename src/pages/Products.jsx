@@ -11,7 +11,6 @@ import {
 
 
 import {
-    Search,
     SlidersHorizontal,
     X,
     RotateCcw,
@@ -351,6 +350,11 @@ function Products() {
 
     /* ========================================================
        SEARCH FROM NAVBAR URL
+
+       Navbar search remains the ONLY search input.
+
+       Example:
+       /products?search=oil
     ======================================================== */
 
     const urlSearchQuery =
@@ -362,7 +366,6 @@ function Products() {
     useEffect(() => {
 
         if (
-            urlSearchQuery &&
             urlSearchQuery !==
             searchQuery
         ) {
@@ -573,7 +576,7 @@ function Products() {
 
 
             /* ==================================================
-               SEARCH
+               SEARCH FROM NAVBAR
             ================================================== */
 
             const query =
@@ -596,15 +599,10 @@ function Products() {
 
                             const searchableText =
                                 [
-
                                     product.name,
-
                                     product.short_description,
-
                                     product.description,
-
                                     categoryName
-
                                 ]
                                     .filter(Boolean)
                                     .join(" ")
@@ -746,21 +744,13 @@ function Products() {
             return result;
 
         }, [
-
             products,
-
             selectedCategory,
-
             searchQuery,
-
             sortBy,
-
             wishlistOnly,
-
             wishlistIds,
-
             categoryMap
-
         ]);
 
 
@@ -825,6 +815,10 @@ function Products() {
             );
 
 
+        /*
+         * Preserve the exact backend/database category ID.
+         */
+
         params.set(
             "category",
             categoryId
@@ -833,54 +827,6 @@ function Products() {
 
         setSearchParams(
             params
-        );
-
-    }
-
-
-    /* ========================================================
-       SEARCH CHANGE
-    ======================================================== */
-
-    function handleSearchChange(
-        value
-    ) {
-
-        setSearchQuery(
-            value
-        );
-
-
-        const params =
-            new URLSearchParams(
-                searchParams
-            );
-
-
-        if (
-            value.trim()
-        ) {
-
-            params.set(
-                "search",
-                value
-            );
-
-        }
-        else {
-
-            params.delete(
-                "search"
-            );
-
-        }
-
-
-        setSearchParams(
-            params,
-            {
-                replace: true
-            }
         );
 
     }
@@ -970,16 +916,12 @@ function Products() {
                         products-page__eyebrow
                     "
                 >
-
                     AYURVEDIC COLLECTIONS
-
                 </p>
 
 
                 <h1>
-
                     Our Products
-
                 </h1>
 
 
@@ -988,85 +930,18 @@ function Products() {
                         products-page__subtitle
                     "
                 >
-
                     Discover authentic Ayurvedic
-                    products crafted with nature's wisdom.
-
+                    products crafted with nature&apos;s wisdom.
                 </p>
 
             </header>
 
 
             {/* =================================================
-                SEARCH
-            ================================================= */}
-
-            <section
-                className="
-                    products-search
-                "
-            >
-
-                <Search
-                    size={19}
-                />
-
-
-                <input
-
-                    type="search"
-
-                    value={
-                        searchQuery
-                    }
-
-                    onChange={
-                        event =>
-                            handleSearchChange(
-                                event.target.value
-                            )
-                    }
-
-                    placeholder="Search products, herbs & wellness..."
-
-                    aria-label="Search products"
-
-                />
-
-
-                {
-                    searchQuery &&
-
-                    <button
-
-                        type="button"
-
-                        className="
-                            products-search__clear
-                        "
-
-                        onClick={() =>
-                            handleSearchChange("")
-                        }
-
-                        aria-label="
-                            Clear search
-                        "
-
-                    >
-
-                        <X
-                            size={17}
-                        />
-
-                    </button>
-                }
-
-            </section>
-
-
-            {/* =================================================
                 SHOP
+
+                No duplicate search field here.
+                Search is controlled from Navbar through URL.
             ================================================= */}
 
             <section
@@ -1126,7 +1001,9 @@ function Products() {
                     "
                 >
 
-                    {/* TOOLBAR */}
+                    {/* =================================================
+                        TOOLBAR
+                    ================================================= */}
 
                     <div
                         className="
@@ -1172,23 +1049,19 @@ function Products() {
                             >
 
                                 <strong>
-
                                     {
                                         filteredProducts.length
                                     }
-
                                 </strong>
 
 
                                 <span>
-
                                     {
                                         filteredProducts.length ===
                                         1
                                             ? " Product"
                                             : " Products"
                                     }
-
                                 </span>
 
                             </div>
@@ -1243,11 +1116,9 @@ function Products() {
 
 
                                 <span>
-
                                     {
                                         wishlistCount
                                     }
-
                                 </span>
 
                             </button>
@@ -1269,11 +1140,9 @@ function Products() {
 
 
                                 <span>
-
                                     {
                                         cartCount
                                     }
-
                                 </span>
 
                             </div>
@@ -1319,13 +1188,7 @@ function Products() {
                                     Search:
 
                                     <strong>
-
-                                        "
-                                        {
-                                            searchQuery
-                                        }
-                                        "
-
+                                        &quot;{searchQuery}&quot;
                                     </strong>
 
                                 </span>
@@ -1337,15 +1200,12 @@ function Products() {
                                 "all" &&
 
                                 <span>
-
                                     {
                                         categoryMap[
                                             selectedCategory
                                         ] ||
-
                                         "Category"
                                     }
-
                                 </span>
                             }
 
@@ -1354,9 +1214,7 @@ function Products() {
                                 wishlistOnly &&
 
                                 <span>
-
                                     Wishlist
-
                                 </span>
                             }
 
@@ -1406,15 +1264,12 @@ function Products() {
                                         ) => (
 
                                             <div
-
                                                 key={
                                                     index
                                                 }
-
                                                 className="
                                                     product-skeleton
                                                 "
-
                                             >
 
                                                 <div
@@ -1469,31 +1324,22 @@ function Products() {
 
 
                                 <h3>
-
                                     Products unavailable
-
                                 </h3>
 
 
                                 <p>
-
                                     {error}
-
                                 </p>
 
 
                                 <button
-
                                     type="button"
-
                                     onClick={
                                         loadData
                                     }
-
                                 >
-
                                     Try Again
-
                                 </button>
 
                             </div>
@@ -1513,32 +1359,23 @@ function Products() {
 
 
                                 <h3>
-
                                     No products found
-
                                 </h3>
 
 
                                 <p>
-
                                     Try another search
                                     or clear your filters.
-
                                 </p>
 
 
                                 <button
-
                                     type="button"
-
                                     onClick={
                                         clearFilters
                                     }
-
                                 >
-
                                     Clear Filters
-
                                 </button>
 
                             </div>
@@ -1600,9 +1437,7 @@ function Products() {
                         >
 
                             <h3>
-
                                 Filters
-
                             </h3>
 
 

@@ -49,7 +49,7 @@ function Footer() {
                     <div className="footer__logo">
 
                         <img
-                            src="https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/branding/logo%20without%20bg.webp"
+                            src="https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/branding/logo%20without%20bg.webp"
                             alt="AUMVEDA Wellness LLP"
                         />
 

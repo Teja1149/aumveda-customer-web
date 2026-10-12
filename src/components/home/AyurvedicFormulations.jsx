@@ -23,7 +23,7 @@ function AyurvedicFormulations() {
                 "Inspired by traditional Ayurvedic principles passed through generations.",
 
             image:
-                "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/formulations/classical-formulations.webp",
+                "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/formulations/classical-formulations.webp",
         },
 
 
@@ -35,7 +35,7 @@ function AyurvedicFormulations() {
                 "Carefully selected natural herbs crafted for everyday wellness.",
 
             image:
-                "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/formulations/herbal-extracts.webp",
+                "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/formulations/herbal-extracts.webp",
         },
 
 
@@ -47,7 +47,7 @@ function AyurvedicFormulations() {
                 "Balanced Ayurvedic solutions designed for modern lifestyles.",
 
             image:
-                "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/formulations/daily-wellness.webp",
+                "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/formulations/daily-wellness.webp",
         },
 
     ];

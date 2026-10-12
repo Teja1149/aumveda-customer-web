@@ -8,7 +8,7 @@ const doodles = [
 {
 id:1,
 image:
-"https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/leaf-branch-1.webp",
+"https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/leaf-branch-1.webp",
 top:"8%",
 left:"5%",
 size:90,
@@ -18,7 +18,7 @@ duration:9
 {
 id:2,
 image:
-"https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/herbal-branch-1.webp",
+"https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/herbal-branch-1.webp",
 top:"30%",
 right:"4%",
 size:120,
@@ -29,7 +29,7 @@ duration:12
 {
 id:3,
 image:
-"https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/leaf-branch-1.webp",
+"https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/leaf-branch-1.webp",
 bottom:"10%",
 left:"8%",
 size:100,
@@ -40,7 +40,7 @@ duration:10
 {
 id:4,
 image:
-"https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/lotus-branch-1.webp",
+"https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/leaf-branch-1.webp",
 bottom:"15%",
 right:"6%",
 size:110,

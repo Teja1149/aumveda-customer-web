@@ -11,7 +11,7 @@ const doodles = [
         id: 1,
 
         image:
-            "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/leaf-branch-1.webp",
+            "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/leaf-branch-1.webp",
 
         className:
             "nature-doodle nature-doodle--one",
@@ -24,7 +24,7 @@ const doodles = [
         id: 2,
 
         image:
-            "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/herbal-branch-1.webp",
+            "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/herbal-branch-1.webp",
 
         className:
             "nature-doodle nature-doodle--two",
@@ -37,7 +37,7 @@ const doodles = [
         id: 3,
 
         image:
-            "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/lotus-branch-1.webp",
+            "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/leaf-branch-1.webp",
 
         className:
             "nature-doodle nature-doodle--three",
@@ -50,7 +50,7 @@ const doodles = [
         id: 4,
 
         image:
-            "https://ihjbssbqwknyyzoewrik.supabase.co/storage/v1/object/public/site-assets/decorations/herbal-branch-1.webp",
+            "https://zgohazzneofbxnmqnhcl.supabase.co/storage/v1/object/public/site_assets/decorations/herbal-branch-1.webp",
 
         className:
             "nature-doodle nature-doodle--four",
